@@ -108,9 +108,9 @@ public final class Constants {
   }
 
   public static final class ShooterConstants{
-    public static final int LEFT_SHOOTER_ID = 0; //TODO: set shooter IDs
-    public static final int RIGHT_SHOOTER_ID = 0;
-    public static final int PIVOT_ID = 0;
+    public static final int LEFT_SHOOTER_ID = 31; //TODO: set shooter IDs
+    public static final int RIGHT_SHOOTER_ID = 32;
+    public static final int PIVOT_ID = 33;
 
     public static final double LEFT_SHOOTER_kP = 0; //TODO: set shooter/pivot PID
     public static final double LEFT_SHOOTER_kI = 0;
@@ -132,16 +132,16 @@ public final class Constants {
   }
 
   public static final class TransportConstants{
-    public static final int TOP_TRANSPORT_ID = 0; //TODO: set transport IDs
-    public static final int BOT_TRANSPORT_ID = 0;
+    public static final int TOP_TRANSPORT_ID = 34; //TODO: set transport IDs
+    public static final int BOT_TRANSPORT_ID = 35;
 
     public static final int IR_SENSOR_CHANNEL = 0;
   }
 
   public static final class IntakeConstants{
-    public static final int UTB_ROLLER_ID = 0; //TODO: set intake IDs
-    public static final int OTB_ROLLER_ID = 0;
-    public static final int OTB_PIVOT_ID = 0;
+    public static final int UTB_ROLLER_ID = 21; //TODO: set intake IDs
+    public static final int OTB_ROLLER_ID = 22;
+    public static final int OTB_PIVOT_ID = 23;
 
     public static final double PIVOT_kP = 0; //TODO: tune intake pivot PID
     public static final double PIVOT_kI = 0;
