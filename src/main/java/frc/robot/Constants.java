@@ -34,16 +34,20 @@ public final class Constants {
 
   public static final class SwerveConstants{
     //Drivetrain motor/encoder IDs
+
+    // Drive Motors (Krakens)
     public static final int LEFT_FRONT_DRIVE_ID = 1;
     public static final int RIGHT_FRONT_DRIVE_ID = 2;
     public static final int LEFT_BACK_DRIVE_ID = 3;
     public static final int RIGHT_BACK_DRIVE_ID = 4;
     
+    // Turn Motors (NEOs)
     public static final int LEFT_FRONT_TURN_ID = 5;
     public static final int RIGHT_FRONT_TURN_ID = 6;
     public static final int LEFT_BACK_TURN_ID = 7;
     public static final int RIGHT_BACK_TURN_ID = 8;
     
+    // CanCoders
     public static final int LEFT_FRONT_CANCODER_ID = 11;
     public static final int RIGHT_FRONT_CANCODER_ID = 12;
     public static final int LEFT_BACK_CANCODER_ID = 13;
@@ -111,6 +115,7 @@ public final class Constants {
     public static final int LEFT_SHOOTER_ID = 32;
     public static final int RIGHT_SHOOTER_ID = 31;
     public static final int PIVOT_ID = 33;
+
 
     public static final double LEFT_SHOOTER_kP = 0; //TODO: set shooter/pivot PID
     public static final double LEFT_SHOOTER_kI = 0;
