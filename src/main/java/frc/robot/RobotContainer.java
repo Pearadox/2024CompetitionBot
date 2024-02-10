@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -40,6 +41,8 @@ public class RobotContainer {
 
   public static final XboxController driverController = new XboxController(IOConstants.DRIVER_CONTROLLER_PORT);
   private final JoystickButton resetHeading_Start = new JoystickButton(driverController, XboxController.Button.kStart.value);
+  private final JoystickButton testIntake = new JoystickButton(driverController, 2);
+  private final JoystickButton testShooter = new JoystickButton(driverController, 3);
 
   public static final PoseEstimation poseEstimation = new PoseEstimation();
 
@@ -66,6 +69,9 @@ public class RobotContainer {
    */
   private void configureBindings() {
     resetHeading_Start.onTrue(new InstantCommand(drivetrain::zeroHeading, drivetrain));
+
+    testIntake.whileTrue(new RunCommand(() -> new IntakeHold()));
+    testShooter.whileTrue(new RunCommand(() -> new ShooterHold()));
   }
 
   /**

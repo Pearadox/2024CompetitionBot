@@ -23,6 +23,8 @@ import frc.robot.RobotContainer;
 public class Intake extends SubsystemBase {
   private PearadoxSparkMax utbRoller;
   private PearadoxSparkMax otbRoller;
+  private PearadoxSparkMax btmIntake;
+  private PearadoxSparkMax topIntake;
 
   private PearadoxSparkMax otbPivot;
 
@@ -43,6 +45,8 @@ public class Intake extends SubsystemBase {
   public Intake() {
     utbRoller = new PearadoxSparkMax(IntakeConstants.UTB_ROLLER_ID, MotorType.kBrushless, IdleMode.kBrake, 35, false); //TODO: set intake inversion
     otbRoller = new PearadoxSparkMax(IntakeConstants.OTB_ROLLER_ID, MotorType.kBrushless, IdleMode.kBrake, 35, false);
+    btmIntake = new PearadoxSparkMax(IntakeConstants.BTM_INTAKE_ID, MotorType.kBrushless, IdleMode.kBrake, 35, false);
+    topIntake = new PearadoxSparkMax(IntakeConstants.TOP_INTAKE_ID, MotorType.kBrushless, IdleMode.kBrake, 35, false);
 
     otbPivot = new PearadoxSparkMax(IntakeConstants.OTB_PIVOT_ID, MotorType.kBrushless, IdleMode.kBrake, 40, true,
       IntakeConstants.PIVOT_kP, IntakeConstants.PIVOT_kI, IntakeConstants.PIVOT_kD, 
@@ -73,8 +77,13 @@ public class Intake extends SubsystemBase {
     }
   }
 
-  public void utbIntakeIn(){
-    utbRoller.set(0.5); //TODO: set utb intake speed
+  public void utbIntakeIn(double power){
+    utbRoller.set(power);
+    double adjustedPower = power * (3./8);
+    btmIntake.set(adjustedPower);
+    topIntake = btmIntake;
+    topIntake.set(adjustedPower);
+    SmartDashboard.putNumber("BTM and TOP Intake Power", adjustedPower);
   }
 
   public void utbIntakeStop(){
