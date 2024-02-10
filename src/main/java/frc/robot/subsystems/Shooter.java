@@ -85,7 +85,7 @@ public class Shooter extends SubsystemBase {
         0,
         CANSparkMax.ControlType.kVoltage,
         0);
-  
+        //TODO: add a variable that can be set on the dashboard to modify the kVolatage setting for the right controller to impart spin to the note
       rightController.setReference(
         0,
         CANSparkMax.ControlType.kVoltage,
