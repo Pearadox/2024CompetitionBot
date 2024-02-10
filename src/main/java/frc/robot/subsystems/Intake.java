@@ -46,9 +46,6 @@ public class Intake extends SubsystemBase {
   public Intake() {
     utbRoller = new PearadoxSparkMax(IntakeConstants.UTB_ROLLER_ID, MotorType.kBrushless, IdleMode.kBrake, 35, false); //TODO: set intake inversion
     otbRoller = new PearadoxSparkMax(IntakeConstants.OTB_ROLLER_ID, MotorType.kBrushless, IdleMode.kBrake, 35, false);
-    btmIntake = new PearadoxSparkMax(TransportConstants.BOT_TRANSPORT_ID, MotorType.kBrushless, IdleMode.kBrake, 35, false);
-    topIntake = new PearadoxSparkMax(TransportConstants.TOP_TRANSPORT_ID, MotorType.kBrushless, IdleMode.kBrake, 35, false);
-
     otbPivot = new PearadoxSparkMax(IntakeConstants.OTB_PIVOT_ID, MotorType.kBrushless, IdleMode.kBrake, 40, true,
       IntakeConstants.PIVOT_kP, IntakeConstants.PIVOT_kI, IntakeConstants.PIVOT_kD, 
       IntakeConstants.PIVOT_MIN_OUTPUT, IntakeConstants.PIVOT_MAX_OUTPUT);
