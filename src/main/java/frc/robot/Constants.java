@@ -142,8 +142,8 @@ public final class Constants {
     public static final int UTB_ROLLER_ID = 21; //TODO: set intake IDs
     public static final int OTB_ROLLER_ID = 22;
     public static final int OTB_PIVOT_ID = 23;
-    public static final int BTM_INTAKE_ID = 35;
-    public static final int TOP_INTAKE_ID = 34;
+    public static final int BTM_INTAKE_ID = 35; //TODO: change intake to use theh TransportConstants and remove these
+    public static final int TOP_INTAKE_ID = 34; //TODO: change intake to use theh TransportConstants and remove these
 
     public static final double PIVOT_kP = 0; //TODO: tune intake pivot PID
     public static final double PIVOT_kI = 0;
