@@ -74,8 +74,8 @@ public final class Constants {
     public static final double DRIVETRAIN_MAX_ANGULAR_SPEED = 3.45 * Math.PI;
 
     //Swerve Kinematics
-    public static final double TRACK_WIDTH = Units.inchesToMeters(20.75); //TODO: Determine track width and wheel base
-    public static final double WHEEL_BASE = Units.inchesToMeters(20.75);
+    public static final double TRACK_WIDTH = Units.inchesToMeters(24.75);
+    public static final double WHEEL_BASE = Units.inchesToMeters(22.75);
     public static final double DRIVE_BASE_RADIUS = Math.sqrt(Math.pow(TRACK_WIDTH, 2) + Math.pow(WHEEL_BASE, 2)) / 2.0;
 
     public static final SwerveDriveKinematics DRIVE_KINEMATICS = new SwerveDriveKinematics(
@@ -112,9 +112,10 @@ public final class Constants {
   }
 
   public static final class ShooterConstants{
-    public static final int LEFT_SHOOTER_ID = 31; //TODO: set shooter IDs
-    public static final int RIGHT_SHOOTER_ID = 32;
-    public static final int PIVOT_ID = 33; 
+    public static final int LEFT_SHOOTER_ID = 32;
+    public static final int RIGHT_SHOOTER_ID = 31;
+    public static final int PIVOT_ID = 33;
+
 
     public static final double LEFT_SHOOTER_kP = 0; //TODO: set shooter/pivot PID
     public static final double LEFT_SHOOTER_kI = 0;
@@ -136,18 +137,16 @@ public final class Constants {
   }
 
   public static final class TransportConstants{
-    public static final int TOP_TRANSPORT_ID = 34; //TODO: set transport IDs
+    public static final int TOP_TRANSPORT_ID = 34;
     public static final int BOT_TRANSPORT_ID = 35;
 
     public static final int IR_SENSOR_CHANNEL = 0;
   }
 
   public static final class IntakeConstants{
-    public static final int UTB_ROLLER_ID = 21; //TODO: set intake IDs
+    public static final int UTB_ROLLER_ID = 21;
     public static final int OTB_ROLLER_ID = 22;
-    public static final int OTB_PIVOT_ID = 23;
-    public static final int BTM_INTAKE_ID = 35; //TODO: change intake to use theh TransportConstants and remove these
-    public static final int TOP_INTAKE_ID = 34; //TODO: change intake to use theh TransportConstants and remove these
+    public static final int OTB_PIVOT_ID = 23; // TOOD: remove, no OTB pivot
 
     public static final double PIVOT_kP = 0; //TODO: tune intake pivot PID
     public static final double PIVOT_kI = 0;

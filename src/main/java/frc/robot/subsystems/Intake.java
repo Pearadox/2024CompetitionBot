@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.drivers.PearadoxSparkMax;
 import frc.robot.Constants.IntakeConstants;
+import frc.robot.Constants.TransportConstants;
 import frc.robot.RobotContainer;
 
 public class Intake extends SubsystemBase {
@@ -45,8 +46,8 @@ public class Intake extends SubsystemBase {
   public Intake() {
     utbRoller = new PearadoxSparkMax(IntakeConstants.UTB_ROLLER_ID, MotorType.kBrushless, IdleMode.kBrake, 35, false); //TODO: set intake inversion
     otbRoller = new PearadoxSparkMax(IntakeConstants.OTB_ROLLER_ID, MotorType.kBrushless, IdleMode.kBrake, 35, false);
-    btmIntake = new PearadoxSparkMax(IntakeConstants.BTM_INTAKE_ID, MotorType.kBrushless, IdleMode.kBrake, 35, false);
-    topIntake = new PearadoxSparkMax(IntakeConstants.TOP_INTAKE_ID, MotorType.kBrushless, IdleMode.kBrake, 35, false);
+    btmIntake = new PearadoxSparkMax(TransportConstants.BOT_TRANSPORT_ID, MotorType.kBrushless, IdleMode.kBrake, 35, false);
+    topIntake = new PearadoxSparkMax(TransportConstants.TOP_TRANSPORT_ID, MotorType.kBrushless, IdleMode.kBrake, 35, false);
 
     otbPivot = new PearadoxSparkMax(IntakeConstants.OTB_PIVOT_ID, MotorType.kBrushless, IdleMode.kBrake, 40, true,
       IntakeConstants.PIVOT_kP, IntakeConstants.PIVOT_kI, IntakeConstants.PIVOT_kD, 
