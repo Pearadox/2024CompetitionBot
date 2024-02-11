@@ -140,7 +140,7 @@ public final class Constants {
     public static final int TOP_TRANSPORT_ID = 34;
     public static final int BOT_TRANSPORT_ID = 35;
 
-    public static final int IR_SENSOR_CHANNEL = 0;
+    public static final int IR_SENSOR_CHANNEL = 9;
   }
 
   public static final class IntakeConstants{

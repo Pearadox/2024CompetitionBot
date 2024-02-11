@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.lib.drivers.PearadoxSparkMax;
 import frc.robot.Constants.TransportConstants;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.*;
 
 public class Transport extends SubsystemBase {
   private PearadoxSparkMax topTransport;
@@ -32,6 +33,9 @@ public class Transport extends SubsystemBase {
 
   private boolean isHolding = true;
   private boolean rumbled = false;
+
+  private double power;
+  private Intake intake;
 
   private static final Transport transport = new Transport();
 
@@ -73,8 +77,9 @@ public class Transport extends SubsystemBase {
   }
 
   public void transportHold(){
-    topTransport.set(0.4); //TODO: tune transport speeds
-    botTransport.set(0.4);
+    power = intake.getPower();
+    topTransport.set(power); //TODO: tune transport speeds
+    botTransport.set(power);
   }
 
   public void transportStop(){
