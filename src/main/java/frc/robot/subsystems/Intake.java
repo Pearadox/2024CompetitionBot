@@ -33,7 +33,7 @@ public class Intake extends SubsystemBase {
   // private SparkPIDController otbPivotController;
 
   private double intakeAdjust = 0;
-  private boolean deployed = false;
+  private boolean deployed = true;
   private boolean zeroing = false;
 
   private static final Intake INTAKE = new Intake();
@@ -72,7 +72,7 @@ public class Intake extends SubsystemBase {
         deployed = true;
       }
       else{
-        deployed = false;
+        // deployed = false;
       }
     }
   }
