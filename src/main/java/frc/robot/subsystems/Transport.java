@@ -22,7 +22,6 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.lib.drivers.PearadoxSparkMax;
 import frc.robot.Constants.TransportConstants;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.*;
 
 public class Transport extends SubsystemBase {
   private PearadoxSparkMax topTransport;
@@ -34,9 +33,6 @@ public class Transport extends SubsystemBase {
   private boolean isHolding = true;
   private boolean rumbled = false;
 
-  private double power;
-  private Intake intake;
-
   private static final Transport transport = new Transport();
 
   public static Transport getInstance(){
@@ -45,7 +41,7 @@ public class Transport extends SubsystemBase {
 
   /** Creates a new Transport. */
   public Transport() {
-    topTransport = new PearadoxSparkMax(TransportConstants.TOP_TRANSPORT_ID, MotorType.kBrushless, IdleMode.kBrake, 40, false); //TODO: set transport inversion
+    topTransport = new PearadoxSparkMax(TransportConstants.TOP_TRANSPORT_ID, MotorType.kBrushless, IdleMode.kBrake, 40, false);
     botTransport = new PearadoxSparkMax(TransportConstants.BOT_TRANSPORT_ID, MotorType.kBrushless, IdleMode.kBrake, 40, false);
 
     irSensor = new DigitalInput(TransportConstants.IR_SENSOR_CHANNEL);
@@ -77,9 +73,13 @@ public class Transport extends SubsystemBase {
   }
 
   public void transportHold(){
-    power = intake.getPower();
-    topTransport.set(power); //TODO: tune transport speeds
-    botTransport.set(power);
+    topTransport.set(0.5);
+    botTransport.set(0.5);
+  }
+
+  public void transportOut(){
+    topTransport.set(-0.5);
+    botTransport.set(-0.5);
   }
 
   public void transportStop(){
@@ -88,8 +88,8 @@ public class Transport extends SubsystemBase {
   }
 
   public void transportShoot(){
-    topTransport.set(0.7);
-    botTransport.set(0.7);
+    topTransport.set(1);
+    botTransport.set(1);
   }
 
   public boolean hasNote(){

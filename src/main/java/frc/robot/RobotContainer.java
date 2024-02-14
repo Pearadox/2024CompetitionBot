@@ -19,6 +19,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.lib.drivers.vision.PoseEstimation;
 import frc.robot.Constants.IOConstants;
 import frc.robot.commands.IntakeHold;
+import frc.robot.commands.Outtake;
+import frc.robot.commands.Shoot;
 import frc.robot.commands.ShooterHold;
 import frc.robot.commands.SwerveDrive;
 import frc.robot.subsystems.Drivetrain;
@@ -41,8 +43,11 @@ public class RobotContainer {
 
   public static final XboxController driverController = new XboxController(IOConstants.DRIVER_CONTROLLER_PORT);
   private final JoystickButton resetHeading_Start = new JoystickButton(driverController, XboxController.Button.kStart.value);
-  private final JoystickButton testIntake = new JoystickButton(driverController, 2);
-  private final JoystickButton testShooter = new JoystickButton(driverController, 3);
+  private final JoystickButton shooterPivotUp_Y = new JoystickButton(driverController, XboxController.Button.kY.value);
+  private final JoystickButton shooterPivotDown_A = new JoystickButton(driverController, XboxController.Button.kA.value);
+  private final JoystickButton shoot_RB = new JoystickButton(driverController, XboxController.Button.kRightBumper.value);
+  private final JoystickButton zeroingShooter_X = new JoystickButton(driverController, XboxController.Button.kX.value);
+  private final JoystickButton outtake_B = new JoystickButton(driverController, XboxController.Button.kB.value);
 
   public static final PoseEstimation poseEstimation = new PoseEstimation();
 
@@ -69,9 +74,13 @@ public class RobotContainer {
    */
   private void configureBindings() {
     resetHeading_Start.onTrue(new InstantCommand(drivetrain::zeroHeading, drivetrain));
-
-    testIntake.whileTrue(new RunCommand(() -> new IntakeHold()));
-    testShooter.whileTrue(new RunCommand(() -> new ShooterHold()));
+    shooterPivotUp_Y.onTrue(new InstantCommand(() -> shooter.changePivotPosition(0.1736 * 3)));
+    shooterPivotDown_A.onTrue(new InstantCommand(() -> shooter.changePivotPosition(-0.1736 * 3)));
+    zeroingShooter_X.whileTrue(new RunCommand(() -> shooter.setZeroing(true)))
+      .onFalse(new InstantCommand(() -> shooter.setZeroing(false))
+      .andThen(new InstantCommand(() -> shooter.resetPivotEncoder())));
+    shoot_RB.whileTrue(new Shoot());
+    outtake_B.whileTrue(new Outtake());
   }
 
   /**
