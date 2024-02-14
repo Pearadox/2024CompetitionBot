@@ -9,23 +9,20 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import org.littletonrobotics.junction.Logger;
 
-// import com.revrobotics.CANSparkMax;
-// import com.revrobotics.RelativeEncoder;
-// import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkPIDController;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.drivers.PearadoxSparkMax;
 import frc.robot.Constants.IntakeConstants;
-// import frc.robot.Constants.TransportConstants;
 import frc.robot.RobotContainer;
 
 public class Intake extends SubsystemBase {
   private PearadoxSparkMax utbRoller;
-  private PearadoxSparkMax otbRoller;
-  // private PearadoxSparkMax btmIntake;
-  // private PearadoxSparkMax topIntake;
+  // private PearadoxSparkMax otbRoller;
 
   // private PearadoxSparkMax otbPivot;
 
@@ -33,12 +30,10 @@ public class Intake extends SubsystemBase {
   // private SparkPIDController otbPivotController;
 
   private double intakeAdjust = 0;
-  private boolean deployed = true;
+  private boolean deployed = false;
   private boolean zeroing = false;
 
   private static final Intake INTAKE = new Intake();
-
-  private double power;
 
   public static Intake getInstance(){
     return INTAKE;
@@ -46,75 +41,82 @@ public class Intake extends SubsystemBase {
 
   /** Creates a new Intake. */
   public Intake() {
-    utbRoller = new PearadoxSparkMax(IntakeConstants.UTB_ROLLER_ID, MotorType.kBrushless, IdleMode.kBrake, 35, false); //TODO: set intake inversion
-    otbRoller = new PearadoxSparkMax(IntakeConstants.OTB_ROLLER_ID, MotorType.kBrushless, IdleMode.kBrake, 35, false);
-    //otbPivot = new PearadoxSparkMax(IntakeConstants.OTB_PIVOT_ID, MotorType.kBrushless, IdleMode.kBrake, 40, true,
-      //IntakeConstants.PIVOT_kP, IntakeConstants.PIVOT_kI, IntakeConstants.PIVOT_kD, 
-      //IntakeConstants.PIVOT_MIN_OUTPUT, IntakeConstants.PIVOT_MAX_OUTPUT);
+    utbRoller = new PearadoxSparkMax(IntakeConstants.UTB_ROLLER_ID, MotorType.kBrushless, IdleMode.kBrake, 35, true);
+    // otbRoller = new PearadoxSparkMax(IntakeConstants.OTB_ROLLER_ID, MotorType.kBrushless, IdleMode.kBrake, 35, false); //TODO: set intake inversion
 
-    //otbPivotEncoder = otbPivot.getEncoder();
-    //otbPivotController = otbPivot.getPIDController();
+    // otbPivot = new PearadoxSparkMax(IntakeConstants.OTB_PIVOT_ID, MotorType.kBrushless, IdleMode.kBrake, 40, true,
+    //   IntakeConstants.PIVOT_kP, IntakeConstants.PIVOT_kI, IntakeConstants.PIVOT_kD, 
+    //   IntakeConstants.PIVOT_MIN_OUTPUT, IntakeConstants.PIVOT_MAX_OUTPUT);
+
+    // otbPivotEncoder = otbPivot.getEncoder();
+    // otbPivotController = otbPivot.getPIDController();
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    //SmartDashboard.putNumber("Pivot Position", otbPivotEncoder.getPosition());
-    SmartDashboard.putBoolean("Deployed", deployed);
-    //SmartDashboard.putNumber("Pivot Current", otbPivot.getOutputCurrent());
+    // SmartDashboard.putNumber("Pivot Position", otbPivotEncoder.getPosition());
+    // SmartDashboard.putBoolean("Deployed", deployed);
+    // SmartDashboard.putNumber("Pivot Current", otbPivot.getOutputCurrent());
 
-    //Logger.recordOutput("Intake/Pivot Position", otbPivotEncoder.getPosition());
-    Logger.recordOutput("Intake/Deployed", deployed);
-    //Logger.recordOutput("Intake/Pivot Current", otbPivot.getOutputCurrent());
+    // Logger.recordOutput("Intake/Pivot Position", otbPivotEncoder.getPosition());
+    // Logger.recordOutput("Intake/Deployed", deployed);
+    // Logger.recordOutput("Intake/Pivot Current", otbPivot.getOutputCurrent());
 
     if(DriverStation.isTeleopEnabled()){
       if(RobotContainer.driverController.getLeftTriggerAxis() > 0.5){
         deployed = true;
       }
       else{
-        // deployed = false;
+        deployed = false;
       }
     }
   }
 
-  public void utbIntakeIn(double power){
-    double adjustedPower = power * (3./8);
-    utbRoller.set(adjustedPower);
-    otbRoller.set(adjustedPower);
-    SmartDashboard.putNumber("BTM and TOP Roller Power", adjustedPower);
-    this.power = power;
+  public void utbIntakeIn(){
+    utbRoller.set(0.7);
+  }
+
+  public void utbIntakeOut(){
+    utbRoller.set(-0.7);
   }
 
   public void utbIntakeStop(){
     utbRoller.set(0);
   }
 
-  public void otbIntakeIn(){
-    otbRoller.set(deployed ? 0.5 : 0); //TODO: set otb intake speed
-  }
+  // public void otbIntakeIn(){
+  //   if(deployed){
+  //     otbRoller.set(0.5); //TODO: set otb intake speed
+  //   }
+  //   else{
+  //     otbRoller.set(0);
+  //   }
+  // }
 
-  public void otbIntakeStop(){
-    otbRoller.set(0);
-  }
+  // public void otbIntakeStop(){
+  //   otbRoller.set(0);
+  // }
 
-  public double getPower(){
-    return power;
-  }
-
-  public void pivotHold(){
-    /*if(zeroing){
-      otbPivot.set(-0.25);
-    }
-    else if(deployed){
-      otbPivotController.setReference(IntakeConstants.DEPLOYED_ROT + intakeAdjust, CANSparkMax.ControlType.kPosition, 0);
-    }
-    else{
-      otbPivotController.setReference(0 + intakeAdjust, CANSparkMax.ControlType.kPosition, 0);
-    }*/
-  }
+  // public void pivotHold(){
+  //   if(zeroing){
+  //     otbPivot.set(-0.25);
+  //   }
+  //   else if(deployed){
+  //     otbPivotController.setReference(IntakeConstants.DEPLOYED_ROT + intakeAdjust, CANSparkMax.ControlType.kPosition, 0);
+  //   }
+  //   else{
+  //     otbPivotController.setReference(0 + intakeAdjust, CANSparkMax.ControlType.kPosition, 0);
+  //   }
+  // }
 
   public void intakeToggle(){
-    deployed = !deployed;
+    if(!deployed){
+      deployed = true;
+    }
+    else{
+      deployed = false;
+    }
   }
 
   public void intakeAdjustUp(){
@@ -133,7 +135,7 @@ public class Intake extends SubsystemBase {
     return deployed;
   }
 
-  public void resetOtbPivotEncoder(){
-   // otbPivotEncoder.setPosition(0);
-  }
+  // public void resetOtbPivotEncoder(){
+  //   otbPivotEncoder.setPosition(0);
+  // }
 }

@@ -4,7 +4,6 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Transport;
@@ -16,7 +15,7 @@ public class IntakeHold extends Command {
   /** Creates a new IntakeHold. */
   public IntakeHold() {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(intake, transport);
+    addRequirements(intake);
   }
 
   // Called when the command is initially scheduled.
@@ -26,12 +25,13 @@ public class IntakeHold extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // testing intake
-    double power = SmartDashboard.getNumber("Input Intake Power", 0.0);
-       
-    intake.utbIntakeIn(power);
-    intake.otbIntakeIn();
-    transport.transportHold();
+    if(transport.hasNote()){
+      intake.utbIntakeStop();
+    }
+    else{
+      intake.utbIntakeIn();
+    }
+    // intake.otbIntakeIn();
     // intake.pivotHold();
   }
 

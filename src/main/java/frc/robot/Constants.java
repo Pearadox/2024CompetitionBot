@@ -34,20 +34,16 @@ public final class Constants {
 
   public static final class SwerveConstants{
     //Drivetrain motor/encoder IDs
-
-    // Drive Motors (Krakens)
     public static final int LEFT_FRONT_DRIVE_ID = 1;
     public static final int RIGHT_FRONT_DRIVE_ID = 2;
     public static final int LEFT_BACK_DRIVE_ID = 3;
     public static final int RIGHT_BACK_DRIVE_ID = 4;
     
-    // Turn Motors (NEOs)
     public static final int LEFT_FRONT_TURN_ID = 5;
     public static final int RIGHT_FRONT_TURN_ID = 6;
     public static final int LEFT_BACK_TURN_ID = 7;
     public static final int RIGHT_BACK_TURN_ID = 8;
     
-    // CanCoders
     public static final int LEFT_FRONT_CANCODER_ID = 11;
     public static final int RIGHT_FRONT_CANCODER_ID = 12;
     public static final int LEFT_BACK_CANCODER_ID = 13;
@@ -56,13 +52,13 @@ public final class Constants {
     public static final int PIGEON_ID = 15;
 
     //Drivetrain characteristics
-    public static final double LEFT_FRONT_OFFSET = -0.19; //TODO: change offsets
-    public static final double RIGHT_FRONT_OFFSET = 0.254;
-    public static final double LEFT_BACK_OFFSET = 0.041;
-    public static final double RIGHT_BACK_OFFSET = 0.136;
+    public static final double LEFT_FRONT_OFFSET = 0.307;
+    public static final double RIGHT_FRONT_OFFSET = -0.254;
+    public static final double LEFT_BACK_OFFSET = 0.026;
+    public static final double RIGHT_BACK_OFFSET = 0.144;
 
     public static final double WHEEL_DIAMETER = Units.inchesToMeters(4);
-    public static final double DRIVE_MOTOR_GEAR_RATIO = 6.122; //SDS Mk4i L3
+    public static final double DRIVE_MOTOR_GEAR_RATIO = 5.357; //SDS Mk4i L3+ (60:16 first stage)
     public static final double TURN_MOTOR_GEAR_RATIO = 150.0/7;
     public static final double DRIVE_MOTOR_PCONVERSION = WHEEL_DIAMETER * Math.PI / DRIVE_MOTOR_GEAR_RATIO;
     public static final double TURN_MOTOR_PCONVERSION = 2 * Math.PI / TURN_MOTOR_GEAR_RATIO;
@@ -70,8 +66,8 @@ public final class Constants {
     public static final double TURN_MOTOR_VCONVERSION = TURN_MOTOR_PCONVERSION / 60.0;
     public static final double KP_TURNING = 0.5;
 
-    public static final double DRIVETRAIN_MAX_SPEED = 4.40; //TODO: Determine max speeds
-    public static final double DRIVETRAIN_MAX_ANGULAR_SPEED = 3.45 * Math.PI;
+    public static final double DRIVETRAIN_MAX_SPEED = 6.62;
+    public static final double DRIVETRAIN_MAX_ANGULAR_SPEED = 3.45 * Math.PI; //TODO: Determine max angular speed
 
     //Swerve Kinematics
     public static final double TRACK_WIDTH = Units.inchesToMeters(24.75);
@@ -112,28 +108,27 @@ public final class Constants {
   }
 
   public static final class ShooterConstants{
-    public static final int LEFT_SHOOTER_ID = 32;
-    public static final int RIGHT_SHOOTER_ID = 31;
+    public static final int LEFT_SHOOTER_ID = 31;
+    public static final int RIGHT_SHOOTER_ID = 32;
     public static final int PIVOT_ID = 33;
 
-
-    public static final double LEFT_SHOOTER_kP = 0; //TODO: set shooter/pivot PID
+    public static final double LEFT_SHOOTER_kP = 0.1; //TODO: tune shooter/pivot PID
     public static final double LEFT_SHOOTER_kI = 0;
     public static final double LEFT_SHOOTER_kD = 0;
 
-    public static final double RIGHT_SHOOTER_kP = 0;
+    public static final double RIGHT_SHOOTER_kP = 0.1;
     public static final double RIGHT_SHOOTER_kI = 0;
     public static final double RIGHT_SHOOTER_kD = 0;
 
     public static final double SHOOTER_MIN_OUTPUT = -1.0;
     public static final double SHOOTER_MAX_OUTPUT = 1.0;
 
-    public static final double PIVOT_kP = 0;
-    public static final double PIVOT_kI = 0;
+    public static final double PIVOT_kP = 0.05;
+    public static final double PIVOT_kI = 0.001;
     public static final double PIVOT_kD = 0;
 
-    public static final double PIVOT_MIN_OUTPUT = -0.5;
-    public static final double PIVOT_MAX_OUTPUT = 0.5;
+    public static final double PIVOT_MIN_OUTPUT = -0.4;
+    public static final double PIVOT_MAX_OUTPUT = 0.4;
   }
 
   public static final class TransportConstants{
@@ -146,7 +141,7 @@ public final class Constants {
   public static final class IntakeConstants{
     public static final int UTB_ROLLER_ID = 21;
     public static final int OTB_ROLLER_ID = 22;
-    public static final int OTB_PIVOT_ID = 23; // TOOD: remove, no OTB pivot
+    public static final int OTB_PIVOT_ID = 23;
 
     public static final double PIVOT_kP = 0; //TODO: tune intake pivot PID
     public static final double PIVOT_kI = 0;
