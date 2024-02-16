@@ -83,7 +83,7 @@ public class RobotContainer {
       .andThen(new InstantCommand(() -> shooter.resetPivotEncoder())));
     shoot_RB.whileTrue(new Shoot());
     outtake_B.whileTrue(new Outtake());
-    align_LB.whileTrue(new RunCommand(()-> drivetrain.align(true))).toggleOnFalse(new InstantCommand(()->drivetrain.align(false)));
+    align_LB.toggleOnTrue(new InstantCommand(() -> drivetrain.setAlign(true))).whileTrue(new RunCommand(()-> drivetrain.align())).toggleOnFalse(new InstantCommand(()->drivetrain.setAlign(false)));
   }
 
   /**

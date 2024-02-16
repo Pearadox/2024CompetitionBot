@@ -41,6 +41,7 @@ public class Drivetrain extends SubsystemBase {
   private static final Drivetrain DRIVETRAIN = new Drivetrain();
 
   NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+  boolean align = false;
 
   public static Drivetrain getInstance(){
     return DRIVETRAIN;
@@ -234,13 +235,13 @@ public class Drivetrain extends SubsystemBase {
     return false;
   }
 
-  public String setDrivestate(String state)
+  public void setAlign(boolean temp)
   {
-    return state;
+    align = temp;
   }
-  public Pair<String, Double> align(boolean temp)
+  public Pair<String, Double> align()
   {
-    if(temp)
+    if(align)
     {
       double tx = table.getEntry("tx").getDouble(0.0);
       double ty = table.getEntry("ty").getDouble(0.0);

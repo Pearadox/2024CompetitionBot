@@ -31,8 +31,8 @@ public class SwerveDrive extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    state = drivetrain.align(true).getFirst() == "NORMAL" ? driveState.NORMAL : driveState.ALIGN;
-    double kP = drivetrain.align(true).getSecond();
+    state = drivetrain.align().getFirst() == "NORMAL" ? driveState.NORMAL : driveState.ALIGN;
+    double kP = drivetrain.align().getSecond();
     drivetrain.swerveDrive(
         -RobotContainer.driverController.getLeftY(), 
         -RobotContainer.driverController.getLeftX(), 
