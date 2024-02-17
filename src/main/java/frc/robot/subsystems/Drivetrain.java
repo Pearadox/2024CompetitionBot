@@ -9,6 +9,7 @@ import java.text.DecimalFormat;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
 
+import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -47,6 +48,8 @@ public class Drivetrain extends SubsystemBase {
   private DriveMode driveMode = DriveMode.Normal;
   
   private static final Drivetrain DRIVETRAIN = new Drivetrain();
+
+  NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 
   public static Drivetrain getInstance(){
     return DRIVETRAIN;
@@ -244,6 +247,7 @@ public class Drivetrain extends SubsystemBase {
     return false;
   }
 
+
   public double getAlignSpeed(){
     double tx = llTable.getEntry("tx").getDouble(0);
     double alignSpeed = Math.abs(tx) > 1 ? Math.signum(tx) * SwerveConstants.kS_PERCENT + SwerveConstants.kP_PERCENT * tx : 0;
@@ -261,5 +265,36 @@ public class Drivetrain extends SubsystemBase {
 
   public void setAlignMode(){
     driveMode = DriveMode.Align;
+
+  public String setDrivestate(String state)
+  {
+    return state;
+  }
+  public Pair<String, Double> align(boolean temp)
+  {
+    if(temp)
+    {
+      double tx = table.getEntry("tx").getDouble(0.0);
+      double ty = table.getEntry("ty").getDouble(0.0);
+      double ta = table.getEntry("ta").getDouble(0.0);
+      double tv = table.getEntry("tv").getDouble(0.0);
+      SmartDashboard.putNumber("tx", tx);
+      SmartDashboard.putNumber("tv", tv);
+      SmartDashboard.putNumber("ty", ty);
+      SmartDashboard.putNumber("ta", ta);
+      if(tv == 1.0)
+      {
+        if(tx > 0.0)
+        {
+          return new Pair("ALIGN", -1*tx*SwerveConstants.kP_PERCENT - SwerveConstants.kS_PERCENT);
+        }else if( tx < -0.0)
+        {
+          return new Pair("ALIGN", -1*tx*SwerveConstants.kP_PERCENT + SwerveConstants.kS_PERCENT);
+        }
+      }
+      return new Pair("NORMAL", 0.0);
+    }
+    return new Pair("NORMAL", 0.0);
+
   }
 }

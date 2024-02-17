@@ -66,6 +66,10 @@ public final class Constants {
     public static final double TURN_MOTOR_VCONVERSION = TURN_MOTOR_PCONVERSION / 60.0;
     public static final double KP_TURNING = 0.5;
 
+    public static final double kS_PERCENT = 0.035;
+    public static final double kP_PERCENT = 0.020;
+    ;
+
     public static final double DRIVETRAIN_MAX_SPEED = 6.62;
     public static final double DRIVETRAIN_MAX_ANGULAR_SPEED = 3.45 * Math.PI; //TODO: Determine max angular speed
 
