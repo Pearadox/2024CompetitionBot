@@ -22,7 +22,7 @@ import frc.robot.RobotContainer;
 
 public class Intake extends SubsystemBase {
   private PearadoxSparkMax utbRoller;
-  // private PearadoxSparkMax otbRoller;
+  private PearadoxSparkMax otbRoller;
 
   // private PearadoxSparkMax otbPivot;
 
@@ -41,8 +41,9 @@ public class Intake extends SubsystemBase {
 
   /** Creates a new Intake. */
   public Intake() {
-    utbRoller = new PearadoxSparkMax(IntakeConstants.UTB_ROLLER_ID, MotorType.kBrushless, IdleMode.kBrake, 35, true);
-    // otbRoller = new PearadoxSparkMax(IntakeConstants.OTB_ROLLER_ID, MotorType.kBrushless, IdleMode.kBrake, 35, false); //TODO: set intake inversion
+    utbRoller = new PearadoxSparkMax(IntakeConstants.UTB_ROLLER_ID, MotorType.kBrushless, IdleMode.kCoast, 35, true);
+    otbRoller = new PearadoxSparkMax(IntakeConstants.OTB_ROLLER_ID, MotorType.kBrushless, IdleMode.kBrake, 35, false); //TODO: set intake inversion
+    otbRoller.follow(utbRoller);
 
     // otbPivot = new PearadoxSparkMax(IntakeConstants.OTB_PIVOT_ID, MotorType.kBrushless, IdleMode.kBrake, 40, true,
     //   IntakeConstants.PIVOT_kP, IntakeConstants.PIVOT_kI, IntakeConstants.PIVOT_kD, 
@@ -75,6 +76,7 @@ public class Intake extends SubsystemBase {
 
   public void utbIntakeIn(){
     utbRoller.set(0.7);
+  
   }
 
   public void utbIntakeOut(){
@@ -85,14 +87,14 @@ public class Intake extends SubsystemBase {
     utbRoller.set(0);
   }
 
-  // public void otbIntakeIn(){
-  //   if(deployed){
-  //     otbRoller.set(0.5); //TODO: set otb intake speed
-  //   }
-  //   else{
-  //     otbRoller.set(0);
-  //   }
-  // }
+  public void otbIntakeIn(){
+    if(deployed){
+      otbRoller.set(0.5); //TODO: set otb intake speed
+    }
+    else{
+      otbRoller.set(0);
+    }
+  }
 
   // public void otbIntakeStop(){
   //   otbRoller.set(0);

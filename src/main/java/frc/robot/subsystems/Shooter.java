@@ -10,12 +10,21 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.drivers.PearadoxSparkFlex;
 import frc.lib.drivers.PearadoxSparkMax;
 import frc.lib.util.LerpTable;
+import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.Constants.VisionConstants;
 
 public class Shooter extends SubsystemBase {
   private PearadoxSparkFlex leftShooter;
@@ -34,6 +43,8 @@ public class Shooter extends SubsystemBase {
   private double pivotPosition;
 
   private boolean zeroing = false;
+
+  private static final NetworkTable llTable = NetworkTableInstance.getDefault().getTable(VisionConstants.LL_NAME);
 
   private enum ShooterMode{
     Auto, Speaker
@@ -80,6 +91,8 @@ public class Shooter extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Shooter Pivot Position", pivotEncoder.getPosition());
     SmartDashboard.putNumber("Shooter Pivot Intended Position", pivotPosition);
+    SmartDashboard.putNumber("Shooter Pivot Current", pivot.getOutputCurrent());
+    SmartDashboard.putNumber("Shooter Pivot Inteded Angle", calculatePivotAngle());
   }
 
   public void shooterHold(){ //TODO: set voltages for shooting
@@ -154,10 +167,51 @@ public class Shooter extends SubsystemBase {
     if(brake){
       leftShooter.setIdleMode(IdleMode.kBrake);
       rightShooter.setIdleMode(IdleMode.kBrake);
+      pivot.setIdleMode(IdleMode.kBrake);
+
     }
     else{
       leftShooter.setIdleMode(IdleMode.kCoast);
       rightShooter.setIdleMode(IdleMode.kCoast);
+      pivot.setIdleMode(IdleMode.kCoast);
     }
+  }
+  public void setPivot(double speed){
+    pivot.set(speed);
+  }
+
+  public double getPivotCurrent(){
+    return pivot.getOutputCurrent();
+  }
+
+  public double calculatePivotAngle(){
+    double[] botpose_targetspace = llTable.getEntry("botpose_targetspace").getDoubleArray(new double[6]);
+
+    double x = Math.abs(botpose_targetspace[0]);
+    double z = Math.abs(botpose_targetspace[2]);
+    double hypot = Math.hypot(x, z);
+
+    double angle = Math.atan((FieldConstants.SPEAKER_HEIGHT - ShooterConstants.FLOOR_TO_SHOOTER) / hypot);
+    return Units.radiansToDegrees(angle);
+  }
+
+  public double calculatePivotAngle(Pose2d tag){
+    double[] botpose_wpiblue = llTable.getEntry("botpose_wpiblue").getDoubleArray(new double[6]);
+
+    double x = Math.abs(botpose_wpiblue[0] - tag.getX());
+    double y = Math.abs(botpose_wpiblue[1] - tag.getY());
+    double hypot = Math.hypot(y,x);
+
+    double angle = Math.atan((FieldConstants.SPEAKER_HEIGHT - ShooterConstants.FLOOR_TO_SHOOTER) / hypot);
+    return Units.radiansToDegrees(angle);
+  }
+
+  public void setPivotAngle(double angle){
+    pivotPosition = (angle) * (62.5 / 360) + 8 * (angle / 41.0);
+
+  }
+
+  public boolean hasTarget(){
+    return llTable.getEntry("tv").getDouble(0) == 1.0;
   }
 }

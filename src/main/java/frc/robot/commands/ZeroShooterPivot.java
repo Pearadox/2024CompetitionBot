@@ -7,11 +7,11 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter;
 
-public class ShooterHold extends Command {
+public class ZeroShooterPivot extends Command {
   private Shooter shooter = Shooter.getInstance();
 
-  /** Creates a new ShooterHold. */
-  public ShooterHold() {
+  /** Creates a new ZeroShooterPivot. */
+  public ZeroShooterPivot() {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooter);
   }
@@ -23,21 +23,19 @@ public class ShooterHold extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.shooterHold();
-    shooter.pivotHold();
-
-    // if(shooter.hasTarget()){
-    //   shooter.setPivotAngle(shooter.calculatePivotAngle());
-    // }
+    shooter.setPivot(0.15);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    shooter.setPivot(0);
+    shooter.resetPivotEncoder();
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return shooter.getPivotCurrent() > 10;
   }
 }
