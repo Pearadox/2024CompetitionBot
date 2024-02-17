@@ -66,7 +66,6 @@ public class Shooter extends SubsystemBase {
     leftController = leftShooter.getPIDController();
     rightController = rightShooter.getPIDController();
     pivotController = pivot.getPIDController();
-
     shooterLerp = new LerpTable();
 
     //SHOOTER LOOKUP TABLE: (distance, voltage)
@@ -149,5 +148,16 @@ public class Shooter extends SubsystemBase {
 
   public void resetPivotEncoder(){
     pivotEncoder.setPosition(0);
+  }
+
+  public void setBrakeMode(boolean brake){
+    if(brake){
+      leftShooter.setIdleMode(IdleMode.kBrake);
+      rightShooter.setIdleMode(IdleMode.kBrake);
+    }
+    else{
+      leftShooter.setIdleMode(IdleMode.kCoast);
+      rightShooter.setIdleMode(IdleMode.kCoast);
+    }
   }
 }

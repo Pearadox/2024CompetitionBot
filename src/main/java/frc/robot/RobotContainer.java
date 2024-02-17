@@ -48,6 +48,7 @@ public class RobotContainer {
   private final JoystickButton shoot_RB = new JoystickButton(driverController, XboxController.Button.kRightBumper.value);
   private final JoystickButton zeroingShooter_X = new JoystickButton(driverController, XboxController.Button.kX.value);
   private final JoystickButton outtake_B = new JoystickButton(driverController, XboxController.Button.kB.value);
+  private final JoystickButton turnToApril_LB = new JoystickButton(driverController, XboxController.Button.kLeftBumper.value);
 
   public static final PoseEstimation poseEstimation = new PoseEstimation();
 
@@ -81,6 +82,8 @@ public class RobotContainer {
       .andThen(new InstantCommand(() -> shooter.resetPivotEncoder())));
     shoot_RB.whileTrue(new Shoot());
     outtake_B.whileTrue(new Outtake());
+    turnToApril_LB.onTrue(new InstantCommand(() -> drivetrain.setAlignMode()))
+      .onFalse(new InstantCommand(() -> drivetrain.setNormalMode()));
   }
 
   /**

@@ -105,6 +105,9 @@ public final class Constants {
 
     //https://docs.wpilib.org/en/stable/docs/software/advanced-controls/state-space/state-space-pose-estimators.html
     public static final Vector<N3> ODOMETRY_STD_DEV = VecBuilder.fill(0.1, 0.1, 0.1);
+
+    public static final double kS_PERCENT = 0.035;
+    public static final double kP_PERCENT = 0.009;
   }
 
   public static final class ShooterConstants{

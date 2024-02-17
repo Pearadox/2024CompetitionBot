@@ -17,11 +17,14 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.SwerveConstants;
+import frc.robot.Constants.VisionConstants;
 
 public class Drivetrain extends SubsystemBase {
   private SwerveModule leftFront;
@@ -34,6 +37,14 @@ public class Drivetrain extends SubsystemBase {
   private SlewRateLimiter turnLimiter;
 
   private Pigeon2 gyro;
+
+  private static final NetworkTable llTable = NetworkTableInstance.getDefault().getTable(VisionConstants.LL_NAME);
+
+  public enum DriveMode{
+    Normal, Align
+  }
+
+  private DriveMode driveMode = DriveMode.Normal;
   
   private static final Drivetrain DRIVETRAIN = new Drivetrain();
 
@@ -109,7 +120,11 @@ public class Drivetrain extends SubsystemBase {
 
   public void swerveDrive(double frontSpeed, double sideSpeed, double turnSpeed, 
     boolean fieldOriented, Translation2d centerOfRotation, boolean deadband){ //Drive with rotational speed control w/ joystick
-    if(deadband){
+    if(driveMode == DriveMode.Align && deadband){
+      frontSpeed = Math.abs(frontSpeed) > 0.1 ? frontSpeed : 0;
+      sideSpeed = Math.abs(sideSpeed) > 0.1 ? sideSpeed : 0;
+    }
+    else{
       frontSpeed = Math.abs(frontSpeed) > 0.1 ? frontSpeed : 0;
       sideSpeed = Math.abs(sideSpeed) > 0.1 ? sideSpeed : 0;
       turnSpeed = Math.abs(turnSpeed) > 0.1 ? turnSpeed : 0;
@@ -227,5 +242,24 @@ public class Drivetrain extends SubsystemBase {
         return alliance.get() == DriverStation.Alliance.Red;
     }
     return false;
+  }
+
+  public double getAlignSpeed(){
+    double tx = llTable.getEntry("tx").getDouble(0);
+    double alignSpeed = Math.abs(tx) > 1 ? Math.signum(tx) * SwerveConstants.kS_PERCENT + SwerveConstants.kP_PERCENT * tx : 0;
+
+    return alignSpeed;
+  }
+
+  public DriveMode getDriveMode(){
+    return driveMode;
+  }
+
+  public void setNormalMode(){
+    driveMode = DriveMode.Normal;
+  }
+
+  public void setAlignMode(){
+    driveMode = DriveMode.Align;
   }
 }

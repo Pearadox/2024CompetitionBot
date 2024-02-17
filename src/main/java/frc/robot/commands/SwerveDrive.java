@@ -26,13 +26,24 @@ public class SwerveDrive extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    drivetrain.swerveDrive(
+    if(drivetrain.getDriveMode() == Drivetrain.DriveMode.Align){
+      drivetrain.swerveDrive(
+        -RobotContainer.driverController.getLeftY(), 
+        -RobotContainer.driverController.getLeftX(), 
+        -drivetrain.getAlignSpeed(),
+        !RobotContainer.driverController.getRawButton(XboxController.Button.kB.value),
+        new Translation2d(),
+        true);
+    }
+    else{
+      drivetrain.swerveDrive(
         -RobotContainer.driverController.getLeftY(), 
         -RobotContainer.driverController.getLeftX(), 
         -RobotContainer.driverController.getRightX(),
         !RobotContainer.driverController.getRawButton(XboxController.Button.kB.value),
         new Translation2d(),
         true);
+    }
   }
 
   // Called once the command ends or is interrupted.
