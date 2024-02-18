@@ -17,7 +17,6 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -42,12 +41,14 @@ public class Drivetrain extends SubsystemBase {
   private static final NetworkTable llTable = NetworkTableInstance.getDefault().getTable(VisionConstants.LL_NAME);
 
   public enum DriveMode{
-    Normal, Align, AlignLocal
+    Normal, Align
   }
 
   private DriveMode driveMode = DriveMode.Normal;
   
   private static final Drivetrain DRIVETRAIN = new Drivetrain();
+
+  NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 
   public static Drivetrain getInstance(){
     return DRIVETRAIN;
@@ -256,25 +257,6 @@ public class Drivetrain extends SubsystemBase {
     return alignSpeed;
   }
 
-  // public double getAlignSpeed(Pose2d tag, Pose2d robot){  //TODO Needs work on angle turning
-  //   double alignSpeed = RobotContainer.driverController.getRightX(); //nope
-  //   double tx;
-  //   double angleToTag = Units.radiansToDegrees(Math.atan(Math.abs(tag.getY()-robot.getY()) / Math.abs(tag.getX()-robot.getX())));
-  //   if(robot.getY() > tag.getY())
-  //   {
-  //     angleToTag = 180- angleToTag;
-  //     tx = Math.abs(angleToTag - robot.getRotation().getDegrees());
-  //     tx = angleToTag + 90 < 360 || angleToTag-90 < 90?  tx : tx*-1;
-
-  //   }
-  //   angleToTag = robot.getY() > tag.getY() ? 180-angleToTag : 180+angleToTag;
-  //   double tx = Math.abs(angleToTag - robot.getRotation().getDegrees());
-  //   tx = angleToTag + 90 < 360 || angleToTag-90 < 90?  tx : tx*-1;
-  //   alignSpeed = Math.abs(tx) > 1 ? Math.signum(tx) * SwerveConstants.kS_PERCENT + SwerveConstants.kP_PERCENT * tx : 0;
-
-  //   return alignSpeed;
-  // }
-
   public DriveMode getDriveMode(){
     return driveMode;
   }
@@ -285,9 +267,5 @@ public class Drivetrain extends SubsystemBase {
 
   public void setAlignMode(){
     driveMode = DriveMode.Align;
-  }
-
-  public void setAlignLocalMode(){
-    driveMode = DriveMode.AlignLocal;
   }
 }

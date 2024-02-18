@@ -4,19 +4,15 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.lib.drivers.vision.PoseEstimation;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Drivetrain;
 
 public class SwerveDrive extends Command {
   private Drivetrain drivetrain = Drivetrain.getInstance();
-
-  private PoseEstimation poseEstimation; 
+  private XboxController driverController = RobotContainer.driverController;
 
   /** Creates a new SwerveDrive. */
   public SwerveDrive() {
@@ -33,29 +29,19 @@ public class SwerveDrive extends Command {
   public void execute() {
     if(drivetrain.getDriveMode() == Drivetrain.DriveMode.Align){
       drivetrain.swerveDrive(
-        -RobotContainer.driverController.getLeftY(), 
-        -RobotContainer.driverController.getLeftX(), 
+        -driverController.getLeftY(), 
+        -driverController.getLeftX(), 
         -drivetrain.getAlignSpeed(),
-        !RobotContainer.driverController.getRawButton(XboxController.Button.kB.value),
+        !driverController.getRawButton(XboxController.Button.kB.value),
         new Translation2d(),
         true);
     }
-    else if(drivetrain.getDriveMode() == Drivetrain.DriveMode.AlignLocal)
-    {
-      drivetrain.swerveDrive(
-       -RobotContainer.driverController.getLeftY(), 
-       -RobotContainer.driverController.getLeftX(), 
-       -drivetrain.getAlignSpeed(new Pose2d(8.308467, 1.442593, new Rotation2d(0)), poseEstimation.getEstimatedPose()),
-       !RobotContainer.driverController.getRawButton(XboxController.Button.kB.value),
-       new Translation2d(),
-       true);
-    }
     else{
       drivetrain.swerveDrive(
-        -RobotContainer.driverController.getLeftY(), 
-        -RobotContainer.driverController.getLeftX(), 
-        -RobotContainer.driverController.getRightX(),
-        !RobotContainer.driverController.getRawButton(XboxController.Button.kB.value),
+        -driverController.getLeftY(), 
+        -driverController.getLeftX(), 
+        -driverController.getRightX(),
+        !driverController.getRawButton(XboxController.Button.kB.value),
         new Translation2d(),
         true);
     }
