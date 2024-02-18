@@ -23,7 +23,7 @@ import frc.robot.subsystems.Drivetrain;
 public class PoseEstimation {
     private final SwerveDrivePoseEstimator poseEstimator;
 
-    private final VisionBackend[] backends;
+    private final LimelightBackend[] backends;
     private final boolean[] backendToggles;
 
     private final TimeInterpolatableBuffer<Pose2d> poseHistory = TimeInterpolatableBuffer.createBuffer(2);
@@ -42,7 +42,7 @@ public class PoseEstimation {
             VecBuilder.fill(0, 0, 0) // will be overwritten for each measurement
         );
 
-        backends = new VisionBackend[1];
+        backends = new LimelightBackend[1];
         backendToggles = new boolean[1];
 
         backends[0] = new LimelightBackend();
@@ -56,15 +56,17 @@ public class PoseEstimation {
                 // where two measurements cannot share the same timestamp
                 double timestampOffset = 1e-9 * i;
 
-                backends[i].getMeasurement().map((measurement) -> {
-                    measurement.timestamp += timestampOffset;
-                    return measurement;
-                }).ifPresent(this::addVisionMeasurement);
-                
-                backends[i].getMeasurement().map((measurement) -> {
-                    measurement.timestamp += timestampOffset;
-                    return measurement;
-                }).ifPresent(this::loggingPose);
+                if(backends[i].hasTarget() && backends[i].isValid()){
+                    backends[i].getMeasurement().map((measurement) -> {
+                        measurement.timestamp += timestampOffset;
+                        return measurement;
+                    }).ifPresent(this::addVisionMeasurement);
+                    
+                    backends[i].getMeasurement().map((measurement) -> {
+                        measurement.timestamp += timestampOffset;
+                        return measurement;
+                    }).ifPresent(this::loggingPose);
+                }
             }
         }
 

@@ -1,0 +1,91 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.5,
+      "y": 4.1
+    },
+    "rotation": 0.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "M_1_A"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stop Modules"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Auto Align"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "M_1-2_A"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stop Modules"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Auto Align"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "M_2-3_A"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stop Modules"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Auto Align"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
