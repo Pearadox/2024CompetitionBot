@@ -66,10 +66,6 @@ public final class Constants {
     public static final double TURN_MOTOR_VCONVERSION = TURN_MOTOR_PCONVERSION / 60.0;
     public static final double KP_TURNING = 0.5;
 
-    public static final double kS_PERCENT = 0.035;
-    public static final double kP_PERCENT = 0.020;
-    ;
-
     public static final double DRIVETRAIN_MAX_SPEED = 6.62;
     public static final double DRIVETRAIN_MAX_ANGULAR_SPEED = 3.45 * Math.PI; //TODO: Determine max angular speed
 
@@ -109,6 +105,9 @@ public final class Constants {
 
     //https://docs.wpilib.org/en/stable/docs/software/advanced-controls/state-space/state-space-pose-estimators.html
     public static final Vector<N3> ODOMETRY_STD_DEV = VecBuilder.fill(0.1, 0.1, 0.1);
+
+    public static final double kS_PERCENT = 0.035;
+    public static final double kP_PERCENT = 0.0115;
   }
 
   public static final class ShooterConstants{
@@ -127,12 +126,17 @@ public final class Constants {
     public static final double SHOOTER_MIN_OUTPUT = -1.0;
     public static final double SHOOTER_MAX_OUTPUT = 1.0;
 
-    public static final double PIVOT_kP = 0.05;
-    public static final double PIVOT_kI = 0.001;
+    public static final double PIVOT_kP = 0.08;
+    public static final double PIVOT_kI = 0.0008;
     public static final double PIVOT_kD = 0;
+    
+
+
 
     public static final double PIVOT_MIN_OUTPUT = -0.4;
     public static final double PIVOT_MAX_OUTPUT = 0.4;
+
+    public static final double FLOOR_TO_SHOOTER = Units.inchesToMeters(7);
   }
 
   public static final class TransportConstants{
@@ -159,6 +163,8 @@ public final class Constants {
   public static final class FieldConstants{
     public static final double FIELD_LENGTH = 16.54175;
     public static final double FIELD_WIDTH = 8.21055;
+
+    public static final double SPEAKER_HEIGHT = Units.inchesToMeters(80.515);
   }
 
   public static final class VisionConstants{

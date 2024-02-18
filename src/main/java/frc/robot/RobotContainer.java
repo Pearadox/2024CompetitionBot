@@ -48,8 +48,7 @@ public class RobotContainer {
   private final JoystickButton shoot_RB = new JoystickButton(driverController, XboxController.Button.kRightBumper.value);
   private final JoystickButton zeroingShooter_X = new JoystickButton(driverController, XboxController.Button.kX.value);
   private final JoystickButton outtake_B = new JoystickButton(driverController, XboxController.Button.kB.value);
-  private final JoystickButton align_LB = new JoystickButton(driverController, XboxController.Button.kLeftBumper.value);
-
+  private final JoystickButton turnToApril_LB = new JoystickButton(driverController, XboxController.Button.kLeftBumper.value);
 
   public static final PoseEstimation poseEstimation = new PoseEstimation();
 
@@ -76,14 +75,15 @@ public class RobotContainer {
    */
   private void configureBindings() {
     resetHeading_Start.onTrue(new InstantCommand(drivetrain::zeroHeading, drivetrain));
-    shooterPivotUp_Y.onTrue(new InstantCommand(() -> shooter.changePivotPosition(0.1736 * 3)));
-    shooterPivotDown_A.onTrue(new InstantCommand(() -> shooter.changePivotPosition(-0.1736 * 3)));
+    shooterPivotUp_Y.whileTrue(new RunCommand(() -> shooter.changePivotPosition(0.1736)));
+    shooterPivotDown_A.whileTrue(new RunCommand(() -> shooter.changePivotPosition(-0.1736)));
     zeroingShooter_X.whileTrue(new RunCommand(() -> shooter.setZeroing(true)))
       .onFalse(new InstantCommand(() -> shooter.setZeroing(false))
       .andThen(new InstantCommand(() -> shooter.resetPivotEncoder())));
     shoot_RB.whileTrue(new Shoot());
     outtake_B.whileTrue(new Outtake());
-    align_LB.whileTrue(new RunCommand(()-> drivetrain.align(true))).toggleOnFalse(new InstantCommand(()->drivetrain.align(false)));
+    turnToApril_LB.onTrue(new InstantCommand(() -> drivetrain.setAlignMode()))
+      .onFalse(new InstantCommand(() -> drivetrain.setNormalMode()));
   }
 
   /**

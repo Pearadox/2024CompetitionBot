@@ -14,6 +14,7 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Shooter;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -24,6 +25,7 @@ import frc.robot.subsystems.Drivetrain;
 public class Robot extends LoggedRobot {
   private Command m_autonomousCommand;
   private Drivetrain drivetrain = Drivetrain.getInstance();
+  private Shooter shooter = Shooter.getInstance();
 
   private RobotContainer m_robotContainer;
 
@@ -75,6 +77,7 @@ public class Robot extends LoggedRobot {
   @Override
   public void disabledInit() {
     drivetrain.setAllIdleMode(true);
+    shooter.setBrakeMode(false);
   }
 
   @Override
@@ -84,6 +87,7 @@ public class Robot extends LoggedRobot {
   @Override
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    shooter.setBrakeMode(true);
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
@@ -107,6 +111,7 @@ public class Robot extends LoggedRobot {
 
     drivetrain.resetAllEncoders();
     drivetrain.setAllIdleMode(true);
+    shooter.setBrakeMode(true);
   }
 
   /** This function is called periodically during operator control. */

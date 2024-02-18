@@ -9,7 +9,6 @@ import java.text.DecimalFormat;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
 
-import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -25,6 +24,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.SwerveConstants;
+import frc.robot.Constants.VisionConstants;
 
 public class Drivetrain extends SubsystemBase {
   private SwerveModule leftFront;
@@ -37,6 +37,14 @@ public class Drivetrain extends SubsystemBase {
   private SlewRateLimiter turnLimiter;
 
   private Pigeon2 gyro;
+
+  private static final NetworkTable llTable = NetworkTableInstance.getDefault().getTable(VisionConstants.LL_NAME);
+
+  public enum DriveMode{
+    Normal, Align
+  }
+
+  private DriveMode driveMode = DriveMode.Normal;
   
   private static final Drivetrain DRIVETRAIN = new Drivetrain();
 
@@ -114,7 +122,11 @@ public class Drivetrain extends SubsystemBase {
 
   public void swerveDrive(double frontSpeed, double sideSpeed, double turnSpeed, 
     boolean fieldOriented, Translation2d centerOfRotation, boolean deadband){ //Drive with rotational speed control w/ joystick
-    if(deadband){
+    if(driveMode == DriveMode.Align && deadband){
+      frontSpeed = Math.abs(frontSpeed) > 0.1 ? frontSpeed : 0;
+      sideSpeed = Math.abs(sideSpeed) > 0.1 ? sideSpeed : 0;
+    }
+    else{
       frontSpeed = Math.abs(frontSpeed) > 0.1 ? frontSpeed : 0;
       sideSpeed = Math.abs(sideSpeed) > 0.1 ? sideSpeed : 0;
       turnSpeed = Math.abs(turnSpeed) > 0.1 ? turnSpeed : 0;
@@ -234,34 +246,26 @@ public class Drivetrain extends SubsystemBase {
     return false;
   }
 
-  public String setDrivestate(String state)
-  {
-    return state;
-  }
-  public Pair<String, Double> align(boolean temp)
-  {
-    if(temp)
-    {
-      double tx = table.getEntry("tx").getDouble(0.0);
-      double ty = table.getEntry("ty").getDouble(0.0);
-      double ta = table.getEntry("ta").getDouble(0.0);
-      double tv = table.getEntry("tv").getDouble(0.0);
-      SmartDashboard.putNumber("tx", tx);
-      SmartDashboard.putNumber("tv", tv);
-      SmartDashboard.putNumber("ty", ty);
-      SmartDashboard.putNumber("ta", ta);
-      if(tv == 1.0)
-      {
-        if(tx > 0.0)
-        {
-          return new Pair("ALIGN", -1*tx*SwerveConstants.kP_PERCENT - SwerveConstants.kS_PERCENT);
-        }else if( tx < -0.0)
-        {
-          return new Pair("ALIGN", -1*tx*SwerveConstants.kP_PERCENT + SwerveConstants.kS_PERCENT);
-        }
-      }
-      return new Pair("NORMAL", 0.0);
+  public double getAlignSpeed(){
+    double alignSpeed = RobotContainer.driverController.getRightX();
+
+    if(llTable.getEntry("tv").getDouble(0) == 1){
+      double tx = llTable.getEntry("tx").getDouble(0);
+      alignSpeed = Math.abs(tx) > 1 ? Math.signum(tx) * SwerveConstants.kS_PERCENT + SwerveConstants.kP_PERCENT * tx : 0;
     }
-    return new Pair("NORMAL", 0.0);
+
+    return alignSpeed;
+  }
+
+  public DriveMode getDriveMode(){
+    return driveMode;
+  }
+
+  public void setNormalMode(){
+    driveMode = DriveMode.Normal;
+  }
+
+  public void setAlignMode(){
+    driveMode = DriveMode.Align;
   }
 }

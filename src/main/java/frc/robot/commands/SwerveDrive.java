@@ -10,13 +10,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Drivetrain;
 
-enum driveState{ 
-  NORMAL,
-  ALIGN
-}
 public class SwerveDrive extends Command {
   private Drivetrain drivetrain = Drivetrain.getInstance();
-  driveState state = driveState.NORMAL;
+  private XboxController driverController = RobotContainer.driverController;
 
   /** Creates a new SwerveDrive. */
   public SwerveDrive() {
@@ -31,15 +27,24 @@ public class SwerveDrive extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    state = drivetrain.align(true).getFirst() == "NORMAL" ? driveState.NORMAL : driveState.ALIGN;
-    double kP = drivetrain.align(true).getSecond();
-    drivetrain.swerveDrive(
-        -RobotContainer.driverController.getLeftY(), 
-        -RobotContainer.driverController.getLeftX(), 
-        state == driveState.NORMAL ? -RobotContainer.driverController.getRightX() : kP,
-        !RobotContainer.driverController.getRawButton(XboxController.Button.kB.value),
+    if(drivetrain.getDriveMode() == Drivetrain.DriveMode.Align){
+      drivetrain.swerveDrive(
+        -driverController.getLeftY(), 
+        -driverController.getLeftX(), 
+        -drivetrain.getAlignSpeed(),
+        !driverController.getRawButton(XboxController.Button.kB.value),
         new Translation2d(),
         true);
+    }
+    else{
+      drivetrain.swerveDrive(
+        -driverController.getLeftY(), 
+        -driverController.getLeftX(), 
+        -driverController.getRightX(),
+        !driverController.getRawButton(XboxController.Button.kB.value),
+        new Translation2d(),
+        true);
+    }
   }
 
   // Called once the command ends or is interrupted.

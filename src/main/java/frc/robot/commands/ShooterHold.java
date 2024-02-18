@@ -25,6 +25,10 @@ public class ShooterHold extends Command {
   public void execute() {
     shooter.shooterHold();
     shooter.pivotHold();
+
+    // if(shooter.hasTarget()){
+    //   shooter.setPivotAngle(shooter.calculatePivotAngle());
+    // }
   }
 
   // Called once the command ends or is interrupted.
