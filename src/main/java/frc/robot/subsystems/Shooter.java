@@ -10,18 +10,13 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.drivers.PearadoxSparkFlex;
 import frc.lib.drivers.PearadoxSparkMax;
-import frc.lib.util.LerpTable;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.VisionConstants;
@@ -37,8 +32,6 @@ public class Shooter extends SubsystemBase {
   private SparkPIDController leftController;
   private SparkPIDController rightController;
   private SparkPIDController pivotController;
-
-  private LerpTable shooterLerp;
 
   private double pivotPosition;
 
@@ -77,10 +70,6 @@ public class Shooter extends SubsystemBase {
     leftController = leftShooter.getPIDController();
     rightController = rightShooter.getPIDController();
     pivotController = pivot.getPIDController();
-    shooterLerp = new LerpTable();
-
-    //SHOOTER LOOKUP TABLE: (distance, voltage)
-    shooterLerp.addPoint(0, 0);
 
     SmartDashboard.putNumber("Left Shooter Speed (Voltage)", 6);
     SmartDashboard.putNumber("Right Shooter Speed (Voltage)", 6);
@@ -195,20 +184,8 @@ public class Shooter extends SubsystemBase {
     return Units.radiansToDegrees(angle);
   }
 
-  public double calculatePivotAngle(Pose2d tag){
-    double[] botpose_wpiblue = llTable.getEntry("botpose_wpiblue").getDoubleArray(new double[6]);
-
-    double x = Math.abs(botpose_wpiblue[0] - tag.getX());
-    double y = Math.abs(botpose_wpiblue[1] - tag.getY());
-    double hypot = Math.hypot(y,x);
-
-    double angle = Math.atan((FieldConstants.SPEAKER_HEIGHT - ShooterConstants.FLOOR_TO_SHOOTER) / hypot);
-    return Units.radiansToDegrees(angle);
-  }
-
   public void setPivotAngle(double angle){
     pivotPosition = (angle) * (62.5 / 360) + 8 * (angle / 41.0);
-
   }
 
   public boolean hasTarget(){
