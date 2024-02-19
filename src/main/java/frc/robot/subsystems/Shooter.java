@@ -10,6 +10,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -20,6 +21,8 @@ import frc.lib.drivers.PearadoxSparkMax;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.VisionConstants;
+import frc.robot.RobotContainer;
+import frc.robot.subsystems.Drivetrain.DriveMode;
 
 public class Shooter extends SubsystemBase {
   private PearadoxSparkFlex leftShooter;
@@ -38,6 +41,8 @@ public class Shooter extends SubsystemBase {
   private boolean zeroing = false;
 
   private static final NetworkTable llTable = NetworkTableInstance.getDefault().getTable(VisionConstants.LL_NAME);
+
+  private Drivetrain drivetrain = new Drivetrain();
 
   private enum ShooterMode{
     Auto, Speaker
@@ -81,7 +86,7 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Shooter Pivot Position", pivotEncoder.getPosition());
     SmartDashboard.putNumber("Shooter Pivot Intended Position", pivotPosition);
     SmartDashboard.putNumber("Shooter Pivot Current", pivot.getOutputCurrent());
-    SmartDashboard.putNumber("Shooter Pivot Inteded Angle", calculatePivotAngle());
+    SmartDashboard.putNumber("Shooter Pivot Intended Angle", calculatePivotAngle());
   }
 
   public void shooterHold(){ //TODO: set voltages for shooting
@@ -179,6 +184,25 @@ public class Shooter extends SubsystemBase {
     double x = Math.abs(botpose_targetspace[0]);
     double z = Math.abs(botpose_targetspace[2]);
     double hypot = Math.hypot(x, z);
+
+    double angle = Math.atan((FieldConstants.SPEAKER_HEIGHT - ShooterConstants.FLOOR_TO_SHOOTER) / hypot);
+    return Units.radiansToDegrees(angle);
+  }
+
+  public double calculatePivotAngle(int tagID){
+    Pose2d tagPose = RobotContainer.aprilTagFieldLayout.getTagPose(tagID).get().toPose2d();
+    Pose2d robotPose = drivetrain.getPose();
+    double deltaX, deltaY;
+    if(drivetrain.getDriveMode() == DriveMode.ShootOnMove) // For now until everythign set to just shoot button
+    {
+      deltaX = robotPose.getX() - tagPose.getX() + drivetrain.getFieldRelativeXVelocity();
+      deltaY = tagPose.getY() - robotPose.getY() + Units.inchesToMeters(22.5) + drivetrain.getFieldRelativeYVelocity(); 
+    }
+    else{
+      deltaX = robotPose.getX() - tagPose.getX();
+      deltaY = tagPose.getY() - robotPose.getY() + Units.inchesToMeters(22.5);
+    }
+    double hypot = Math.hypot(deltaX, deltaY);
 
     double angle = Math.atan((FieldConstants.SPEAKER_HEIGHT - ShooterConstants.FLOOR_TO_SHOOTER) / hypot);
     return Units.radiansToDegrees(angle);

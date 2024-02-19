@@ -108,6 +108,8 @@ public final class Constants {
 
     public static final double kS_PERCENT = 0.035;
     public static final double kP_PERCENT = 0.0115;
+
+    public static final double CONSTANT_VELOCITY = 5;
   }
 
   public static final class ShooterConstants{

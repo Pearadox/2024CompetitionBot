@@ -29,6 +29,7 @@ public class AutoAlign extends Command {
       0, 
       -drivetrain.getAlignSpeed(),
       true,
+      false,
       new Translation2d(),
       false);
   }

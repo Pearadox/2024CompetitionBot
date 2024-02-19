@@ -12,8 +12,10 @@ import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -58,7 +60,11 @@ public class RobotContainer {
   public static final PoseEstimation poseEstimation = new PoseEstimation();
   public static AprilTagFieldLayout aprilTagFieldLayout;
 
-  private final SendableChooser<Command> autoChooser;
+  public static final ShuffleboardTab autoTab = Shuffleboard.getTab("Auto");
+  public static final ShuffleboardTab swerveTab = Shuffleboard.getTab("Swerve");
+  public static final ShuffleboardTab armTab = Shuffleboard.getTab("Arm");
+  public static final ShuffleboardTab diagnosticsTab = Shuffleboard.getTab("Diagnostics");
+  private SendableChooser<Command> autoChooser;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. 
    * @throws IOException */
@@ -66,9 +72,7 @@ public class RobotContainer {
     registerNamedCommands();
     configureBindings();
     setDefaultCommands();
-
-    autoChooser = AutoBuilder.buildAutoChooser("Two Meters");
-    SmartDashboard.putData("Auto Chooser", autoChooser);
+    configureAutoTab();
 
     aprilTagFieldLayout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2024Crescendo.m_resourceFile);
   }
@@ -114,5 +118,10 @@ public class RobotContainer {
     drivetrain.setDefaultCommand(new SwerveDrive());
     intake.setDefaultCommand(new IntakeHold());
     shooter.setDefaultCommand(new ShooterHold());
+  }
+
+  private void configureAutoTab() {
+    autoChooser = AutoBuilder.buildAutoChooser("Two Meters");
+    autoTab.add("Auto Chooser", autoChooser).withWidget(BuiltInWidgets.kComboBoxChooser).withSize(2, 1).withPosition(0, 0);
   }
 }

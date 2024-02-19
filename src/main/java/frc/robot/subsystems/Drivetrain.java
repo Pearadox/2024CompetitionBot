@@ -42,7 +42,7 @@ public class Drivetrain extends SubsystemBase {
   private static final NetworkTable llTable = NetworkTableInstance.getDefault().getTable(VisionConstants.LL_NAME);
 
   public enum DriveMode{
-    Normal, Align
+    Normal, Align, ShootOnMove
   }
 
   private DriveMode driveMode = DriveMode.Normal;
@@ -126,7 +126,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void swerveDrive(double frontSpeed, double sideSpeed, double turnSpeed, 
-    boolean fieldOriented, Translation2d centerOfRotation, boolean deadband){ //Drive with rotational speed control w/ joystick
+    boolean fieldOriented, boolean constantSpeed, Translation2d centerOfRotation, boolean deadband){ //Drive with rotational speed control w/ joystick
     if(driveMode == DriveMode.Align && deadband){
       frontSpeed = Math.abs(frontSpeed) > 0.1 ? frontSpeed : 0;
       sideSpeed = Math.abs(sideSpeed) > 0.1 ? sideSpeed : 0;
@@ -140,6 +140,12 @@ public class Drivetrain extends SubsystemBase {
     frontSpeed = frontLimiter.calculate(frontSpeed) * SwerveConstants.TELE_DRIVE_MAX_SPEED;
     sideSpeed = sideLimiter.calculate(sideSpeed) * SwerveConstants.TELE_DRIVE_MAX_SPEED;
     turnSpeed = turnLimiter.calculate(turnSpeed) * SwerveConstants.TELE_DRIVE_MAX_ANGULAR_SPEED;
+
+    if(constantSpeed) // no idea if this constant stuff mathmatically makes sense
+    {
+      frontSpeed = frontSpeed > 0.1 ? SwerveConstants.CONSTANT_VELOCITY : 0;
+      sideSpeed = sideSpeed > 0.1 ? SwerveConstants.CONSTANT_VELOCITY : 0;
+    }
 
     ChassisSpeeds chassisSpeeds;
     if(fieldOriented){
@@ -178,7 +184,6 @@ public class Drivetrain extends SubsystemBase {
 
   public Pose2d getPose(){
     return RobotContainer.poseEstimation.getEstimatedPose();
-    
   }
 
   public void resetPose(Pose2d pose) {
@@ -308,13 +313,41 @@ public class Drivetrain extends SubsystemBase {
     return alignSpeed;
   }
 
+  public ChassisSpeeds getFieldRelativeChassisSpeeds() {
+    return new ChassisSpeeds(
+            getRobotRelativeSpeeds().vxMetersPerSecond * getPose().getRotation().getCos()
+                    - getRobotRelativeSpeeds().vyMetersPerSecond * getPose().getRotation().getSin(),
+            getRobotRelativeSpeeds().vyMetersPerSecond * getPose().getRotation().getCos()
+                    + getRobotRelativeSpeeds().vxMetersPerSecond * getPose().getRotation().getSin(),
+            getRobotRelativeSpeeds().omegaRadiansPerSecond);
+}
+
+  public double getFieldRelativeXVelocity() {
+      return getFieldRelativeChassisSpeeds().vxMetersPerSecond;
+  }
+
+  public double getFieldRelativeYVelocity() {
+      return getFieldRelativeChassisSpeeds().vyMetersPerSecond;
+  }
+
+  public double getFieldRelativeAngularVelocity() {
+      return getFieldRelativeChassisSpeeds().omegaRadiansPerSecond;
+  }
+
   public double getAlignAngle(int tagID){
     Pose2d tagPose = RobotContainer.aprilTagFieldLayout.getTagPose(tagID).get().toPose2d();
     Pose2d robotPose = getPose();
-
-    double deltaX = robotPose.getX() - tagPose.getX();
-    double deltaY = tagPose.getY() - robotPose.getY() + Units.inchesToMeters(22.5);
-
+    double deltaX, deltaY;
+    if(driveMode == DriveMode.ShootOnMove) // For now until everythign set to just shoot button
+    {
+      deltaX = robotPose.getX() - tagPose.getX() + getFieldRelativeXVelocity();
+      deltaY = tagPose.getY() - robotPose.getY() + Units.inchesToMeters(22.5) + getFieldRelativeYVelocity(); 
+    }
+    else{
+      deltaX = robotPose.getX() - tagPose.getX();
+      deltaY = tagPose.getY() - robotPose.getY() + Units.inchesToMeters(22.5);
+    }
+   
     double alignAngle;
 
     if(deltaY != 0){
@@ -342,5 +375,9 @@ public class Drivetrain extends SubsystemBase {
 
   public void setAlignMode(){
     driveMode = DriveMode.Align;
+  }
+
+  public void setShootOnMoveMode(){
+    driveMode = DriveMode.ShootOnMove;
   }
 }

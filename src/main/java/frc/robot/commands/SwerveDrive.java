@@ -27,12 +27,13 @@ public class SwerveDrive extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(drivetrain.getDriveMode() == Drivetrain.DriveMode.Align){
+    if(drivetrain.getDriveMode() == Drivetrain.DriveMode.Align || drivetrain.getDriveMode() == Drivetrain.DriveMode.ShootOnMove){
       drivetrain.swerveDrive(
         -driverController.getLeftY(), 
         -driverController.getLeftX(), 
         -drivetrain.getAlignSpeed(),
         !driverController.getRawButton(XboxController.Button.kB.value),
+        !driverController.getRawButton(0 /*change to something*/),
         new Translation2d(),
         true);
     }
@@ -42,6 +43,7 @@ public class SwerveDrive extends Command {
         -driverController.getLeftX(), 
         -driverController.getRightX(),
         !driverController.getRawButton(XboxController.Button.kB.value),
+        !driverController.getRawButton(0 /*change to something*/),
         new Translation2d(),
         true);
     }
