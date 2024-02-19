@@ -75,7 +75,7 @@ public class Intake extends SubsystemBase {
   }
 
   public void utbIntakeIn(){
-    utbRoller.set(0.7);
+    utbRoller.set(1);
   
   }
 

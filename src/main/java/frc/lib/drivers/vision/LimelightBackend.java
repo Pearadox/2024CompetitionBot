@@ -28,7 +28,6 @@ public class LimelightBackend extends VisionBackend {
         tl = table.getDoubleTopic("tl").subscribe(0);
     }
 
-
     @Override
     public Optional<VisionBackend.Measurement> getMeasurement() {
         TimestampedDoubleArray[] updates = botPose.readQueue();
@@ -56,9 +55,17 @@ public class LimelightBackend extends VisionBackend {
         Pose3d pose = new Pose3d(new Translation3d(x, y, z), new Rotation3d(roll, pitch, yaw));
 
         return Optional.of(new Measurement(
-                timestamp,
-                pose,
-                Constants.VisionConstants.LIMELIGHT_STD_DEV
+            timestamp,
+            pose,
+            Constants.VisionConstants.LIMELIGHT_STD_DEV
         ));
+    }
+
+    public boolean hasTarget(){
+        return table.getEntry("tv").getDouble(0) == 1;
+    }
+
+    public boolean isValid(){
+        return table.getEntry("ta").getDouble(0) > 0.12; 
     }
 }

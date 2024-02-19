@@ -1,0 +1,97 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.5,
+      "y": 4.1
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "M_6_B"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stop Modules"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "M_6_R_B"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stop Modules"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "M_1_B"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stop Modules"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "M_1-2_B"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stop Modules"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "M_2-3_B"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stop Modules"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Middle",
+  "choreoAuto": false
+}

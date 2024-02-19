@@ -4,9 +4,13 @@
 
 package frc.robot;
 
+import java.io.IOException;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -18,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.lib.drivers.vision.PoseEstimation;
 import frc.robot.Constants.IOConstants;
+import frc.robot.commands.AutoAlign;
 import frc.robot.commands.IntakeHold;
 import frc.robot.commands.Outtake;
 import frc.robot.commands.Shoot;
@@ -51,17 +56,21 @@ public class RobotContainer {
   private final JoystickButton turnToApril_LB = new JoystickButton(driverController, XboxController.Button.kLeftBumper.value);
 
   public static final PoseEstimation poseEstimation = new PoseEstimation();
+  public static AprilTagFieldLayout aprilTagFieldLayout;
 
   private final SendableChooser<Command> autoChooser;
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
-  public RobotContainer() {
+  /** The container for the robot. Contains subsystems, OI devices, and commands. 
+   * @throws IOException */
+  public RobotContainer() throws IOException {
     registerNamedCommands();
     configureBindings();
     setDefaultCommands();
 
     autoChooser = AutoBuilder.buildAutoChooser("Two Meters");
     SmartDashboard.putData("Auto Chooser", autoChooser);
+
+    aprilTagFieldLayout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2024Crescendo.m_resourceFile);
   }
 
   /**
@@ -97,6 +106,8 @@ public class RobotContainer {
 
   public void registerNamedCommands(){
     NamedCommands.registerCommand("Stop Modules", new InstantCommand(() -> drivetrain.stopModules()));
+    NamedCommands.registerCommand("Auto Align", new AutoAlign().withTimeout(0.5));
+    NamedCommands.registerCommand("Shoot", new Shoot().withTimeout(0.5));
   }
 
   public void setDefaultCommands(){

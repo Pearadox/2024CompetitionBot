@@ -71,8 +71,8 @@ public class Shooter extends SubsystemBase {
     rightController = rightShooter.getPIDController();
     pivotController = pivot.getPIDController();
 
-    SmartDashboard.putNumber("Left Shooter Speed (Voltage)", 6);
-    SmartDashboard.putNumber("Right Shooter Speed (Voltage)", 6);
+    SmartDashboard.putNumber("Left Shooter Speed (Voltage)", 3);
+    SmartDashboard.putNumber("Right Shooter Speed (Voltage)", 3);
   }
 
   @Override
@@ -98,12 +98,12 @@ public class Shooter extends SubsystemBase {
     }
     else if(shooterMode == ShooterMode.Speaker){
       leftController.setReference(
-        SmartDashboard.getNumber("Left Shooter Speed (Voltage)", 6),
+        SmartDashboard.getNumber("Left Shooter Speed (Voltage)", 3),
         CANSparkMax.ControlType.kVoltage,
         0);
   
       rightController.setReference(
-        SmartDashboard.getNumber("Right Shooter Speed (Voltage)", 6),
+        SmartDashboard.getNumber("Right Shooter Speed (Voltage)", 3),
         CANSparkMax.ControlType.kVoltage,
         0);
     }
@@ -190,5 +190,9 @@ public class Shooter extends SubsystemBase {
 
   public boolean hasTarget(){
     return llTable.getEntry("tv").getDouble(0) == 1.0;
+  }
+
+  public void setPipeline(int index){
+    llTable.getEntry("pipeline").setNumber(index);
   }
 }

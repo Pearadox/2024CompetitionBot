@@ -1,0 +1,115 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.5,
+      "y": 6.28
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "A_5"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stop Modules"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "A_5_R"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stop Modules"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "A_5-4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stop Modules"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "A_4_R"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stop Modules"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "A_4-3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stop Modules"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "A_3-2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stop Modules"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Amp",
+  "choreoAuto": false
+}
