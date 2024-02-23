@@ -49,8 +49,6 @@ public class Drivetrain extends SubsystemBase {
   
   private static final Drivetrain DRIVETRAIN = new Drivetrain();
 
-  NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-
   public static Drivetrain getInstance(){
     return DRIVETRAIN;
   }
@@ -121,8 +119,6 @@ public class Drivetrain extends SubsystemBase {
     SmartDashboard.putString("Angular Speed", new DecimalFormat("#.00").format((-gyro.getRate() / 180)) + "pi rad/s");
 
     SmartDashboard.putString("Robot Pose", getPose().toString());
-
-    SmartDashboard.putNumber("Align Angle 4", getAlignAngle(4));
   }
 
   public void swerveDrive(double frontSpeed, double sideSpeed, double turnSpeed, 

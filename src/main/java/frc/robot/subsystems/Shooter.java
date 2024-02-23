@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.drivers.PearadoxSparkFlex;
 import frc.lib.drivers.PearadoxSparkMax;
+import frc.lib.util.LerpTable;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.VisionConstants;
@@ -44,6 +45,8 @@ public class Shooter extends SubsystemBase {
   }
 
   private ShooterMode shooterMode = ShooterMode.Speaker;
+
+  private LerpTable pivotLerp;
 
   private static final Shooter SHOOTER = new Shooter();
 
@@ -73,6 +76,16 @@ public class Shooter extends SubsystemBase {
 
     SmartDashboard.putNumber("Left Shooter Speed (Voltage)", 3);
     SmartDashboard.putNumber("Right Shooter Speed (Voltage)", 3);
+
+    pivotLerp = new LerpTable();
+    pivotLerp.addPoint(53, 19.8);
+    pivotLerp.addPoint(48, 16.7);
+    pivotLerp.addPoint(43, 13.6);
+    pivotLerp.addPoint(38, 12.3);
+    pivotLerp.addPoint(33, 10.1);
+    pivotLerp.addPoint(28, 8.1);
+    pivotLerp.addPoint(23, 6.45);
+    pivotLerp.addPoint(18, 5.5);
   }
 
   @Override
@@ -81,7 +94,7 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Shooter Pivot Position", pivotEncoder.getPosition());
     SmartDashboard.putNumber("Shooter Pivot Intended Position", pivotPosition);
     SmartDashboard.putNumber("Shooter Pivot Current", pivot.getOutputCurrent());
-    SmartDashboard.putNumber("Shooter Pivot Inteded Angle", calculatePivotAngle());
+    SmartDashboard.putNumber("Shooter Pivot Intended Angle", calculatePivotAngle());
   }
 
   public void shooterHold(){ //TODO: set voltages for shooting
@@ -162,7 +175,6 @@ public class Shooter extends SubsystemBase {
     else{
       leftShooter.setIdleMode(IdleMode.kCoast);
       rightShooter.setIdleMode(IdleMode.kCoast);
-      pivot.setIdleMode(IdleMode.kCoast);
     }
   }
   public void setPivot(double speed){
@@ -185,7 +197,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setPivotAngle(double angle){
-    pivotPosition = (angle) * (62.5 / 360) + 8 * (angle / 41.0);
+    pivotPosition = pivotLerp.interpolate(angle);
   }
 
   public boolean hasTarget(){
