@@ -43,7 +43,7 @@
     "rotateFast": true
   },
   "reversed": false,
-  "folder": "Source A",
+  "folder": "Source",
   "previewStartingState": {
     "rotation": -37.0,
     "velocity": 0

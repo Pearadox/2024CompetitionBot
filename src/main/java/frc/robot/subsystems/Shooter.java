@@ -13,6 +13,7 @@ import com.revrobotics.SparkPIDController;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.drivers.PearadoxSparkFlex;
@@ -34,11 +35,12 @@ public class Shooter extends SubsystemBase {
   private SparkPIDController rightController;
   private SparkPIDController pivotController;
 
-  private double pivotPosition;
-
   private boolean zeroing = false;
 
   private static final NetworkTable llTable = NetworkTableInstance.getDefault().getTable(VisionConstants.LL_NAME);
+
+  private double pivotPosition;
+  private double[] botpose_targetspace = new double[6];
 
   private enum ShooterMode{
     Auto, Speaker
@@ -74,18 +76,18 @@ public class Shooter extends SubsystemBase {
     rightController = rightShooter.getPIDController();
     pivotController = pivot.getPIDController();
 
-    SmartDashboard.putNumber("Left Shooter Speed (Voltage)", 3);
-    SmartDashboard.putNumber("Right Shooter Speed (Voltage)", 3);
+    SmartDashboard.putNumber("Left Shooter Speed (Voltage)", 7.5);
+    SmartDashboard.putNumber("Right Shooter Speed (Voltage)", 7.5);
 
     pivotLerp = new LerpTable();
-    pivotLerp.addPoint(53, 19.8);
-    pivotLerp.addPoint(48, 16.7);
-    pivotLerp.addPoint(43, 13.6);
-    pivotLerp.addPoint(38, 12.3);
-    pivotLerp.addPoint(33, 10.1);
+    pivotLerp.addPoint(53, 20.0);
+    pivotLerp.addPoint(48, 16.9);
+    pivotLerp.addPoint(43, 13.8);
+    pivotLerp.addPoint(38, 12.25);
+    pivotLerp.addPoint(33, 10.0);
     pivotLerp.addPoint(28, 8.1);
-    pivotLerp.addPoint(23, 6.45);
-    pivotLerp.addPoint(18, 5.5);
+    pivotLerp.addPoint(23, 6.88);
+    pivotLerp.addPoint(18, 5.9);
   }
 
   @Override
@@ -94,7 +96,8 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Shooter Pivot Position", pivotEncoder.getPosition());
     SmartDashboard.putNumber("Shooter Pivot Intended Position", pivotPosition);
     SmartDashboard.putNumber("Shooter Pivot Current", pivot.getOutputCurrent());
-    SmartDashboard.putNumber("Shooter Pivot Intended Angle", calculatePivotAngle());
+    SmartDashboard.putNumber("Shooter Pivot Intended Angle", calculatePivotAngle());  
+    SmartDashboard.putBoolean("Shooter Has Target", hasTarget());  
   }
 
   public void shooterHold(){ //TODO: set voltages for shooting
@@ -111,7 +114,7 @@ public class Shooter extends SubsystemBase {
     }
     else if(shooterMode == ShooterMode.Speaker){
       leftController.setReference(
-        SmartDashboard.getNumber("Left Shooter Speed (Voltage)", 3),
+        SmartDashboard.getNumber("Left Shooter Speed (Voltage)", 7.5),
         CANSparkMax.ControlType.kVoltage,
         0);
   
@@ -177,6 +180,7 @@ public class Shooter extends SubsystemBase {
       rightShooter.setIdleMode(IdleMode.kCoast);
     }
   }
+  
   public void setPivot(double speed){
     pivot.set(speed);
   }
@@ -186,7 +190,9 @@ public class Shooter extends SubsystemBase {
   }
 
   public double calculatePivotAngle(){
-    double[] botpose_targetspace = llTable.getEntry("botpose_targetspace").getDoubleArray(new double[6]);
+    if(hasTarget()){
+      botpose_targetspace = llTable.getEntry("botpose_targetspace").getDoubleArray(new double[6]);
+    }
 
     double x = Math.abs(botpose_targetspace[0]);
     double z = Math.abs(botpose_targetspace[2]);
@@ -197,7 +203,12 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setPivotAngle(double angle){
-    pivotPosition = pivotLerp.interpolate(angle);
+    if(hasTarget()){
+      pivotPosition = pivotLerp.interpolate(angle);
+    }
+    else{
+      pivotPosition = 3;
+    }
   }
 
   public boolean hasTarget(){
@@ -206,5 +217,13 @@ public class Shooter extends SubsystemBase {
 
   public void setPipeline(int index){
     llTable.getEntry("pipeline").setNumber(index);
+  }
+
+  public boolean isRedAlliance(){
+    var alliance = DriverStation.getAlliance();
+    if (alliance.isPresent()) {
+        return alliance.get() == DriverStation.Alliance.Red;
+    }
+    return false;
   }
 }

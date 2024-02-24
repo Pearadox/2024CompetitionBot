@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Transport;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -28,6 +29,7 @@ public class Robot extends LoggedRobot {
   private Command m_autonomousCommand;
   private Drivetrain drivetrain = Drivetrain.getInstance();
   private Shooter shooter = Shooter.getInstance();
+  private Transport transport = Transport.getInstance();
 
   private RobotContainer m_robotContainer;
 
@@ -85,6 +87,7 @@ public class Robot extends LoggedRobot {
   public void disabledInit() {
     drivetrain.setAllIdleMode(true);
     shooter.setBrakeMode(false);
+    transport.setBrakeMode(false);
   }
 
   @Override
@@ -95,6 +98,7 @@ public class Robot extends LoggedRobot {
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     shooter.setBrakeMode(true);
+    transport.setBrakeMode(true);
 
     if(drivetrain.isRedAlliance()){
       shooter.setPipeline(1);
@@ -126,6 +130,7 @@ public class Robot extends LoggedRobot {
     drivetrain.resetAllEncoders();
     drivetrain.setAllIdleMode(true);
     shooter.setBrakeMode(true);
+    transport.setBrakeMode(true);
     shooter.setPipeline(0);
   }
 

@@ -32,7 +32,7 @@ public class SwerveDrive extends Command {
         -driverController.getLeftY(), 
         -driverController.getLeftX(), 
         -drivetrain.getAlignSpeed(),
-        !driverController.getRawButton(XboxController.Button.kB.value),
+        true,
         new Translation2d(),
         true);
     }
