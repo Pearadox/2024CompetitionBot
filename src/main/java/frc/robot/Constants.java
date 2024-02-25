@@ -83,7 +83,7 @@ public final class Constants {
 
     //Teleop constraints
     public static final double TELE_DRIVE_MAX_SPEED = DRIVETRAIN_MAX_SPEED;
-    public static final double TELE_DRIVE_MAX_ANGULAR_SPEED = DRIVETRAIN_MAX_ANGULAR_SPEED / 1.75;
+    public static final double TELE_DRIVE_MAX_ANGULAR_SPEED = DRIVETRAIN_MAX_ANGULAR_SPEED / 1.25;
     public static final double TELE_DRIVE_MAX_ACCELERATION = 3;
     public static final double TELE_DRIVE_MAX_ANGULAR_ACCELERATION = 3;
 
@@ -107,7 +107,7 @@ public final class Constants {
     public static final Vector<N3> ODOMETRY_STD_DEV = VecBuilder.fill(0.1, 0.1, 0.1);
 
     public static final double kS_PERCENT = 0.035;
-    public static final double kP_PERCENT = 0.0115;
+    public static final double kP_PERCENT = 0.12;
   }
 
   public static final class ShooterConstants{
@@ -190,7 +190,7 @@ public final class Constants {
       //     );
       // };
 
-      public static final Vector<N3> LIMELIGHT_STD_DEV = VecBuilder.fill(0.9, 0.9, 0.9);
+      public static final Vector<N3> LIMELIGHT_STD_DEV = VecBuilder.fill(.7,.7,9999999);
       
       public static final double AMBIGUITY_FILTER = 0.3;
       public static final double DISTANCE_FILTER = FieldConstants.FIELD_LENGTH / 2;

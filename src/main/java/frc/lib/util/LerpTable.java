@@ -9,6 +9,11 @@ public class LerpTable {
         datapoints.put(key, value);
     }
 
+    public void addPoints(double[] keys, double[] values) {
+        for(int i = 0; i < keys.length; i++)
+            datapoints.put(keys[i], values[i]);
+    }
+
     public double interpolate(double input) {
         var y = datapoints.ceilingEntry(input);
         var x = datapoints.floorEntry(input);

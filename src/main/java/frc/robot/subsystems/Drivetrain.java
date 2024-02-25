@@ -49,8 +49,6 @@ public class Drivetrain extends SubsystemBase {
   
   private static final Drivetrain DRIVETRAIN = new Drivetrain();
 
-  NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-
   public static Drivetrain getInstance(){
     return DRIVETRAIN;
   }
@@ -121,8 +119,6 @@ public class Drivetrain extends SubsystemBase {
     SmartDashboard.putString("Angular Speed", new DecimalFormat("#.00").format((-gyro.getRate() / 180)) + "pi rad/s");
 
     SmartDashboard.putString("Robot Pose", getPose().toString());
-
-    SmartDashboard.putNumber("Align Angle 4", getAlignAngle(4));
   }
 
   public void swerveDrive(double frontSpeed, double sideSpeed, double turnSpeed, 
@@ -255,9 +251,11 @@ public class Drivetrain extends SubsystemBase {
     double alignSpeed;
 
     if(isRedAlliance()){
-      if(llTable.getEntry("tv").getDouble(0) == 1 && llTable.getEntry("tid").getDouble(0) == 4){
-        double tx = llTable.getEntry("tx").getDouble(0);
-        alignSpeed = Math.abs(tx) > 1 ? Math.signum(tx) * SwerveConstants.kS_PERCENT + SwerveConstants.kP_PERCENT * tx : 0;
+      if(llTable.getEntry("tid").getDouble(0) == 4){
+        double[] targetpose_robotspace = llTable.getEntry("targetpose_robotspace").getDoubleArray(new double[6]);
+        double tx = -targetpose_robotspace[0];
+
+        alignSpeed = Math.abs(tx) > 0.05 ? Math.signum(tx) * SwerveConstants.kS_PERCENT + SwerveConstants.kP_PERCENT * tx : 0;
       }
       else{
         double alignAngle = getAlignAngle(4);
@@ -280,9 +278,11 @@ public class Drivetrain extends SubsystemBase {
       }
     }
     else{
-      if(llTable.getEntry("tv").getDouble(0) == 1 && llTable.getEntry("tid").getDouble(0) == 7){
-        double tx = llTable.getEntry("tx").getDouble(0);
-        alignSpeed = Math.abs(tx) > 1 ? Math.signum(tx) * SwerveConstants.kS_PERCENT + SwerveConstants.kP_PERCENT * tx : 0;
+      if(llTable.getEntry("tid").getDouble(0) == 7){
+        double[] targetpose_robotspace = llTable.getEntry("targetpose_robotspace").getDoubleArray(new double[6]);
+        double tx = -targetpose_robotspace[0];
+
+        alignSpeed = Math.abs(tx) > 0.08 ? Math.signum(tx) * SwerveConstants.kS_PERCENT + SwerveConstants.kP_PERCENT * tx : 0;
       }
       else{
         double alignAngle = getAlignAngle(7);

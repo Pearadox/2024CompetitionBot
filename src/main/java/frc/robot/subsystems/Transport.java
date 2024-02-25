@@ -73,8 +73,8 @@ public class Transport extends SubsystemBase {
   }
 
   public void transportHold(){
-    topTransport.set(0.5);
-    botTransport.set(0.5);
+    topTransport.set(0.8);
+    botTransport.set(0.8);
   }
 
   public void transportOut(){
@@ -90,6 +90,17 @@ public class Transport extends SubsystemBase {
   public void transportShoot(){
     topTransport.set(1);
     botTransport.set(1);
+  }
+
+  public void setBrakeMode(boolean brake){
+    if(brake){
+      topTransport.setIdleMode(IdleMode.kBrake);
+      botTransport.setIdleMode(IdleMode.kBrake);
+    }
+    else{
+      topTransport.setIdleMode(IdleMode.kCoast);
+      botTransport.setIdleMode(IdleMode.kCoast);
+    }
   }
 
   public boolean hasNote(){
