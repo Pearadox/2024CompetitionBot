@@ -26,7 +26,7 @@ public class ShooterHold extends Command {
     shooter.shooterHold();
     shooter.pivotHold();
 
-    if(shooter.hasTarget()){
+    if(shooter.hasPriorityTarget()){
       shooter.setPivotAngle(shooter.calculatePivotAngle());
     }
   }

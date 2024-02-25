@@ -41,6 +41,8 @@ public class Shooter extends SubsystemBase {
 
   private double pivotPosition;
   private double[] botpose_targetspace = new double[6];
+  public static final Drivetrain drivetrain = Drivetrain.getInstance();
+
 
   private enum ShooterMode{
     Auto, Speaker
@@ -76,8 +78,8 @@ public class Shooter extends SubsystemBase {
     rightController = rightShooter.getPIDController();
     pivotController = pivot.getPIDController();
 
-    SmartDashboard.putNumber("Left Shooter Speed (Voltage)", 7.5);
-    SmartDashboard.putNumber("Right Shooter Speed (Voltage)", 7.5);
+    SmartDashboard.putNumber("Left Shooter Speed (Voltage)", 8);
+    SmartDashboard.putNumber("Right Shooter Speed (Voltage)", 6);
 
     pivotLerp = new LerpTable();
     pivotLerp.addPoint(53, 20.0);
@@ -97,7 +99,7 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Shooter Pivot Intended Position", pivotPosition);
     SmartDashboard.putNumber("Shooter Pivot Current", pivot.getOutputCurrent());
     SmartDashboard.putNumber("Shooter Pivot Intended Angle", calculatePivotAngle());  
-    SmartDashboard.putBoolean("Shooter Has Target", hasTarget());  
+    SmartDashboard.putBoolean("Shooter Has Priority Target", hasPriorityTarget());  
   }
 
   public void shooterHold(){ //TODO: set voltages for shooting
@@ -114,12 +116,12 @@ public class Shooter extends SubsystemBase {
     }
     else if(shooterMode == ShooterMode.Speaker){
       leftController.setReference(
-        SmartDashboard.getNumber("Left Shooter Speed (Voltage)", 7.5),
+        SmartDashboard.getNumber("Left Shooter Speed (Voltage)", 8),
         CANSparkMax.ControlType.kVoltage,
         0);
   
       rightController.setReference(
-        SmartDashboard.getNumber("Right Shooter Speed (Voltage)", 3),
+        SmartDashboard.getNumber("Right Shooter Speed (Voltage)", 6),
         CANSparkMax.ControlType.kVoltage,
         0);
     }
@@ -180,7 +182,7 @@ public class Shooter extends SubsystemBase {
       rightShooter.setIdleMode(IdleMode.kCoast);
     }
   }
-  
+
   public void setPivot(double speed){
     pivot.set(speed);
   }
@@ -190,7 +192,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public double calculatePivotAngle(){
-    if(hasTarget()){
+    if(hasPriorityTarget()){
       botpose_targetspace = llTable.getEntry("botpose_targetspace").getDoubleArray(new double[6]);
     }
 
@@ -202,8 +204,20 @@ public class Shooter extends SubsystemBase {
     return Units.radiansToDegrees(angle);
   }
 
+  // public double calculateLocalPivotAngle(){
+  //   Pose2d tagPose = RobotContainer.aprilTagFieldLayout.getTagPose((int)llTable.getEntry("priorityid").getDouble(0)).get().toPose2d();
+  //   Pose2d robotPose = drivetrain.getPose();
+
+  //   double deltaX = robotPose.getX() - tagPose.getX();
+  //   double deltaY = tagPose.getY() - robotPose.getY() + Units.inchesToMeters(22.5);
+  //   double hypot = Math.hypot(deltaX, deltaY);
+
+  //   double angle = Math.atan((FieldConstants.SPEAKER_HEIGHT - ShooterConstants.FLOOR_TO_SHOOTER) / hypot);
+  //   return Units.radiansToDegrees(angle);
+  // }
+
   public void setPivotAngle(double angle){
-    if(hasTarget()){
+    if(hasPriorityTarget()){
       pivotPosition = pivotLerp.interpolate(angle);
     }
     else{
@@ -211,8 +225,13 @@ public class Shooter extends SubsystemBase {
     }
   }
 
-  public boolean hasTarget(){
-    return llTable.getEntry("tv").getDouble(0) == 1.0;
+  public boolean hasPriorityTarget(){
+    if(isRedAlliance()){
+      return llTable.getEntry("tid").getDouble(0) == 4;
+    }
+    else{
+      return llTable.getEntry("tid").getDouble(0) == 7;
+    }
   }
 
   public void setPipeline(int index){
