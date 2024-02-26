@@ -45,7 +45,7 @@ public class Transport extends SubsystemBase {
     botTransport = new PearadoxSparkMax(TransportConstants.BOT_TRANSPORT_ID, MotorType.kBrushless, IdleMode.kBrake, 40, false);
 
     irSensor = new DigitalInput(TransportConstants.IR_SENSOR_CHANNEL);
-    debouncer = new Debouncer(0.2, DebounceType.kFalling);
+    debouncer = new Debouncer(0.1, DebounceType.kFalling);
   }
 
   @Override
@@ -73,8 +73,8 @@ public class Transport extends SubsystemBase {
   }
 
   public void transportHold(){
-    topTransport.set(0.8);
-    botTransport.set(0.8);
+    topTransport.set(0.65);
+    botTransport.set(0.65);
   }
 
   public void transportOut(){

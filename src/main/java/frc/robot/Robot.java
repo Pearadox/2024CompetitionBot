@@ -66,7 +66,6 @@ public class Robot extends LoggedRobot {
     try {
       m_robotContainer = new RobotContainer();
     } catch (IOException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
   }

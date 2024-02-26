@@ -38,10 +38,10 @@ public class LimelightBackend extends VisionBackend {
 
         TimestampedDoubleArray update = updates[updates.length - 1];
 
-        if (Arrays.equals(update.value, new double[6])) {
+        if (Arrays.equals(update.value, new double[11])) {
             return Optional.empty();
         }
-
+        
         double x = update.value[0];
         double y = update.value[1];
         double z = update.value[2];
@@ -61,11 +61,12 @@ public class LimelightBackend extends VisionBackend {
         ));
     }
 
-    public boolean hasTarget(){
-        return table.getEntry("tv").getDouble(0) == 1;
-    }
-
     public boolean isValid(){
-        return table.getEntry("ta").getDouble(0) > 0.12; 
+        double[] botpose_wpiblue = table.getEntry("botpose_wpiblue").getDoubleArray(new double[11]);
+
+        double tagCount = botpose_wpiblue[7];
+        double avgDist = botpose_wpiblue[9];
+
+        return tagCount > 0 && avgDist < 4.5;
     }
 }

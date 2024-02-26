@@ -119,6 +119,7 @@ public class Drivetrain extends SubsystemBase {
     SmartDashboard.putString("Angular Speed", new DecimalFormat("#.00").format((-gyro.getRate() / 180)) + "pi rad/s");
 
     SmartDashboard.putString("Robot Pose", getPose().toString());
+    SmartDashboard.putNumber("Align Angle 7", getAlignAngle(7));
   }
 
   public void swerveDrive(double frontSpeed, double sideSpeed, double turnSpeed, 
@@ -252,10 +253,8 @@ public class Drivetrain extends SubsystemBase {
 
     if(isRedAlliance()){
       if(llTable.getEntry("tid").getDouble(0) == 4){
-        double[] targetpose_robotspace = llTable.getEntry("targetpose_robotspace").getDoubleArray(new double[6]);
-        double tx = -targetpose_robotspace[0];
-
-        alignSpeed = Math.abs(tx) > 0.05 ? Math.signum(tx) * SwerveConstants.kS_PERCENT + SwerveConstants.kP_PERCENT * tx : 0;
+        double tx = llTable.getEntry("tx").getDouble(0);
+        alignSpeed = Math.abs(tx) > 1.5 ? Math.signum(tx) * SwerveConstants.kS_PERCENT + SwerveConstants.kP_PERCENT * tx : 0;
       }
       else{
         double alignAngle = getAlignAngle(4);
@@ -279,10 +278,8 @@ public class Drivetrain extends SubsystemBase {
     }
     else{
       if(llTable.getEntry("tid").getDouble(0) == 7){
-        double[] targetpose_robotspace = llTable.getEntry("targetpose_robotspace").getDoubleArray(new double[6]);
-        double tx = -targetpose_robotspace[0];
-
-        alignSpeed = Math.abs(tx) > 0.08 ? Math.signum(tx) * SwerveConstants.kS_PERCENT + SwerveConstants.kP_PERCENT * tx : 0;
+        double tx = llTable.getEntry("tx").getDouble(0);
+        alignSpeed = Math.abs(tx) > 1.5 ? Math.signum(tx) * SwerveConstants.kS_PERCENT + SwerveConstants.kP_PERCENT * tx : 0;
       }
       else{
         double alignAngle = getAlignAngle(7);
@@ -308,11 +305,11 @@ public class Drivetrain extends SubsystemBase {
     return alignSpeed;
   }
 
-  public double getAlignAngle(int tagID){
+  public double getAlignAngle(int tagID){ //TODO: wrong
     Pose2d tagPose = RobotContainer.aprilTagFieldLayout.getTagPose(tagID).get().toPose2d();
     Pose2d robotPose = getPose();
 
-    double deltaX = robotPose.getX() - tagPose.getX();
+    double deltaX = tagPose.getX() - robotPose.getX(); //TODO: check if this works
     double deltaY = tagPose.getY() - robotPose.getY() + Units.inchesToMeters(22.5);
 
     double alignAngle;

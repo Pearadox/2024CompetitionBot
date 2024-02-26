@@ -107,7 +107,7 @@ public final class Constants {
     public static final Vector<N3> ODOMETRY_STD_DEV = VecBuilder.fill(0.1, 0.1, 0.1);
 
     public static final double kS_PERCENT = 0.035;
-    public static final double kP_PERCENT = 0.12;
+    public static final double kP_PERCENT = 0.009;
   }
 
   public static final class ShooterConstants{
@@ -115,7 +115,7 @@ public final class Constants {
     public static final int RIGHT_SHOOTER_ID = 32;
     public static final int PIVOT_ID = 33;
 
-    public static final double LEFT_SHOOTER_kP = 0.1; //TODO: tune shooter/pivot PID
+    public static final double LEFT_SHOOTER_kP = 0.1;
     public static final double LEFT_SHOOTER_kI = 0;
     public static final double LEFT_SHOOTER_kD = 0;
 
@@ -129,9 +129,6 @@ public final class Constants {
     public static final double PIVOT_kP = 0.08;
     public static final double PIVOT_kI = 0.0008;
     public static final double PIVOT_kD = 0;
-    
-
-
 
     public static final double PIVOT_MIN_OUTPUT = -0.4;
     public static final double PIVOT_MAX_OUTPUT = 0.4;
@@ -148,16 +145,6 @@ public final class Constants {
 
   public static final class IntakeConstants{
     public static final int UTB_ROLLER_ID = 21;
-    public static final int OTB_ROLLER_ID = 22;
-    public static final int OTB_PIVOT_ID = 23;
-
-    public static final double PIVOT_kP = 0; //TODO: tune intake pivot PID
-    public static final double PIVOT_kI = 0;
-    public static final double PIVOT_kD = 0;
-    public static final double PIVOT_MIN_OUTPUT = -0.35;
-    public static final double PIVOT_MAX_OUTPUT = 0.35;
-
-    public static final double DEPLOYED_ROT = 0;
   }
 
   public static final class FieldConstants{
