@@ -110,16 +110,20 @@ public final class Constants {
     public static final double kP_PERCENT = 0.009;
   }
 
+  public static final class IntakeConstants{
+    public static final int UTB_ROLLER_ID = 21;
+  }
+
   public static final class ShooterConstants{
     public static final int LEFT_SHOOTER_ID = 31;
     public static final int RIGHT_SHOOTER_ID = 32;
     public static final int PIVOT_ID = 33;
 
-    public static final double LEFT_SHOOTER_kP = 0.2;
+    public static final double LEFT_SHOOTER_kP = 0.3;
     public static final double LEFT_SHOOTER_kI = 0;
     public static final double LEFT_SHOOTER_kD = 0;
 
-    public static final double RIGHT_SHOOTER_kP = 0.2;
+    public static final double RIGHT_SHOOTER_kP = 0.3;
     public static final double RIGHT_SHOOTER_kI = 0;
     public static final double RIGHT_SHOOTER_kD = 0;
 
@@ -133,6 +137,7 @@ public final class Constants {
     public static final double PIVOT_MIN_OUTPUT = -0.4;
     public static final double PIVOT_MAX_OUTPUT = 0.4;
 
+    public static final double AMP_PIVOT_POSITION = 14.9;
     public static final double FLOOR_TO_SHOOTER = Units.inchesToMeters(7);
   }
 
@@ -143,8 +148,18 @@ public final class Constants {
     public static final int IR_SENSOR_CHANNEL = 9;
   }
 
-  public static final class IntakeConstants{
-    public static final int UTB_ROLLER_ID = 21;
+  public static final class AmpBarConstants{
+    public static final int AMP_BAR_ID = 41;
+
+    public static final double AMP_BAR_kP = 0.25;
+    public static final double AMP_BAR_kI = 0;
+    public static final double AMP_BAR_kD = 0;
+
+    public static final double AMP_BAR_MIN_OUTPUT = -0.5;
+    public static final double AMP_BAR_MAX_OUTPUT = 0.5;
+
+    public static final double DEPLOYED_ROT = 17.5;
+    ;
   }
 
   public static final class FieldConstants{

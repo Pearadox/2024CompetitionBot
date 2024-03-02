@@ -86,15 +86,20 @@
       "waypointRelativePos": 3,
       "rotationDegrees": 25.0,
       "rotateFast": true
+    },
+    {
+      "waypointRelativePos": 3.15,
+      "rotationDegrees": 25.0,
+      "rotateFast": false
     }
   ],
   "constraintZones": [
     {
-      "name": "New Constraints Zone",
-      "minWaypointRelativePos": 2.45,
-      "maxWaypointRelativePos": 3.15,
+      "name": "Shoot 3",
+      "minWaypointRelativePos": 2.6,
+      "maxWaypointRelativePos": 3.1,
       "constraints": {
-        "maxVelocity": 0.95,
+        "maxVelocity": 1.0,
         "maxAcceleration": 3.0,
         "maxAngularVelocity": 360.0,
         "maxAngularAcceleration": 360.0
@@ -129,7 +134,7 @@
   "goalEndState": {
     "velocity": 0,
     "rotation": 0.0,
-    "rotateFast": false
+    "rotateFast": true
   },
   "reversed": false,
   "folder": "Middle 7 Note",

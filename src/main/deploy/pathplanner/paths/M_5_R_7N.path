@@ -3,41 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.28,
-        "y": 5.78
+        "x": 8.35,
+        "y": 5.82
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.522600677468795,
-        "y": 5.78
+        "x": 7.704770563935427,
+        "y": 6.018103237631655
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.768793775117243,
-        "y": 5.976601786932791
+        "x": 6.944289423020653,
+        "y": 6.259344775221617
       },
       "prevControl": {
-        "x": 7.275390877247819,
-        "y": 5.887275049478449
+        "x": 7.2855309606106164,
+        "y": 6.171596951269912
       },
       "nextControl": {
-        "x": 6.262196672986667,
-        "y": 6.065928524387134
+        "x": 6.64197961715556,
+        "y": 6.33708158244407
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.31,
-        "y": 6.33
+        "x": 5.7,
+        "y": 6.55
       },
       "prevControl": {
-        "x": 5.866505403806237,
-        "y": 6.33
+        "x": 6.271556106057582,
+        "y": 6.418093566305897
       },
       "nextControl": null,
       "isLocked": false,
@@ -55,13 +55,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 9.5,
-    "rotateFast": false
+    "rotation": 16.0,
+    "rotateFast": true
   },
   "reversed": false,
   "folder": "Middle 7 Note",
   "previewStartingState": {
-    "rotation": 0.0,
+    "rotation": -15.0,
     "velocity": 0
   },
   "useDefaultConstraints": false

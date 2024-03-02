@@ -31,6 +31,7 @@ import frc.robot.commands.Outtake;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.ShooterHold;
 import frc.robot.commands.SwerveDrive;
+import frc.robot.subsystems.AmpBar;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
@@ -48,11 +49,13 @@ public class RobotContainer {
   public static final Intake intake = Intake.getInstance();
   public static final Transport transport = Transport.getInstance();
   public static final Shooter shooter = Shooter.getInstance();
+  public static final AmpBar ampBar = AmpBar.getInstance();
 
   public static final XboxController driverController = new XboxController(IOConstants.DRIVER_CONTROLLER_PORT);
   private final JoystickButton resetHeading_Start = new JoystickButton(driverController, XboxController.Button.kStart.value);
-  private final JoystickButton shooterPivotUp_Y = new JoystickButton(driverController, XboxController.Button.kY.value);
-  private final JoystickButton shooterPivotDown_A = new JoystickButton(driverController, XboxController.Button.kA.value);
+  // private final JoystickButton shooterPivotUp_Y = new JoystickButton(driverController, XboxController.Button.kY.value);
+  // private final JoystickButton shooterPivotDown_A = new JoystickButton(driverController, XboxController.Button.kA.value);
+  private final JoystickButton ampBar_A = new JoystickButton(driverController, XboxController.Button.kA.value);
   private final JoystickButton shoot_RB = new JoystickButton(driverController, XboxController.Button.kRightBumper.value);
   private final JoystickButton zeroingShooter_X = new JoystickButton(driverController, XboxController.Button.kX.value);
   private final JoystickButton outtake_B = new JoystickButton(driverController, XboxController.Button.kB.value);
@@ -87,8 +90,9 @@ public class RobotContainer {
    */
   private void configureBindings() {
     resetHeading_Start.onTrue(new InstantCommand(drivetrain::zeroHeading, drivetrain));
-    shooterPivotUp_Y.whileTrue(new RunCommand(() -> shooter.changePivotPosition(0.1)));
-    shooterPivotDown_A.whileTrue(new RunCommand(() -> shooter.changePivotPosition(-0.1)));
+    // shooterPivotUp_Y.whileTrue(new RunCommand(() -> shooter.changePivotPosition(0.1)));
+    // shooterPivotDown_A.whileTrue(new RunCommand(() -> shooter.changePivotPosition(-0.1)));
+    ampBar_A.whileTrue(new RunCommand(() -> ampBar.setDeployedMode())).onFalse(new InstantCommand(() -> ampBar.setStowedMode()));
     zeroingShooter_X.whileTrue(new RunCommand(() -> shooter.setZeroing(true)))
       .onFalse(new InstantCommand(() -> shooter.setZeroing(false))
       .andThen(new InstantCommand(() -> shooter.resetPivotEncoder())));

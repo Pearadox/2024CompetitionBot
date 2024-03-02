@@ -3,41 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.31,
-        "y": 6.44
+        "x": 5.7,
+        "y": 6.55
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.067399322531205,
-        "y": 6.44
+        "x": 6.261806347840725,
+        "y": 6.43759308273961
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.768793775117243,
-        "y": 5.976601786932791
+        "x": 6.97353869767122,
+        "y": 6.220345742354193
       },
       "prevControl": {
-        "x": 6.437301995744135,
-        "y": 6.074099369101352
+        "x": 6.640374579492917,
+        "y": 6.311965874853227
       },
       "nextControl": {
-        "x": 7.262303073245227,
-        "y": 5.8314519933657385
+        "x": 7.363529026345464,
+        "y": 6.1130984019687755
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 8.280006298729937,
-        "y": 5.781606622595669
+        "x": 8.35,
+        "y": 5.82
       },
       "prevControl": {
-        "x": 7.723500894923699,
-        "y": 5.781606622595669
+        "x": 7.773018871453421,
+        "y": 5.988853962981086
       },
       "nextControl": null,
       "isLocked": false,
@@ -55,8 +55,8 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
-    "rotateFast": false
+    "rotation": -15.0,
+    "rotateFast": true
   },
   "reversed": false,
   "folder": "Middle 7 Note",

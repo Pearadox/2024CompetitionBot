@@ -4,9 +4,9 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 
@@ -14,11 +14,13 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.drivers.PearadoxSparkFlex;
 import frc.lib.drivers.PearadoxSparkMax;
 import frc.lib.util.LerpTable;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.VisionConstants;
@@ -29,6 +31,7 @@ public class Shooter extends SubsystemBase {
   
   private PearadoxSparkMax pivot;
 
+  private RelativeEncoder leftEncoder;
   private RelativeEncoder pivotEncoder;
 
   private SparkPIDController leftController;
@@ -66,6 +69,7 @@ public class Shooter extends SubsystemBase {
       ShooterConstants.PIVOT_kP, ShooterConstants.PIVOT_kI, ShooterConstants.PIVOT_kD,
       ShooterConstants.PIVOT_MIN_OUTPUT, ShooterConstants.PIVOT_MAX_OUTPUT);
 
+    leftEncoder = leftShooter.getEncoder();
     pivotEncoder = pivot.getEncoder();
     
     leftController = leftShooter.getPIDController();
@@ -80,11 +84,11 @@ public class Shooter extends SubsystemBase {
     pivotLerp.addPoint(38, 12.3);
     pivotLerp.addPoint(35, 11.3);
     pivotLerp.addPoint(32, 10.1);
-    pivotLerp.addPoint(29, 9.3);
-    pivotLerp.addPoint(26, 8.0);
-    pivotLerp.addPoint(23, 7.3);
-    pivotLerp.addPoint(20, 6.7);
-    pivotLerp.addPoint(17, 6.15);
+    pivotLerp.addPoint(29, 9.4);
+    pivotLerp.addPoint(26, 8.4);
+    pivotLerp.addPoint(23, 7.7);
+    pivotLerp.addPoint(20, 7.0);
+    pivotLerp.addPoint(17, 6.45);
     pivotLerp.addPoint(14, 5.4);
 
     shooterLerp.addPoint(53, 7);
@@ -99,6 +103,7 @@ public class Shooter extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Shooter Left Speed", leftEncoder.getVelocity());
     SmartDashboard.putNumber("Shooter Pivot Position", pivotEncoder.getPosition());
     SmartDashboard.putNumber("Shooter Pivot Intended Position", pivotPosition);
     SmartDashboard.putNumber("Shooter Pivot Current", pivot.getOutputCurrent());
@@ -114,16 +119,27 @@ public class Shooter extends SubsystemBase {
       leftShooter.set(0.7);
       rightShooter.set(0.6);
     }
+    else if(RobotContainer.driverController.getRawButton(XboxController.Button.kA.value)){
+      leftController.setReference(
+        3.35,
+        ControlType.kVoltage,
+        0);
+
+      rightController.setReference(
+        3.35,
+        ControlType.kVoltage,
+        0);
+    }
     else{
       leftController.setReference(
         shooterVoltage,
-        CANSparkMax.ControlType.kVoltage,
+        ControlType.kVoltage,
         0);
 
       rightController.setReference(
         shooterVoltage - 2,
-        CANSparkMax.ControlType.kVoltage,
-      0);
+        ControlType.kVoltage,
+        0);
     }
   }
 
@@ -136,10 +152,16 @@ public class Shooter extends SubsystemBase {
     if(zeroing){
       pivot.set(-0.08);
     }
+    else if(RobotContainer.driverController.getRawButton(XboxController.Button.kA.value)){
+      pivotController.setReference(
+        ShooterConstants.AMP_PIVOT_POSITION,
+        ControlType.kPosition,
+        0);
+    }
     else{
       pivotController.setReference(
         pivotPosition,
-        CANSparkMax.ControlType.kPosition,
+        ControlType.kPosition,
         0);
     }
   }

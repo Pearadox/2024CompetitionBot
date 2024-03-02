@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 2.04,
-        "y": 4.967
+        "y": 4.96
       },
       "prevControl": null,
       "nextControl": {
         "x": 2.2156566878454433,
-        "y": 4.562886845488656
+        "y": 4.555886845488656
       },
       "isLocked": false,
       "linkedName": null
@@ -45,7 +45,7 @@
   "reversed": false,
   "folder": "Middle 7 Note",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": -20.0,
     "velocity": 0
   },
   "useDefaultConstraints": false

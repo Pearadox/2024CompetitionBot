@@ -292,7 +292,8 @@ public class Drivetrain extends SubsystemBase {
     if(isRedAlliance()){
       if(llTable.getEntry("tid").getDouble(0) == 4){
         double tx = llTable.getEntry("tx").getDouble(0);
-        alignSpeed = Math.abs(tx) > 1.5 ? Math.signum(tx) * SwerveConstants.kS_PERCENT + SwerveConstants.kP_PERCENT * tx : 0;
+        double error = tx + 1.5;
+        alignSpeed = Math.abs(error) > 0.9 ? Math.signum(error) * SwerveConstants.kS_PERCENT + SwerveConstants.kP_PERCENT * tx : 0;
       }
       else{
         double alignAngle = getAlignAngle(4);
@@ -317,7 +318,8 @@ public class Drivetrain extends SubsystemBase {
     else{
       if(llTable.getEntry("tid").getDouble(0) == 7){
         double tx = llTable.getEntry("tx").getDouble(0);
-        alignSpeed = Math.abs(tx) > 1.5 ? Math.signum(tx) * SwerveConstants.kS_PERCENT + SwerveConstants.kP_PERCENT * tx : 0;
+        double error = tx + 1.5;
+        alignSpeed = Math.abs(error) > 0.9 ? Math.signum(error) * SwerveConstants.kS_PERCENT + SwerveConstants.kP_PERCENT * tx : 0;
       }
       else{
         double alignAngle = getAlignAngle(7);
