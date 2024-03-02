@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.47044996702820163,
-        "y": 5.52811290895741
+        "x": 2.04,
+        "y": 4.967
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.4704499670282014,
-        "y": 5.52811290895741
+        "x": 2.2156566878454433,
+        "y": 4.562886845488656
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.798043049767811,
-        "y": 7.273319629774651
+        "x": 2.742143631555673,
+        "y": 4.182646275031268
       },
       "prevControl": {
-        "x": 0.47044996702820163,
-        "y": 5.52811290895741
+        "x": 2.547148467218551,
+        "y": 4.319142890067254
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,21 +32,21 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
-    "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 720.0
+    "maxVelocity": 6.0,
+    "maxAcceleration": 7.0,
+    "maxAngularVelocity": 360.0,
+    "maxAngularAcceleration": 540.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 15.42,
-    "rotateFast": false
+    "rotation": -30.0,
+    "rotateFast": true
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Middle 7 Note",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

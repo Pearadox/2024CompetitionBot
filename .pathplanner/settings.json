@@ -6,6 +6,7 @@
     "Amp",
     "Middle",
     "Misc",
+    "Middle 7 Note",
     "Source"
   ],
   "autoFolders": [
@@ -16,7 +17,7 @@
   ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,
-  "defaultMaxAngVel": 540.0,
-  "defaultMaxAngAccel": 720.0,
+  "defaultMaxAngVel": 360.0,
+  "defaultMaxAngAccel": 360.0,
   "maxModuleSpeed": 4.5
 }

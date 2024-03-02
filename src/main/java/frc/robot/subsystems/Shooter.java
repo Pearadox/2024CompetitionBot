@@ -87,8 +87,8 @@ public class Shooter extends SubsystemBase {
     pivotLerp.addPoint(17, 6.15);
     pivotLerp.addPoint(14, 5.4);
 
-    shooterLerp.addPoint(53, 6);
-    shooterLerp.addPoint(47, 6.5);
+    shooterLerp.addPoint(53, 7);
+    shooterLerp.addPoint(47, 7);
     shooterLerp.addPoint(41, 7);
     shooterLerp.addPoint(35, 7.5);
     shooterLerp.addPoint(29, 8);
@@ -110,15 +110,26 @@ public class Shooter extends SubsystemBase {
     double shooterVoltage = shooterLerp.interpolate(calculatePivotAngle());
     SmartDashboard.putNumber("Shooter Voltage", shooterVoltage);
 
-    leftController.setReference(
-      shooterVoltage,
-      CANSparkMax.ControlType.kVoltage,
-      0);
+    if(DriverStation.isAutonomousEnabled()){
+      leftShooter.set(0.7);
+      rightShooter.set(0.6);
+    }
+    else{
+      leftController.setReference(
+        shooterVoltage,
+        CANSparkMax.ControlType.kVoltage,
+        0);
 
-    rightController.setReference(
-      shooterVoltage - 2,
-      CANSparkMax.ControlType.kVoltage,
-    0);
+      rightController.setReference(
+        shooterVoltage - 2,
+        CANSparkMax.ControlType.kVoltage,
+      0);
+    }
+  }
+
+  public void setShooterAuto(double speed){
+    leftShooter.set(speed);
+    rightShooter.set(speed);
   }
 
   public void pivotHold(){
@@ -183,9 +194,6 @@ public class Shooter extends SubsystemBase {
     if(hasPriorityTarget()){
       pivotPosition = pivotLerp.interpolate(angle);
     }
-    else{
-      pivotPosition = 3;
-    }
   }
 
   public boolean hasPriorityTarget(){
@@ -199,6 +207,10 @@ public class Shooter extends SubsystemBase {
 
   public void setPipeline(int index){
     llTable.getEntry("pipeline").setNumber(index);
+  }
+
+  public void setPivotPosition(double position){
+    pivotPosition = position;
   }
 
   public boolean isRedAlliance(){

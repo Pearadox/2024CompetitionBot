@@ -117,9 +117,10 @@ public class Drivetrain extends SubsystemBase {
     
     SmartDashboard.putNumber("Robot Angle", getHeading());
     SmartDashboard.putString("Angular Speed", new DecimalFormat("#.00").format((-gyro.getRate() / 180)) + "pi rad/s");
+    SmartDashboard.putString("Tag 4 Pose", RobotContainer.aprilTagFieldLayout.getTagPose(4).get().toPose2d().toString());
 
     SmartDashboard.putString("Robot Pose", getPose().toString());
-    SmartDashboard.putNumber("Align Angle 7", getAlignAngle(7));
+    SmartDashboard.putNumber("Align Angle 4", getAlignAngle(4));
   }
 
   public void swerveDrive(double frontSpeed, double sideSpeed, double turnSpeed, 
@@ -149,6 +150,43 @@ public class Drivetrain extends SubsystemBase {
     SwerveModuleState[] moduleStates = SwerveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds, centerOfRotation);
 
     setModuleStates(moduleStates);
+  }
+
+  public void turnToHeading(double heading, Translation2d centerOfRotation){
+    double turnSpeed;
+
+    if(DriverStation.isAutonomousEnabled()){
+      heading = isRedAlliance() ? -heading : heading;
+    }
+
+    double error = heading - getHeading();
+
+    if(error > 180) {
+      error -= 360;
+    }
+    else if(error < -180){
+      error += 360;
+    }
+    
+    if(Math.abs(error) > 1){
+      turnSpeed = Math.signum(error) * SwerveConstants.kS_PERCENT + SwerveConstants.kP_PERCENT * error;
+    }
+    else{
+      turnSpeed = 0;
+    }
+
+    turnSpeed = turnLimiter.calculate(turnSpeed) * SwerveConstants.TELE_DRIVE_MAX_ANGULAR_SPEED;
+
+    ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, turnSpeed, getHeadingRotation2d());
+
+    SwerveModuleState[] moduleStates = SwerveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds, centerOfRotation);
+
+    setModuleStates(moduleStates);
+  }
+
+  public boolean hasTurnedToHeading(double heading){
+    heading = isRedAlliance() ? -heading : heading;
+    return Math.abs(heading - getHeading()) < 1;
   }
 
   public void setAllIdleMode(boolean brake){
@@ -312,18 +350,13 @@ public class Drivetrain extends SubsystemBase {
     double deltaX = tagPose.getX() - robotPose.getX(); //TODO: check if this works
     double deltaY = tagPose.getY() - robotPose.getY() + Units.inchesToMeters(22.5);
 
-    double alignAngle;
+    double alignAngle = Math.toDegrees(Math.atan2(deltaY, deltaX));
 
-    if(deltaY != 0){
-      alignAngle = Math.toDegrees(Math.atan2(-deltaY, deltaX));   
-    }
-    else{
-      alignAngle = Math.toDegrees(Math.atan2(deltaY, deltaX));
-    }
-
-    alignAngle += 180;
-    if(alignAngle > 180){
-      alignAngle -= 360;
+    if(!isRedAlliance()){
+      alignAngle += 180;
+      if(alignAngle > 180){
+        alignAngle -= 360;
+      }
     }
 
     return alignAngle;

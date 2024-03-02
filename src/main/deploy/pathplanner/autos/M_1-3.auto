@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.5,
-      "y": 4.1
+      "x": 1.35,
+      "y": 5.55
     },
     "rotation": 0.0
   },
@@ -12,9 +12,27 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "Set Shooter Auto"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "M_1_A"
+            "pathName": "M_2_A"
           }
         },
         {
@@ -38,7 +56,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "M_1-2_A"
+            "pathName": "M_2-1_A"
           }
         },
         {
@@ -62,7 +80,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "M_2-3_A"
+            "pathName": "M_1-3_A"
           }
         },
         {

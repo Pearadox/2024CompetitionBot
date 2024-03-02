@@ -115,11 +115,11 @@ public final class Constants {
     public static final int RIGHT_SHOOTER_ID = 32;
     public static final int PIVOT_ID = 33;
 
-    public static final double LEFT_SHOOTER_kP = 0.1;
+    public static final double LEFT_SHOOTER_kP = 0.2;
     public static final double LEFT_SHOOTER_kI = 0;
     public static final double LEFT_SHOOTER_kD = 0;
 
-    public static final double RIGHT_SHOOTER_kP = 0.1;
+    public static final double RIGHT_SHOOTER_kP = 0.2;
     public static final double RIGHT_SHOOTER_kI = 0;
     public static final double RIGHT_SHOOTER_kD = 0;
 
@@ -177,7 +177,7 @@ public final class Constants {
       //     );
       // };
 
-      public static final Vector<N3> LIMELIGHT_STD_DEV = VecBuilder.fill(.7,.7,9999999);
+      public static final Vector<N3> LIMELIGHT_STD_DEV = VecBuilder.fill(.7, .7, .9999999);
       
       public static final double AMBIGUITY_FILTER = 0.3;
       public static final double DISTANCE_FILTER = FieldConstants.FIELD_LENGTH / 2;
