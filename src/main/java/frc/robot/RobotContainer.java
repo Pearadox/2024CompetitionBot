@@ -11,6 +11,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -108,8 +109,13 @@ public class RobotContainer {
 
   public void registerNamedCommands(){
     NamedCommands.registerCommand("Stop Modules", new InstantCommand(() -> drivetrain.stopModules()));
-    NamedCommands.registerCommand("Auto Align", new AutoAlign().withTimeout(0.5));
-    NamedCommands.registerCommand("Shoot", new Shoot().withTimeout(0.5));
+    NamedCommands.registerCommand("Auto Align", new AutoAlign().withTimeout(0.3));
+    NamedCommands.registerCommand("Shoot", new Shoot().withTimeout(0.2));
+    NamedCommands.registerCommand("Set Shooter Auto", new InstantCommand(() -> shooter.setShooterAuto(0.85)));
+    NamedCommands.registerCommand("Reset Heading", new InstantCommand(drivetrain::zeroHeading, drivetrain));
+    NamedCommands.registerCommand("7 Note Set Pivot Position", new InstantCommand(() -> shooter.setPivotPosition(11.5)));
+    NamedCommands.registerCommand("Turn to Heading Middle", new RunCommand(() -> drivetrain.turnToHeading(-56, new Translation2d()))
+      .until(() -> drivetrain.hasTurnedToHeading(-56)));
   }
 
   public void setDefaultCommands(){

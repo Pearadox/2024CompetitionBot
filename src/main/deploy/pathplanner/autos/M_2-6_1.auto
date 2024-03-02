@@ -20,7 +20,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.75
+            "waitTime": 0.8
           }
         },
         {
@@ -32,7 +32,31 @@
         {
           "type": "path",
           "data": {
-            "pathName": "M_6_B"
+            "pathName": "M_2_7N"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stop Modules"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.25
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "M_2-3_7N"
           }
         },
         {
@@ -44,7 +68,61 @@
         {
           "type": "path",
           "data": {
-            "pathName": "M_6_R_B"
+            "pathName": "M_4_R_7N"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.25
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "M_4-5_7N"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stop Modules"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "M_5_R_7N"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "M_5-6_7N"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stop Modules"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "M_6_R_7N"
           }
         },
         {
@@ -62,49 +140,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "M_2_B"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Stop Modules"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "M_2-1_B"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Stop Modules"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "M_1-3_B"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Stop Modules"
+            "pathName": "M_6-1_7N"
           }
         },
         {

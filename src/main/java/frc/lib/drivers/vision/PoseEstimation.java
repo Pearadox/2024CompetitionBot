@@ -55,8 +55,8 @@ public class PoseEstimation {
                 // this is a hack to get around an issue in `SwerveDrivePoseEstimator`
                 // where two measurements cannot share the same timestamp
                 double timestampOffset = 1e-9 * i;
-
-                if(backends[i].hasTarget() && backends[i].isValid()){
+                
+                if(backends[i].isValid()){
                     backends[i].getMeasurement().map((measurement) -> {
                         measurement.timestamp += timestampOffset;
                         return measurement;
