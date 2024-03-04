@@ -13,6 +13,7 @@ import com.revrobotics.SparkPIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.drivers.PearadoxSparkMax;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.AmpBarConstants;
 
 public class AmpBar extends SubsystemBase {
@@ -20,6 +21,8 @@ public class AmpBar extends SubsystemBase {
 
   private RelativeEncoder ampBarEncoder;
   private SparkPIDController ampBarController;
+
+  private double ampBarAdjust = 0;
 
   public enum AmpBarMode{
     Stowed, Deployed
@@ -47,16 +50,23 @@ public class AmpBar extends SubsystemBase {
   public void periodic() {
     if(ampBarMode == AmpBarMode.Deployed){
       ampBarController.setReference(
-        AmpBarConstants.DEPLOYED_ROT,
+        AmpBarConstants.DEPLOYED_ROT + ampBarAdjust,
         ControlType.kPosition,
         0);
     }
     else{
       ampBarController.setReference(
-        0,
+        0 + ampBarAdjust,
         ControlType.kPosition,
         0);
+
+    if(RobotContainer.opController.getPOV() == 90){
+      ampBarAdjust += 0.06;
     }
+    else if(RobotContainer.opController.getPOV() == 270){
+      ampBarAdjust -= 0.06;
+    }
+  }
 
     SmartDashboard.putNumber("Amp Bar Position", ampBarEncoder.getPosition());
   }

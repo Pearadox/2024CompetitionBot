@@ -55,6 +55,12 @@ public class Shooter extends SubsystemBase {
     return SHOOTER;
   }
 
+  public enum ShooterMode{
+    Auto, Manual, Passing, Speaker
+  }
+
+  private ShooterMode shooterMode = ShooterMode.Auto;
+
   /** Creates a new Shooter. */
   public Shooter() {
     leftShooter = new PearadoxSparkFlex(ShooterConstants.LEFT_SHOOTER_ID, MotorType.kBrushless, IdleMode.kBrake, 50, false,
@@ -85,11 +91,11 @@ public class Shooter extends SubsystemBase {
     pivotLerp.addPoint(35, 11.3);
     pivotLerp.addPoint(32, 10.1);
     pivotLerp.addPoint(29, 9.4);
-    pivotLerp.addPoint(26, 8.4);
-    pivotLerp.addPoint(23, 7.7);
-    pivotLerp.addPoint(20, 7.0);
-    pivotLerp.addPoint(17, 6.45);
-    pivotLerp.addPoint(14, 5.4);
+    pivotLerp.addPoint(26, 8.1);
+    pivotLerp.addPoint(23, 7.2);
+    pivotLerp.addPoint(20, 6.5);
+    pivotLerp.addPoint(17, 6.1);
+    pivotLerp.addPoint(14, 5.1);
 
     shooterLerp.addPoint(53, 7);
     shooterLerp.addPoint(47, 7);
@@ -109,6 +115,7 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Shooter Pivot Current", pivot.getOutputCurrent());
     SmartDashboard.putNumber("Shooter Pivot Intended Angle", calculatePivotAngle());  
     SmartDashboard.putBoolean("Shooter Has Priority Target", hasPriorityTarget());  
+    SmartDashboard.putBoolean("AutoShoot Mode", shooterMode == ShooterMode.Auto ? true: false);
   }
 
   public void shooterHold(){
@@ -127,6 +134,17 @@ public class Shooter extends SubsystemBase {
 
       rightController.setReference(
         3.35,
+        ControlType.kVoltage,
+        0);
+    }
+    else if(shooterMode == ShooterMode.Passing){
+      leftController.setReference(
+        5.6,
+        ControlType.kVoltage,
+        0);
+
+      rightController.setReference(
+        3.6,
         ControlType.kVoltage,
         0);
     }
@@ -150,11 +168,23 @@ public class Shooter extends SubsystemBase {
 
   public void pivotHold(){
     if(zeroing){
-      pivot.set(-0.08);
+      pivot.set(-0.15);
     }
     else if(RobotContainer.driverController.getRawButton(XboxController.Button.kA.value)){
       pivotController.setReference(
         ShooterConstants.AMP_PIVOT_POSITION,
+        ControlType.kPosition,
+        0);
+    }
+    else if(shooterMode == ShooterMode.Passing){
+      pivotController.setReference(
+        ShooterConstants.PASSING_PIVOT_POSITION,
+        ControlType.kPosition,
+        0);
+    }
+    else if(shooterMode == ShooterMode.Speaker){
+      pivotController.setReference(
+        ShooterConstants.SPEAKER_PIVOT_POSITION,
         ControlType.kPosition,
         0);
     }
@@ -163,11 +193,18 @@ public class Shooter extends SubsystemBase {
         pivotPosition,
         ControlType.kPosition,
         0);
+      
+      if(shooterMode == ShooterMode.Auto && hasPriorityTarget()){
+        setPivotAngle(calculatePivotAngle());
+      }
     }
-  }
 
-  public void changePivotPosition(double change){
-    pivotPosition += change;
+    if(RobotContainer.opController.getPOV() == 0){
+      pivotPosition += 0.1;
+    }
+    else if(RobotContainer.opController.getPOV() == 180){
+      pivotPosition -= 0.1;
+    }
   }
 
   public void setZeroing(boolean zeroing){
@@ -233,6 +270,26 @@ public class Shooter extends SubsystemBase {
 
   public void setPivotPosition(double position){
     pivotPosition = position;
+  }
+
+  public ShooterMode getShooterMode(){
+    return shooterMode;
+  }
+
+  public void setAutoMode(){
+    shooterMode = ShooterMode.Auto;
+  }
+
+  public void setManualMode(){
+    shooterMode = ShooterMode.Manual;
+  }
+
+  public void setPassingMode(){
+    shooterMode = ShooterMode.Passing;
+  }
+
+  public void setSpeakerMode(){
+    shooterMode = ShooterMode.Speaker;
   }
 
   public boolean isRedAlliance(){

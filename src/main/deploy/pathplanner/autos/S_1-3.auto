@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.5,
-      "y": 1.540461798263264
+      "x": 1.35,
+      "y": 2.34
     },
     "rotation": 0
   },
@@ -15,6 +15,42 @@
           "type": "path",
           "data": {
             "pathName": "S_1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stop Modules"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "S_1-1.5"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stop Modules"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.1
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "S_1.5-2"
           }
         },
         {
@@ -38,13 +74,19 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.1
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "S_1-1.5"
+            "pathName": "S_2.5-3"
           }
         },
         {
@@ -56,13 +98,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "S_1.5-2"
+            "pathName": "S-3-3.5"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "Stop Modules"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.1
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
           }
         }
       ]

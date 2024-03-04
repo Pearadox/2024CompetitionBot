@@ -14,6 +14,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.interpolation.TimeInterpolatableBuffer;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
@@ -31,6 +32,8 @@ public class PoseEstimation {
     private static final double DIFFERENTIATION_TIME = Robot.defaultPeriodSecs;
 
     private Drivetrain drivetrain = Drivetrain.getInstance();
+
+    private GenericEntry robotPoseEntry = Drivetrain.swerveTab.add("Robot Pose", new Pose2d().toString()).withSize(4, 1).withPosition(4, 0).getEntry();
 
     public PoseEstimation() {
         poseEstimator = new SwerveDrivePoseEstimator(
@@ -70,6 +73,7 @@ public class PoseEstimation {
             }
         }
 
+        robotPoseEntry.setString(getEstimatedPose().toString());
         poseHistory.addSample(Timer.getFPGATimestamp(), poseEstimator.getEstimatedPosition());
     }
 

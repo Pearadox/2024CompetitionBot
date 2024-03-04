@@ -138,6 +138,9 @@ public final class Constants {
     public static final double PIVOT_MAX_OUTPUT = 0.4;
 
     public static final double AMP_PIVOT_POSITION = 14.9;
+    public static final double PASSING_PIVOT_POSITION = 15.5;
+    public static final double SPEAKER_PIVOT_POSITION = 19.7;
+
     public static final double FLOOR_TO_SHOOTER = Units.inchesToMeters(7);
   }
 

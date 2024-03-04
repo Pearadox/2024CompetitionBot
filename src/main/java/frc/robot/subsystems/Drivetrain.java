@@ -18,10 +18,12 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.SwerveConstants;
@@ -46,7 +48,15 @@ public class Drivetrain extends SubsystemBase {
   }
 
   private DriveMode driveMode = DriveMode.Normal;
-  
+
+  public static final ShuffleboardTab swerveTab = Shuffleboard.getTab("Swerve");
+  private GenericEntry leftFrontStateEntry;
+  private GenericEntry rightFrontStateEntry;
+  private GenericEntry leftBackStateEntry;
+  private GenericEntry rightBackStateEntry;
+  private GenericEntry robotAngleEntry;
+  private GenericEntry angularSpeedEntry;
+
   private static final Drivetrain DRIVETRAIN = new Drivetrain();
 
   public static Drivetrain getInstance(){
@@ -109,18 +119,25 @@ public class Drivetrain extends SubsystemBase {
       SwerveConstants.AUTO_CONFIG,
       () -> isRedAlliance(),
       this);
+
+    leftFrontStateEntry = swerveTab.add("Left Front Module State", leftFront.getState().toString()).withSize(4, 1).withPosition(0, 0).getEntry();
+    rightFrontStateEntry = swerveTab.add("Right Front Module State", rightFront.getState().toString()).withSize(4, 1).withPosition(0, 1).getEntry();
+    leftBackStateEntry = swerveTab.add("Left Back Module State", leftBack.getState().toString()).withSize(4, 1).withPosition(0, 2).getEntry();
+    rightBackStateEntry = swerveTab.add("Right Back Module State", rightBack.getState().toString()).withSize(4, 1).withPosition(0, 3).getEntry();
+    robotAngleEntry = swerveTab.add("Robot Angle", getHeading()).withSize(1, 1).withPosition(4, 1).getEntry();
+    angularSpeedEntry = swerveTab.add("Angular Speed", new DecimalFormat("#.00").format((-gyro.getRate() / 180)) + "\u03C0" + " rad/s").withSize(1, 1).withPosition(5, 1).getEntry();
   }
 
   @Override
   public void periodic() {
     RobotContainer.poseEstimation.updateOdometry(getHeadingRotation2d(), getModulePositions());
-    
-    SmartDashboard.putNumber("Robot Angle", getHeading());
-    SmartDashboard.putString("Angular Speed", new DecimalFormat("#.00").format((-gyro.getRate() / 180)) + "pi rad/s");
-    SmartDashboard.putString("Tag 4 Pose", RobotContainer.aprilTagFieldLayout.getTagPose(4).get().toPose2d().toString());
 
-    SmartDashboard.putString("Robot Pose", getPose().toString());
-    SmartDashboard.putNumber("Align Angle 4", getAlignAngle(4));
+    leftFrontStateEntry.setString(leftFront.getState().toString());
+    rightFrontStateEntry.setString(rightFront.getState().toString());
+    leftBackStateEntry.setString(leftBack.getState().toString());
+    rightBackStateEntry.setString(rightBack.getState().toString());
+    robotAngleEntry.setDouble(getHeading());
+    angularSpeedEntry.setString(new DecimalFormat("#.00").format((-gyro.getRate() / 180)) + "\u03C0" + "rad/s");
   }
 
   public void swerveDrive(double frontSpeed, double sideSpeed, double turnSpeed, 
@@ -345,11 +362,11 @@ public class Drivetrain extends SubsystemBase {
     return alignSpeed;
   }
 
-  public double getAlignAngle(int tagID){ //TODO: wrong
+  public double getAlignAngle(int tagID){
     Pose2d tagPose = RobotContainer.aprilTagFieldLayout.getTagPose(tagID).get().toPose2d();
     Pose2d robotPose = getPose();
 
-    double deltaX = tagPose.getX() - robotPose.getX(); //TODO: check if this works
+    double deltaX = tagPose.getX() - robotPose.getX();
     double deltaY = tagPose.getY() - robotPose.getY() + Units.inchesToMeters(22.5);
 
     double alignAngle = Math.toDegrees(Math.atan2(deltaY, deltaX));
