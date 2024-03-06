@@ -148,18 +148,6 @@
           "data": {
             "name": "Shoot"
           }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "M_6-1_7N"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
         }
       ]
     }

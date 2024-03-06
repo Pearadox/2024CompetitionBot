@@ -56,7 +56,7 @@ public class AmpBar extends SubsystemBase {
     }
     else{
       ampBarController.setReference(
-        0 + ampBarAdjust,
+        AmpBarConstants.STOWED_ROT + ampBarAdjust,
         ControlType.kPosition,
         0);
 

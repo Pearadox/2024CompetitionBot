@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.35,
-      "y": 2.34
+      "x": 1.45,
+      "y": 2.98
     },
     "rotation": 0
   },
@@ -14,19 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "S_1"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Stop Modules"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "S_1-1.5"
+            "pathName": "S_8.5"
           }
         },
         {
@@ -38,7 +26,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.1
+            "waitTime": 0.6
           }
         },
         {
@@ -50,19 +38,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "S_1.5-2"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Stop Modules"
+            "pathName": "S_8"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "S_2-2.5"
+            "pathName": "S_8_R"
           }
         },
         {
@@ -74,7 +56,43 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.1
+            "waitTime": 0.3
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stop Modules"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "S_7"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "S_7_R"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stop Modules"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.4
           }
         },
         {
@@ -86,7 +104,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "S_2.5-3"
+            "pathName": "S_6"
           }
         },
         {
@@ -98,7 +116,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "S-3-3.5"
+            "pathName": "S_6_R"
           }
         },
         {
@@ -110,7 +128,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.1
+            "waitTime": 0.4
           }
         },
         {

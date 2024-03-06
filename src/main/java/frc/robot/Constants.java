@@ -130,14 +130,14 @@ public final class Constants {
     public static final double SHOOTER_MIN_OUTPUT = -1.0;
     public static final double SHOOTER_MAX_OUTPUT = 1.0;
 
-    public static final double PIVOT_kP = 0.08;
+    public static final double PIVOT_kP = 0.06;
     public static final double PIVOT_kI = 0.0008;
     public static final double PIVOT_kD = 0;
 
     public static final double PIVOT_MIN_OUTPUT = -0.4;
     public static final double PIVOT_MAX_OUTPUT = 0.4;
 
-    public static final double AMP_PIVOT_POSITION = 14.9;
+    public static final double AMP_PIVOT_POSITION = 15.0;
     public static final double PASSING_PIVOT_POSITION = 15.5;
     public static final double SPEAKER_PIVOT_POSITION = 19.7;
 
@@ -161,8 +161,8 @@ public final class Constants {
     public static final double AMP_BAR_MIN_OUTPUT = -0.5;
     public static final double AMP_BAR_MAX_OUTPUT = 0.5;
 
+    public static final double STOWED_ROT = -3;
     public static final double DEPLOYED_ROT = 17.5;
-    ;
   }
 
   public static final class FieldConstants{
@@ -173,6 +173,8 @@ public final class Constants {
   }
 
   public static final class VisionConstants{
+    //Limelight Offest with Mount
+    // LL Forward = 0.2667 LL Up = 0.46355
     public static final String LL_NAME = "limelight";
 
     public static final Transform3d ROBOT_TO_SHOOTER_LL = new Transform3d(

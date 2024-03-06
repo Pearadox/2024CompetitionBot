@@ -11,8 +11,6 @@ import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.cscore.HttpCamera;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -89,9 +87,9 @@ public class RobotContainer {
 
     aprilTagFieldLayout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2024Crescendo.m_resourceFile);
       
-    HttpCamera httpCamera = new HttpCamera("Limelight", "http://10.54.14.11:5800");
-    CameraServer.addCamera(httpCamera);
-    driverTab.add(httpCamera).withSize(6, 4).withPosition(4, 0);
+    // HttpCamera httpCamera = new HttpCamera("Limelight", "http://10.54.14.11:5800");
+    // CameraServer.addCamera(httpCamera);
+    // driverTab.add(httpCamera).withSize(6, 4).withPosition(4, 0);
   }
 
   /**

@@ -73,8 +73,8 @@ public class Transport extends SubsystemBase {
   }
 
   public void transportHold(){
-    topTransport.set(0.65);
-    botTransport.set(0.65);
+    topTransport.set(0.6);
+    botTransport.set(0.6);
   }
 
   public void transportOut(){

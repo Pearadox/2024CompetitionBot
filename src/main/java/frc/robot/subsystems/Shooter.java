@@ -82,20 +82,20 @@ public class Shooter extends SubsystemBase {
     rightController = rightShooter.getPIDController();
     pivotController = pivot.getPIDController();
 
-    pivotLerp.addPoint(53, 19.7);
-    pivotLerp.addPoint(50, 17.9);
-    pivotLerp.addPoint(47, 16.4);
-    pivotLerp.addPoint(44, 14.8);
-    pivotLerp.addPoint(41, 13.5);
-    pivotLerp.addPoint(38, 12.3);
-    pivotLerp.addPoint(35, 11.3);
-    pivotLerp.addPoint(32, 10.1);
-    pivotLerp.addPoint(29, 9.4);
-    pivotLerp.addPoint(26, 8.1);
-    pivotLerp.addPoint(23, 7.2);
-    pivotLerp.addPoint(20, 6.5);
-    pivotLerp.addPoint(17, 6.1);
-    pivotLerp.addPoint(14, 5.1);
+    pivotLerp.addPoint(53, 20.5);
+    pivotLerp.addPoint(50, 19.6);
+    pivotLerp.addPoint(47, 18.0);
+    pivotLerp.addPoint(44, 16.0);
+    pivotLerp.addPoint(41, 15.0);
+    pivotLerp.addPoint(38, 13.9);
+    pivotLerp.addPoint(35, 13.0);
+    pivotLerp.addPoint(32, 12.4);
+    pivotLerp.addPoint(29, 11.0);
+    pivotLerp.addPoint(26, 9.75);
+    pivotLerp.addPoint(23, 8.8);
+    pivotLerp.addPoint(20, 8.4);
+    pivotLerp.addPoint(17, 7.9);
+    pivotLerp.addPoint(14, 7.2);
 
     shooterLerp.addPoint(53, 7);
     shooterLerp.addPoint(47, 7);
@@ -128,12 +128,12 @@ public class Shooter extends SubsystemBase {
     }
     else if(RobotContainer.driverController.getRawButton(XboxController.Button.kA.value)){
       leftController.setReference(
-        3.35,
+        3.2,
         ControlType.kVoltage,
         0);
 
       rightController.setReference(
-        3.35,
+        3.2,
         ControlType.kVoltage,
         0);
     }

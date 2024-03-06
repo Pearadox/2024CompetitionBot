@@ -3,57 +3,57 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.7,
-        "y": 6.55
+        "x": 3.3,
+        "y": 2.77
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.300815052033907,
-        "y": 6.58383945599245
+        "x": 4.350853737336929,
+        "y": 2.339941972045465
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.885790873719516,
-        "y": 6.181346709486769
+        "x": 4.6427041111467915,
+        "y": 2.2242627513175903
       },
       "prevControl": {
-        "x": 6.618302395868717,
-        "y": 6.353919921003413
+        "x": 4.496778924241861,
+        "y": 2.2821023616815275
       },
       "nextControl": {
-        "x": 7.188033378442056,
-        "y": 5.986351545149647
+        "x": 4.788629298051722,
+        "y": 2.166423140953653
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.597523223550011,
-        "y": 5.450114843222561
+        "x": 5.705116428463262,
+        "y": 1.7977452545344526
       },
       "prevControl": {
-        "x": 7.427783373188517,
-        "y": 5.682390427927764
+        "x": 5.027985082900095,
+        "y": 2.0688436132899586
       },
       "nextControl": {
-        "x": 7.782768629670276,
-        "y": 5.196621129584304
+        "x": 6.382247774026428,
+        "y": 1.5266468957789465
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 8.37,
-        "y": 4.27
+        "x": 8.358004364464787,
+        "y": 0.7312318662642086
       },
       "prevControl": {
-        "x": 8.046012101525392,
-        "y": 4.816380559126915
+        "x": 7.119785070924062,
+        "y": 1.208970018890156
       },
       "nextControl": null,
       "isLocked": false,
@@ -65,19 +65,19 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 6.0,
-    "maxAcceleration": 7.0,
+    "maxAcceleration": 5.0,
     "maxAngularVelocity": 360.0,
     "maxAngularAcceleration": 360.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -40.0,
+    "rotation": -21.0,
     "rotateFast": true
   },
   "reversed": false,
-  "folder": "Middle 7 Note",
+  "folder": "Source",
   "previewStartingState": {
-    "rotation": 9.5,
+    "rotation": 0,
     "velocity": 0
   },
   "useDefaultConstraints": false
