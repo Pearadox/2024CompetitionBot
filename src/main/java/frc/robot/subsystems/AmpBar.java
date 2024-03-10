@@ -59,6 +59,7 @@ public class AmpBar extends SubsystemBase {
         AmpBarConstants.STOWED_ROT + ampBarAdjust,
         ControlType.kPosition,
         0);
+    }
 
     if(RobotContainer.opController.getPOV() == 90){
       ampBarAdjust += 0.06;
@@ -66,7 +67,13 @@ public class AmpBar extends SubsystemBase {
     else if(RobotContainer.opController.getPOV() == 270){
       ampBarAdjust -= 0.06;
     }
-  }
+
+    if(RobotContainer.driverController.getLeftTriggerAxis() >= 0.95 && ampBarMode == AmpBarMode.Stowed){
+      setDeployedMode();
+    }
+    else if (RobotContainer.driverController.getLeftTriggerAxis() < 0.95 && ampBarMode == AmpBarMode.Deployed){
+      setStowedMode();
+    }
 
     SmartDashboard.putNumber("Amp Bar Position", ampBarEncoder.getPosition());
   }

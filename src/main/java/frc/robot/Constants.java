@@ -53,7 +53,7 @@ public final class Constants {
 
     //Drivetrain characteristics
     public static final double LEFT_FRONT_OFFSET = 0.307;
-    public static final double RIGHT_FRONT_OFFSET = -0.254;
+    public static final double RIGHT_FRONT_OFFSET = -0.244;
     public static final double LEFT_BACK_OFFSET = 0.026;
     public static final double RIGHT_BACK_OFFSET = 0.144;
 
@@ -137,7 +137,7 @@ public final class Constants {
     public static final double PIVOT_MIN_OUTPUT = -0.4;
     public static final double PIVOT_MAX_OUTPUT = 0.4;
 
-    public static final double AMP_PIVOT_POSITION = 15.0;
+    public static final double AMP_PIVOT_POSITION = 13.8;
     public static final double PASSING_PIVOT_POSITION = 15.5;
     public static final double SPEAKER_PIVOT_POSITION = 19.7;
 
@@ -162,7 +162,7 @@ public final class Constants {
     public static final double AMP_BAR_MAX_OUTPUT = 0.5;
 
     public static final double STOWED_ROT = -3;
-    public static final double DEPLOYED_ROT = 17.5;
+    public static final double DEPLOYED_ROT = 18.0;
   }
 
   public static final class FieldConstants{

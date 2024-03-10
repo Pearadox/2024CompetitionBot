@@ -3,57 +3,57 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.53,
-        "y": 4.65
+        "x": 3.33,
+        "y": 2.79
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.965088504998865,
-        "y": 4.3678916811515345
+        "x": 3.9413638922289733,
+        "y": 3.3929158594659237
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.754818920564208,
-        "y": 4.163146758597556
+        "x": 5.335579317239397,
+        "y": 4.319142890067254
       },
       "prevControl": {
-        "x": 5.251827915067662,
-        "y": 4.263744959696864
+        "x": 4.832482412402683,
+        "y": 4.219075642585569
       },
       "nextControl": {
-        "x": 6.096060458154172,
-        "y": 4.094898451079563
+        "x": 5.793817953431632,
+        "y": 4.410287714399658
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.710295225816106,
-        "y": 4.02
+        "x": 6.57379861078012,
+        "y": 4.319142890067254
       },
       "prevControl": {
-        "x": 6.34955417179243,
-        "y": 4.02665014356157
+        "x": 6.155699766500564,
+        "y": 4.397170138845761
       },
       "nextControl": {
-        "x": 7.03199751868065,
-        "y": 4.014069523255606
+        "x": 6.97353869767122,
+        "y": 4.244541824713104
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 8.25,
-        "y": 4.09
+        "x": 8.358004364464787,
+        "y": 4.319142890067254
       },
       "prevControl": {
-        "x": 7.441527092080313,
-        "y": 3.9974008689110017
+        "x": 7.559266194164788,
+        "y": 4.319142890067254
       },
       "nextControl": null,
       "isLocked": false,
@@ -65,9 +65,9 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 6.0,
-    "maxAcceleration": 6.0,
+    "maxAcceleration": 8.0,
     "maxAngularVelocity": 360.0,
-    "maxAngularAcceleration": 180.0
+    "maxAngularAcceleration": 540.0
   },
   "goalEndState": {
     "velocity": 0,
@@ -77,7 +77,7 @@
   "reversed": false,
   "folder": "Source",
   "previewStartingState": {
-    "rotation": -4.444414803235169,
+    "rotation": -50.0,
     "velocity": 0
   },
   "useDefaultConstraints": false

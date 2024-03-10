@@ -20,7 +20,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.93
           }
         },
         {
@@ -93,6 +93,12 @@
           "type": "named",
           "data": {
             "name": "Auto Align"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.3
           }
         },
         {

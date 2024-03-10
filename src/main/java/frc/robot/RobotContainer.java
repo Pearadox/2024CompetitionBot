@@ -29,6 +29,7 @@ import frc.robot.commands.IntakeHold;
 import frc.robot.commands.Outtake;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.ShooterHold;
+import frc.robot.commands.SourceAutoAlign;
 import frc.robot.commands.SwerveDrive;
 import frc.robot.subsystems.AmpBar;
 import frc.robot.subsystems.Drivetrain;
@@ -54,7 +55,7 @@ public class RobotContainer {
   public static final XboxController driverController = new XboxController(IOConstants.DRIVER_CONTROLLER_PORT);
 
   private final JoystickButton resetHeading_Start = new JoystickButton(driverController, XboxController.Button.kStart.value);
-  private final JoystickButton ampBar_A = new JoystickButton(driverController, XboxController.Button.kA.value);
+  private final JoystickButton popNote_A = new JoystickButton(driverController, XboxController.Button.kA.value);
   private final JoystickButton shoot_RB = new JoystickButton(driverController, XboxController.Button.kRightBumper.value);
   private final JoystickButton zeroingShooter_X = new JoystickButton(driverController, XboxController.Button.kX.value);
   private final JoystickButton outtake_B = new JoystickButton(driverController, XboxController.Button.kB.value);
@@ -74,7 +75,6 @@ public class RobotContainer {
 
   //Shuffleboard
   public static final ShuffleboardTab autoTab = Shuffleboard.getTab("Auto");
-  public static final ShuffleboardTab driverTab = Shuffleboard.getTab("Driver");
   private SendableChooser<Command> autoChooser;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. 
@@ -104,7 +104,7 @@ public class RobotContainer {
   private void configureBindings() {
     //Driver Buttons
     resetHeading_Start.onTrue(new InstantCommand(drivetrain::zeroHeading, drivetrain));
-    ampBar_A.whileTrue(new RunCommand(() -> ampBar.setDeployedMode())).onFalse(new InstantCommand(() -> ampBar.setStowedMode()));
+    popNote_A.whileTrue(new Shoot());
     zeroingShooter_X.whileTrue(new RunCommand(() -> shooter.setZeroing(true)))
       .onFalse(new InstantCommand(() -> shooter.setZeroing(false))
       .andThen(new InstantCommand(() -> shooter.resetPivotEncoder())));
@@ -126,14 +126,22 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
+    drivetrain.resetAllEncoders();
+    if(drivetrain.isRedAlliance()){
+      drivetrain.setHeading(60);
+    }
+    else{
+      drivetrain.setHeading(-60);
+    }
     return autoChooser.getSelected();
   }
 
   public void registerNamedCommands(){
     NamedCommands.registerCommand("Stop Modules", new InstantCommand(() -> drivetrain.stopModules()));
-    NamedCommands.registerCommand("Auto Align", new AutoAlign().withTimeout(0.3));
+    NamedCommands.registerCommand("Auto Align", new AutoAlign().withTimeout(0.4));
+    NamedCommands.registerCommand("Source Auto Align", new SourceAutoAlign().withTimeout(0.4));
     NamedCommands.registerCommand("Shoot", new Shoot().withTimeout(0.2));
-    NamedCommands.registerCommand("Source Set Pivot Position", new InstantCommand(() -> shooter.setPivotPosition(9.05)));
+    NamedCommands.registerCommand("Source Set Pivot Position", new InstantCommand(() -> shooter.setPivotPosition(14.0)));
     NamedCommands.registerCommand("Set Shooter Auto", new InstantCommand(() -> shooter.setShooterAuto(0.85)));
     NamedCommands.registerCommand("Reset Heading", new InstantCommand(drivetrain::zeroHeading, drivetrain));
     NamedCommands.registerCommand("7 Note Set Pivot Position", new InstantCommand(() -> shooter.setPivotPosition(11.5)));

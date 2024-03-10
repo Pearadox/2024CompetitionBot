@@ -22,9 +22,13 @@ import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.Constants.VisionConstants;
@@ -308,9 +312,14 @@ public class Drivetrain extends SubsystemBase {
 
     if(isRedAlliance()){
       if(llTable.getEntry("tid").getDouble(0) == 4){
-        double tx = llTable.getEntry("tx").getDouble(0);
-        double error = tx + 2.5;
-        alignSpeed = Math.abs(error) > 0.9 ? Math.signum(error) * SwerveConstants.kS_PERCENT + SwerveConstants.kP_PERCENT * tx : 0;
+        double[] camerapose_targetspace = llTable.getEntry("camerapose_targetspace").getDoubleArray(new double[6]);
+        double x = Math.abs(camerapose_targetspace[0]);
+        double z = Math.abs(camerapose_targetspace[2]);
+        double offset = Math.atan(x / z);
+
+        double error = llTable.getEntry("tx").getDouble(0) + offset + 2.5;
+        
+        alignSpeed = Math.abs(error) > 0.9 ? Math.signum(error) * SwerveConstants.kS_PERCENT + SwerveConstants.kP_PERCENT * error : 0;
       }
       else{
         double alignAngle = getAlignAngle(4);
@@ -334,9 +343,14 @@ public class Drivetrain extends SubsystemBase {
     }
     else{
       if(llTable.getEntry("tid").getDouble(0) == 7){
-        double tx = llTable.getEntry("tx").getDouble(0);
-        double error = tx + 2.5;
-        alignSpeed = Math.abs(error) > 0.9 ? Math.signum(error) * SwerveConstants.kS_PERCENT + SwerveConstants.kP_PERCENT * tx : 0;
+        double[] camerapose_targetspace = llTable.getEntry("camerapose_targetspace").getDoubleArray(new double[6]);
+        double x = Math.abs(camerapose_targetspace[0]);
+        double z = Math.abs(camerapose_targetspace[2]);
+        double offset = Math.atan(x / z);
+
+        double error = llTable.getEntry("tx").getDouble(0) + offset + 2.5;
+        
+        alignSpeed = Math.abs(error) > 0.9 ? Math.signum(error) * SwerveConstants.kS_PERCENT + SwerveConstants.kP_PERCENT * error : 0;
       }
       else{
         double alignAngle = getAlignAngle(7);
@@ -360,6 +374,90 @@ public class Drivetrain extends SubsystemBase {
     }
 
     return alignSpeed;
+  }
+
+  public double getAlignSpeedSourceAuto(){
+    double alignSpeed;
+
+    if(isRedAlliance()){
+      if(llTable.getEntry("tid").getDouble(0) == 4){
+        double[] camerapose_targetspace = llTable.getEntry("camerapose_targetspace").getDoubleArray(new double[6]);
+        double x = Math.abs(camerapose_targetspace[0]);
+        double z = Math.abs(camerapose_targetspace[2]);
+        double offset = Math.atan(x / z);
+
+        double error = llTable.getEntry("tx").getDouble(0) + offset;
+        
+        alignSpeed = Math.abs(error) > 0.9 ? Math.signum(error) * SwerveConstants.kS_PERCENT + SwerveConstants.kP_PERCENT * error : 0;
+      }
+      else{
+        double alignAngle = getAlignAngle(4);
+
+        double error = alignAngle - getHeading();
+
+        if(error > 180) {
+          error -= 360;
+        }
+        else if(error < -180){
+          error += 360;
+        }
+        
+        if(Math.abs(error) > 1){
+          alignSpeed = Math.signum(-error) * SwerveConstants.kS_PERCENT + SwerveConstants.kP_PERCENT * -error;
+        }
+        else{
+          alignSpeed = 0;
+        }
+      }
+    }
+    else{
+      if(llTable.getEntry("tid").getDouble(0) == 7){
+        double[] camerapose_targetspace = llTable.getEntry("camerapose_targetspace").getDoubleArray(new double[6]);
+        double x = Math.abs(camerapose_targetspace[0]);
+        double z = Math.abs(camerapose_targetspace[2]);
+        double offset = Math.atan(x / z);
+
+        double error = llTable.getEntry("tx").getDouble(0) + offset;
+        
+        alignSpeed = Math.abs(error) > 0.9 ? Math.signum(error) * SwerveConstants.kS_PERCENT + SwerveConstants.kP_PERCENT * error : 0;
+      }
+      else{
+        double alignAngle = getAlignAngle(7);
+
+        double error = alignAngle - getHeading();
+
+        if(error > 180) {
+          error -= 360;
+        }
+        else if(error < -180){
+          error += 360;
+        }
+        
+        if(Math.abs(error) > 1){
+          alignSpeed = Math.signum(-error) * SwerveConstants.kS_PERCENT + SwerveConstants.kP_PERCENT * -error;
+        }
+        else{
+          alignSpeed = 0;
+        }
+      }
+    }
+
+    return alignSpeed;
+  }
+
+  public boolean readyToShoot(){
+    double[] camerapose_targetspace = llTable.getEntry("camerapose_targetspace").getDoubleArray(new double[6]);
+    double x = Math.abs(camerapose_targetspace[0]);
+    double z = Math.abs(camerapose_targetspace[2]);
+    double offset = Math.atan(x / z);
+
+    double error = llTable.getEntry("tx").getDouble(0) + offset + 2.5;
+    if(isRedAlliance()){
+      return Math.abs(error) <= 0.9 && llTable.getEntry("tid").getDouble(0) == 4; 
+    }
+    else{
+      return Math.abs(error) <= 0.9 && llTable.getEntry("tid").getDouble(0) == 7;
+    }
   }
 
   public double getAlignAngle(int tagID){
@@ -391,5 +489,11 @@ public class Drivetrain extends SubsystemBase {
 
   public void setAlignMode(){
     driveMode = DriveMode.Align;
+  }
+
+  public Command rumbleController(){
+    return new InstantCommand(() -> RobotContainer.driverController.setRumble(RumbleType.kBothRumble, 0.25))
+      .andThen(new WaitCommand(0.5))
+      .andThen(new InstantCommand(() -> RobotContainer.driverController.setRumble(RumbleType.kBothRumble, 0)));
   }
 }
