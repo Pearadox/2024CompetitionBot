@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Drivetrain;
 
@@ -35,13 +36,17 @@ public class SwerveDrive extends Command {
         true,
         new Translation2d(),
         true);
+      
+      if(drivetrain.readyToShoot()){
+        CommandScheduler.getInstance().schedule(drivetrain.rumbleController());
+      }
     }
     else{
       drivetrain.swerveDrive(
         -driverController.getLeftY(), 
         -driverController.getLeftX(), 
         -driverController.getRightX(),
-        !driverController.getRawButton(XboxController.Button.kB.value),
+        RobotContainer.driverController.getRightTriggerAxis() < 0.9,
         new Translation2d(),
         true);
     }

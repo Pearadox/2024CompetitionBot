@@ -4,16 +4,17 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Drivetrain;
 
-public class ShooterHold extends Command {
-  private Shooter shooter = Shooter.getInstance();
+public class SourceAutoAlign extends Command {
+  private Drivetrain drivetrain = Drivetrain.getInstance();
 
-  /** Creates a new ShooterHold. */
-  public ShooterHold() {
+  /** Creates a new AutoAlign. */
+  public SourceAutoAlign() {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(shooter);
+    addRequirements(drivetrain);
   }
 
   // Called when the command is initially scheduled.
@@ -23,14 +24,20 @@ public class ShooterHold extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.shooterHold();
-    shooter.pivotHold();
+    drivetrain.swerveDrive(
+      0,
+      0, 
+      -drivetrain.getAlignSpeedSourceAuto(),
+      true,
+      new Translation2d(),
+      false);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
-
+  public void end(boolean interrupted) {
+    drivetrain.stopModules();
+  }
 
   // Returns true when the command should end.
   @Override

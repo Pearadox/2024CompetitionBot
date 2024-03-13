@@ -23,10 +23,14 @@ public class PearadoxTalonFX extends TalonFX{
         this.setInverted(isInverted);
 
         CurrentLimitsConfigs currentLimitsConfigs = new CurrentLimitsConfigs();
+        this.getConfigurator().refresh(currentLimitsConfigs);
+
         currentLimitsConfigs.withSupplyCurrentLimitEnable(true);
         currentLimitsConfigs.withSupplyCurrentLimit(limit);
         currentLimitsConfigs.withSupplyTimeThreshold(limit);
         currentLimitsConfigs.withSupplyTimeThreshold(1);
+        currentLimitsConfigs.withStatorCurrentLimitEnable(true);
+        currentLimitsConfigs.withStatorCurrentLimit(limit);
 
         this.getConfigurator().apply(currentLimitsConfigs);
     }

@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.35,
-      "y": 5.55
+      "x": 0.73,
+      "y": 4.42
     },
-    "rotation": 0
+    "rotation": -60.0
   },
   "command": {
     "type": "sequential",
@@ -14,13 +14,25 @@
         {
           "type": "named",
           "data": {
-            "name": "Set Shooter Auto"
+            "name": "Source Set Pivot Position"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "S_8.5"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.8
+            "waitTime": 0.7
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Auto Align"
           }
         },
         {
@@ -32,7 +44,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "M_2_7N"
+            "pathName": "S_8"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "S_8_R"
           }
         },
         {
@@ -44,19 +62,19 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.25
+            "waitTime": 0.45
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Source Auto Align"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "Shoot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "M_2-3_7N"
           }
         },
         {
@@ -68,13 +86,31 @@
         {
           "type": "path",
           "data": {
-            "pathName": "M_4_R_7N"
+            "pathName": "S_7"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "S_7_R"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stop Modules"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.25
+            "waitTime": 0.45
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Source Auto Align"
           }
         },
         {
@@ -86,72 +122,18 @@
         {
           "type": "path",
           "data": {
-            "pathName": "M_4-5_7N"
+            "pathName": "S_6"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "Stop Modules"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "M_5_R_7N"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "M_5-6_7N"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Stop Modules"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "M_6_R_7N"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Stop Modules"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "M_6-1_7N"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
           }
         }
       ]
     }
   },
-  "folder": "Middle",
+  "folder": "Source",
   "choreoAuto": false
 }

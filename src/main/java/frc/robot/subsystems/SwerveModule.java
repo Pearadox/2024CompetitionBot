@@ -15,10 +15,10 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.drivers.PearadoxSparkMax;
 import frc.lib.drivers.PearadoxTalonFX;
+import frc.lib.util.SmarterDashboard;
 import frc.robot.Constants.SwerveConstants;
 
 public class SwerveModule extends SubsystemBase {
@@ -58,9 +58,9 @@ public class SwerveModule extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Drive Distance (rot) - Motor: " + driveMotor.getDeviceID(), getDriveMotorPosition());
-    SmartDashboard.putNumber("Wheel Position (rot) - Motor: " + driveMotor.getDeviceID(), getTurnMotorPosition());
-    SmartDashboard.putNumber("Absolute Wheel Angle (deg) - Motor: " + driveMotor.getDeviceID(), absoluteEncoder.getAbsolutePosition().getValueAsDouble());
+    SmarterDashboard.putNumber("Drive Distance (rot) - Motor: " + driveMotor.getDeviceID(), getDriveMotorPosition(), "Drivetrain");
+    SmarterDashboard.putNumber("Wheel Position (rot) - Motor: " + driveMotor.getDeviceID(), getTurnMotorPosition(), "Drivetrain");
+    SmarterDashboard.putNumber("Absolute Wheel Angle (deg) - Motor: " + driveMotor.getDeviceID(), absoluteEncoder.getAbsolutePosition().getValueAsDouble(), "Drivetrain");
   }
 
   public void setBrake(boolean brake){

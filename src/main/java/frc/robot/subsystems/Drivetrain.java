@@ -18,11 +18,18 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.lib.util.SmarterDashboard;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.Constants.VisionConstants;
@@ -46,7 +53,15 @@ public class Drivetrain extends SubsystemBase {
   }
 
   private DriveMode driveMode = DriveMode.Normal;
-  
+
+  public static final ShuffleboardTab swerveTab = Shuffleboard.getTab("Swerve");
+  private GenericEntry leftFrontStateEntry;
+  private GenericEntry rightFrontStateEntry;
+  private GenericEntry leftBackStateEntry;
+  private GenericEntry rightBackStateEntry;
+  private GenericEntry robotAngleEntry;
+  private GenericEntry angularSpeedEntry;
+
   private static final Drivetrain DRIVETRAIN = new Drivetrain();
 
   public static Drivetrain getInstance(){
@@ -109,18 +124,33 @@ public class Drivetrain extends SubsystemBase {
       SwerveConstants.AUTO_CONFIG,
       () -> isRedAlliance(),
       this);
+
+    leftFrontStateEntry = swerveTab.add("Left Front Module State", leftFront.getState().toString()).withSize(4, 1).withPosition(0, 0).getEntry();
+    rightFrontStateEntry = swerveTab.add("Right Front Module State", rightFront.getState().toString()).withSize(4, 1).withPosition(0, 1).getEntry();
+    leftBackStateEntry = swerveTab.add("Left Back Module State", leftBack.getState().toString()).withSize(4, 1).withPosition(0, 2).getEntry();
+    rightBackStateEntry = swerveTab.add("Right Back Module State", rightBack.getState().toString()).withSize(4, 1).withPosition(0, 3).getEntry();
+    robotAngleEntry = swerveTab.add("Robot Angle", getHeading()).withSize(1, 1).withPosition(4, 1).getEntry();
+    angularSpeedEntry = swerveTab.add("Angular Speed", new DecimalFormat("#.00").format((-gyro.getRate() / 180)) + "\u03C0" + " rad/s").withSize(1, 1).withPosition(5, 1).getEntry();
   }
 
   @Override
   public void periodic() {
     RobotContainer.poseEstimation.updateOdometry(getHeadingRotation2d(), getModulePositions());
-    
-    SmartDashboard.putNumber("Robot Angle", getHeading());
-    SmartDashboard.putString("Angular Speed", new DecimalFormat("#.00").format((-gyro.getRate() / 180)) + "pi rad/s");
-    SmartDashboard.putString("Tag 4 Pose", RobotContainer.aprilTagFieldLayout.getTagPose(4).get().toPose2d().toString());
 
-    SmartDashboard.putString("Robot Pose", getPose().toString());
-    SmartDashboard.putNumber("Align Angle 4", getAlignAngle(4));
+    SmarterDashboard.putString("Left Front Module State", leftFront.getState().toString(), "Drivetrain");
+    SmarterDashboard.putString("Right Front Module State", rightFront.getState().toString(), "Drivetrain");
+    SmarterDashboard.putString("Left Back Module State", leftBack.getState().toString(), "Drivetrain");
+    SmarterDashboard.putString("Right Back Module State", rightBack.getState().toString(), "Drivetrain");
+    SmarterDashboard.putNumber("Robot Angle", getHeading(), "Drivetrain");
+    SmarterDashboard.putString("Angular Speed", new DecimalFormat("#.00").format((-gyro.getRate() / 180)) + "\u03C0" + " rad/s", "Drivetrain");
+    SmarterDashboard.putString("Odometry", getPose().toString(), "Drivetrain");
+
+    leftFrontStateEntry.setString(leftFront.getState().toString());
+    rightFrontStateEntry.setString(rightFront.getState().toString());
+    leftBackStateEntry.setString(leftBack.getState().toString());
+    rightBackStateEntry.setString(rightBack.getState().toString());
+    robotAngleEntry.setDouble(getHeading());
+    angularSpeedEntry.setString(new DecimalFormat("#.00").format((-gyro.getRate() / 180)) + "\u03C0" + "rad/s");
   }
 
   public void swerveDrive(double frontSpeed, double sideSpeed, double turnSpeed, 
@@ -146,6 +176,14 @@ public class Drivetrain extends SubsystemBase {
     else{
       chassisSpeeds = new ChassisSpeeds(frontSpeed, sideSpeed, turnSpeed);
     }
+
+    SwerveModuleState[] moduleStates = SwerveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds, centerOfRotation);
+
+    setModuleStates(moduleStates);
+  }
+
+  public void swerveDrive(ChassisSpeeds chassisSpeeds, Translation2d centerOfRotation){ //Drive with field relative chassis speeds
+    chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(chassisSpeeds, getHeadingRotation2d());
 
     SwerveModuleState[] moduleStates = SwerveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds, centerOfRotation);
 
@@ -229,6 +267,11 @@ public class Drivetrain extends SubsystemBase {
     setModuleStates(moduleStates);
   }
 
+  public ChassisSpeeds getFieldRelativeSpeeds(){
+    ChassisSpeeds chassisSpeeds = SwerveConstants.DRIVE_KINEMATICS.toChassisSpeeds(getModuleStates());
+    return ChassisSpeeds.fromRobotRelativeSpeeds(chassisSpeeds, getHeadingRotation2d());
+  }
+
   public void zeroHeading(){
     gyro.setYaw(0);
   }
@@ -291,8 +334,14 @@ public class Drivetrain extends SubsystemBase {
 
     if(isRedAlliance()){
       if(llTable.getEntry("tid").getDouble(0) == 4){
-        double tx = llTable.getEntry("tx").getDouble(0);
-        alignSpeed = Math.abs(tx) > 1.5 ? Math.signum(tx) * SwerveConstants.kS_PERCENT + SwerveConstants.kP_PERCENT * tx : 0;
+        double[] camerapose_targetspace = llTable.getEntry("camerapose_targetspace").getDoubleArray(new double[6]);
+        double x = Math.abs(camerapose_targetspace[0]);
+        double z = Math.abs(camerapose_targetspace[2]);
+        double offset = Math.atan(x / z);
+
+        double error = llTable.getEntry("tx").getDouble(0) + offset + 2.5;
+        
+        alignSpeed = Math.abs(error) > 0.9 ? Math.signum(error) * SwerveConstants.kS_PERCENT + SwerveConstants.kP_PERCENT * error : 0;
       }
       else{
         double alignAngle = getAlignAngle(4);
@@ -316,8 +365,14 @@ public class Drivetrain extends SubsystemBase {
     }
     else{
       if(llTable.getEntry("tid").getDouble(0) == 7){
-        double tx = llTable.getEntry("tx").getDouble(0);
-        alignSpeed = Math.abs(tx) > 1.5 ? Math.signum(tx) * SwerveConstants.kS_PERCENT + SwerveConstants.kP_PERCENT * tx : 0;
+        double[] camerapose_targetspace = llTable.getEntry("camerapose_targetspace").getDoubleArray(new double[6]);
+        double x = Math.abs(camerapose_targetspace[0]);
+        double z = Math.abs(camerapose_targetspace[2]);
+        double offset = Math.atan(x / z);
+
+        double error = llTable.getEntry("tx").getDouble(0) + offset + 2.5;
+        
+        alignSpeed = Math.abs(error) > 0.9 ? Math.signum(error) * SwerveConstants.kS_PERCENT + SwerveConstants.kP_PERCENT * error : 0;
       }
       else{
         double alignAngle = getAlignAngle(7);
@@ -343,11 +398,95 @@ public class Drivetrain extends SubsystemBase {
     return alignSpeed;
   }
 
-  public double getAlignAngle(int tagID){ //TODO: wrong
+  public double getAlignSpeedSourceAuto(){
+    double alignSpeed;
+
+    if(isRedAlliance()){
+      if(llTable.getEntry("tid").getDouble(0) == 4){
+        double[] camerapose_targetspace = llTable.getEntry("camerapose_targetspace").getDoubleArray(new double[6]);
+        double x = Math.abs(camerapose_targetspace[0]);
+        double z = Math.abs(camerapose_targetspace[2]);
+        double offset = Math.atan(x / z);
+
+        double error = llTable.getEntry("tx").getDouble(0) + offset;
+        
+        alignSpeed = Math.abs(error) > 0.9 ? Math.signum(error) * SwerveConstants.kS_PERCENT + SwerveConstants.kP_PERCENT * error : 0;
+      }
+      else{
+        double alignAngle = getAlignAngle(4);
+
+        double error = alignAngle - getHeading();
+
+        if(error > 180) {
+          error -= 360;
+        }
+        else if(error < -180){
+          error += 360;
+        }
+        
+        if(Math.abs(error) > 1){
+          alignSpeed = Math.signum(-error) * SwerveConstants.kS_PERCENT + SwerveConstants.kP_PERCENT * -error;
+        }
+        else{
+          alignSpeed = 0;
+        }
+      }
+    }
+    else{
+      if(llTable.getEntry("tid").getDouble(0) == 7){
+        double[] camerapose_targetspace = llTable.getEntry("camerapose_targetspace").getDoubleArray(new double[6]);
+        double x = Math.abs(camerapose_targetspace[0]);
+        double z = Math.abs(camerapose_targetspace[2]);
+        double offset = Math.atan(x / z);
+
+        double error = llTable.getEntry("tx").getDouble(0) + offset;
+        
+        alignSpeed = Math.abs(error) > 0.9 ? Math.signum(error) * SwerveConstants.kS_PERCENT + SwerveConstants.kP_PERCENT * error : 0;
+      }
+      else{
+        double alignAngle = getAlignAngle(7);
+
+        double error = alignAngle - getHeading();
+
+        if(error > 180) {
+          error -= 360;
+        }
+        else if(error < -180){
+          error += 360;
+        }
+        
+        if(Math.abs(error) > 1){
+          alignSpeed = Math.signum(-error) * SwerveConstants.kS_PERCENT + SwerveConstants.kP_PERCENT * -error;
+        }
+        else{
+          alignSpeed = 0;
+        }
+      }
+    }
+
+    return alignSpeed;
+  }
+
+  public boolean readyToShoot(){
+    double[] camerapose_targetspace = llTable.getEntry("camerapose_targetspace").getDoubleArray(new double[6]);
+    double x = Math.abs(camerapose_targetspace[0]);
+    double z = Math.abs(camerapose_targetspace[2]);
+    double offset = Math.atan(x / z);
+
+    double error = llTable.getEntry("tx").getDouble(0) + offset + 2.5;
+    if(isRedAlliance()){
+      return Math.abs(error) <= 0.9 && llTable.getEntry("tid").getDouble(0) == 4; 
+    }
+    else{
+      return Math.abs(error) <= 0.9 && llTable.getEntry("tid").getDouble(0) == 7;
+    }
+  }
+
+  public double getAlignAngle(int tagID){
     Pose2d tagPose = RobotContainer.aprilTagFieldLayout.getTagPose(tagID).get().toPose2d();
     Pose2d robotPose = getPose();
 
-    double deltaX = tagPose.getX() - robotPose.getX(); //TODO: check if this works
+    double deltaX = tagPose.getX() - robotPose.getX();
     double deltaY = tagPose.getY() - robotPose.getY() + Units.inchesToMeters(22.5);
 
     double alignAngle = Math.toDegrees(Math.atan2(deltaY, deltaX));
@@ -372,5 +511,11 @@ public class Drivetrain extends SubsystemBase {
 
   public void setAlignMode(){
     driveMode = DriveMode.Align;
+  }
+
+  public Command rumbleController(){
+    return new InstantCommand(() -> RobotContainer.driverController.setRumble(RumbleType.kBothRumble, 0.25))
+      .andThen(new WaitCommand(0.5))
+      .andThen(new InstantCommand(() -> RobotContainer.driverController.setRumble(RumbleType.kBothRumble, 0)));
   }
 }
