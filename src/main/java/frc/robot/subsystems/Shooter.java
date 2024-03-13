@@ -21,11 +21,11 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.drivers.PearadoxSparkFlex;
 import frc.lib.drivers.PearadoxSparkMax;
 import frc.lib.util.LerpTable;
+import frc.lib.util.SmarterDashboard;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.ShooterConstants;
@@ -38,6 +38,7 @@ public class Shooter extends SubsystemBase {
   private PearadoxSparkMax pivot;
 
   private RelativeEncoder leftEncoder;
+  private RelativeEncoder rightEncoder;
   private RelativeEncoder pivotEncoder;
 
   private SparkPIDController leftController;
@@ -89,6 +90,7 @@ public class Shooter extends SubsystemBase {
       ShooterConstants.PIVOT_MIN_OUTPUT, ShooterConstants.PIVOT_MAX_OUTPUT);
 
     leftEncoder = leftShooter.getEncoder();
+    rightEncoder = rightShooter.getEncoder();
     pivotEncoder = pivot.getEncoder();
     
     leftController = leftShooter.getPIDController();
@@ -130,12 +132,15 @@ public class Shooter extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Shooter Left Speed", leftEncoder.getVelocity());
-    SmartDashboard.putNumber("Shooter Pivot Position", pivotEncoder.getPosition());
-    SmartDashboard.putNumber("Shooter Pivot Intended Position", pivotPosition);
-    SmartDashboard.putNumber("Shooter Pivot Current", pivot.getOutputCurrent());
-    SmartDashboard.putNumber("Shooter Pivot Intended Angle", calculatePivotAngle());  
-    SmartDashboard.putBoolean("Shooter Has Priority Target", hasPriorityTarget());  
+    SmarterDashboard.putNumber("Shooter Left Speed", leftEncoder.getVelocity(), "Shooter");
+    SmarterDashboard.putNumber("Shooter Pivot Position", pivotEncoder.getPosition(), "Shooter");
+    SmarterDashboard.putNumber("Shooter Pivot Intended Position", pivotPosition, "Shooter");
+    SmarterDashboard.putNumber("Shooter Pivot Current", pivot.getOutputCurrent(), "Shooter");
+    SmarterDashboard.putNumber("Shooter Pivot Intended Angle", calculatePivotAngle(), "Shooter");  
+    SmarterDashboard.putBoolean("Shooter Has Priority Target", hasPriorityTarget(), "Shooter"); 
+    SmarterDashboard.putString("Shooter Mode", shooterMode.toString(), "Shooter"); 
+    SmarterDashboard.putNumber("Shooter Pivot Adjust", pivotAdjust, "Shooter");
+    SmarterDashboard.putNumber("Note Velocity", getNoteVelocity(), "Shooter");
 
     shooterModeEntry.setString(shooterMode.toString());
     pivotAdjustEntry.setDouble(pivotAdjust);
@@ -304,6 +309,17 @@ public class Shooter extends SubsystemBase {
     if(hasPriorityTarget()){
       pivotPosition = pivotLerp.interpolate(angle);
     }
+  }
+
+  public void setPivotPosition(){
+    pivotController.setReference(
+      pivotPosition + pivotAdjust,
+      ControlType.kPosition,
+      0);
+  }
+
+  public double getNoteVelocity(){
+    return ((leftEncoder.getVelocity() + rightEncoder.getVelocity()) / 2) * 2 * Math.PI * Units.inchesToMeters(1.5) / 60;
   }
 
   public boolean hasPriorityTarget(){

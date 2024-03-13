@@ -51,6 +51,7 @@ public class PearadoxSparkMax extends CANSparkMax {
         this.setIdleMode(mode);
         this.getPIDController().setP(kP, 0);
         this.getPIDController().setI(kI, 0);
+        this.getPIDController().setIZone(2, 0);
         this.getPIDController().setD(kD, 0);
         this.getPIDController().setOutputRange(minOutput, maxOutput, 0);
         this.burnFlash();

@@ -5,8 +5,6 @@
 
 package frc.lib.drivers.vision;
 
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -16,7 +14,7 @@ import edu.wpi.first.math.interpolation.TimeInterpolatableBuffer;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.lib.util.SmarterDashboard;
 import frc.robot.Robot;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.subsystems.Drivetrain;
@@ -103,7 +101,6 @@ public class PoseEstimation {
     }
 
     private void loggingPose(VisionBackend.Measurement measurement) {
-        Logger.recordOutput("Vision Pose", measurement.pose.toPose2d());
-        SmartDashboard.putString("Vision Pose", measurement.pose.toPose2d().toString());
+        SmarterDashboard.putString("Vision Pose", measurement.pose.toPose2d().toString(), "Drivetrain");
     }
 }

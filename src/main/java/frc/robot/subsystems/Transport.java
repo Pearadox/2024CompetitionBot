@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems;
 
-import org.littletonrobotics.junction.Logger;
-
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
@@ -13,13 +11,13 @@ import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.lib.drivers.PearadoxSparkMax;
+import frc.lib.util.SmarterDashboard;
 import frc.robot.Constants.TransportConstants;
 import frc.robot.RobotContainer;
 
@@ -51,8 +49,7 @@ public class Transport extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putBoolean("Ir Sensor", hasNote());
-    Logger.recordOutput("Transport/Distance Sensor", hasNote());
+    SmarterDashboard.putBoolean("Ir Sensor", hasNote(), "Transport");
 
     if(isHolding){
       if(hasNote()){

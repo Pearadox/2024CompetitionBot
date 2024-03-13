@@ -28,6 +28,7 @@ import frc.robot.commands.AutoAlign;
 import frc.robot.commands.IntakeHold;
 import frc.robot.commands.Outtake;
 import frc.robot.commands.Shoot;
+import frc.robot.commands.ShootOnTheMove;
 import frc.robot.commands.ShooterHold;
 import frc.robot.commands.SourceAutoAlign;
 import frc.robot.commands.SwerveDrive;
@@ -108,7 +109,7 @@ public class RobotContainer {
     zeroingShooter_X.whileTrue(new RunCommand(() -> shooter.setZeroing(true)))
       .onFalse(new InstantCommand(() -> shooter.setZeroing(false))
       .andThen(new InstantCommand(() -> shooter.resetPivotEncoder())));
-    shoot_RB.whileTrue(new Shoot());
+    shoot_RB.whileTrue(new ShootOnTheMove());
     outtake_B.whileTrue(new Outtake());
     turnToApril_LB.onTrue(new InstantCommand(() -> drivetrain.setAlignMode()))
       .onFalse(new InstantCommand(() -> drivetrain.setNormalMode()));

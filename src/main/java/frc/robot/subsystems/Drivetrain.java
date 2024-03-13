@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.lib.util.SmarterDashboard;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.Constants.VisionConstants;
@@ -136,6 +137,14 @@ public class Drivetrain extends SubsystemBase {
   public void periodic() {
     RobotContainer.poseEstimation.updateOdometry(getHeadingRotation2d(), getModulePositions());
 
+    SmarterDashboard.putString("Left Front Module State", leftFront.getState().toString(), "Drivetrain");
+    SmarterDashboard.putString("Right Front Module State", rightFront.getState().toString(), "Drivetrain");
+    SmarterDashboard.putString("Left Back Module State", leftBack.getState().toString(), "Drivetrain");
+    SmarterDashboard.putString("Right Back Module State", rightBack.getState().toString(), "Drivetrain");
+    SmarterDashboard.putNumber("Robot Angle", getHeading(), "Drivetrain");
+    SmarterDashboard.putString("Angular Speed", new DecimalFormat("#.00").format((-gyro.getRate() / 180)) + "\u03C0" + " rad/s", "Drivetrain");
+    SmarterDashboard.putString("Odometry", getPose().toString(), "Drivetrain");
+
     leftFrontStateEntry.setString(leftFront.getState().toString());
     rightFrontStateEntry.setString(rightFront.getState().toString());
     leftBackStateEntry.setString(leftBack.getState().toString());
@@ -167,6 +176,14 @@ public class Drivetrain extends SubsystemBase {
     else{
       chassisSpeeds = new ChassisSpeeds(frontSpeed, sideSpeed, turnSpeed);
     }
+
+    SwerveModuleState[] moduleStates = SwerveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds, centerOfRotation);
+
+    setModuleStates(moduleStates);
+  }
+
+  public void swerveDrive(ChassisSpeeds chassisSpeeds, Translation2d centerOfRotation){ //Drive with field relative chassis speeds
+    chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(chassisSpeeds, getHeadingRotation2d());
 
     SwerveModuleState[] moduleStates = SwerveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds, centerOfRotation);
 
@@ -248,6 +265,11 @@ public class Drivetrain extends SubsystemBase {
   public void driveRobotRelative(ChassisSpeeds chassisSpeeds){
     SwerveModuleState[] moduleStates = SwerveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds);
     setModuleStates(moduleStates);
+  }
+
+  public ChassisSpeeds getFieldRelativeSpeeds(){
+    ChassisSpeeds chassisSpeeds = SwerveConstants.DRIVE_KINEMATICS.toChassisSpeeds(getModuleStates());
+    return ChassisSpeeds.fromRobotRelativeSpeeds(chassisSpeeds, getHeadingRotation2d());
   }
 
   public void zeroHeading(){

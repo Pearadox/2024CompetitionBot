@@ -130,12 +130,13 @@ public final class Constants {
     public static final double SHOOTER_MIN_OUTPUT = -1.0;
     public static final double SHOOTER_MAX_OUTPUT = 1.0;
 
-    public static final double PIVOT_kP = 0.06;
-    public static final double PIVOT_kI = 0.0008;
+    //TODO Tune Pivot to Not Oscillate
+    public static final double PIVOT_kP = 0.07;
+    public static final double PIVOT_kI = 0.00008;
     public static final double PIVOT_kD = 0;
 
-    public static final double PIVOT_MIN_OUTPUT = -0.4;
-    public static final double PIVOT_MAX_OUTPUT = 0.4;
+    public static final double PIVOT_MIN_OUTPUT = -0.85;
+    public static final double PIVOT_MAX_OUTPUT = 0.85;
 
     public static final double AMP_PIVOT_POSITION = 13.8;
     public static final double PASSING_PIVOT_POSITION = 15.5;
@@ -161,8 +162,9 @@ public final class Constants {
     public static final double AMP_BAR_MIN_OUTPUT = -0.5;
     public static final double AMP_BAR_MAX_OUTPUT = 0.5;
 
-    public static final double STOWED_ROT = -3;
-    public static final double DEPLOYED_ROT = 18.0;
+    // Zero at Top of Shooter at Lowest Pivot
+    public static final double STOWED_ROT = 3.0;
+    public static final double DEPLOYED_ROT = 22.0;
   }
 
   public static final class FieldConstants{

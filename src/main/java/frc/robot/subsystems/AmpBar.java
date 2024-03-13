@@ -10,9 +10,9 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.drivers.PearadoxSparkMax;
+import frc.lib.util.SmarterDashboard;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.AmpBarConstants;
 
@@ -75,7 +75,7 @@ public class AmpBar extends SubsystemBase {
       setStowedMode();
     }
 
-    SmartDashboard.putNumber("Amp Bar Position", ampBarEncoder.getPosition());
+    SmarterDashboard.putNumber("Amp Bar Position", ampBarEncoder.getPosition(), "Amp Bar");
   }
 
   public void setStowedMode(){
