@@ -6,9 +6,12 @@ package frc.robot.subsystems;
 
 import java.text.DecimalFormat;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -25,6 +28,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -44,9 +48,11 @@ public class Drivetrain extends SubsystemBase {
   private SlewRateLimiter sideLimiter;
   private SlewRateLimiter turnLimiter;
 
+  private PIDController alignPIDController;
+
   private Pigeon2 gyro;
 
-  private static final NetworkTable llTable = NetworkTableInstance.getDefault().getTable(VisionConstants.LL_NAME);
+  private static final NetworkTable llTable = NetworkTableInstance.getDefault().getTable(VisionConstants.SHOOTER_LL_NAME);
 
   public enum DriveMode{
     Normal, Align
@@ -114,6 +120,8 @@ public class Drivetrain extends SubsystemBase {
     sideLimiter = new SlewRateLimiter(SwerveConstants.TELE_DRIVE_MAX_ACCELERATION);
     turnLimiter = new SlewRateLimiter(SwerveConstants.TELE_DRIVE_MAX_ANGULAR_ACCELERATION);
 
+    alignPIDController = new PIDController(SwerveConstants.kP_PERCENT, 0, 0);
+
     gyro = new Pigeon2(SwerveConstants.PIGEON_ID);
     
     AutoBuilder.configureHolonomic(
@@ -137,13 +145,16 @@ public class Drivetrain extends SubsystemBase {
   public void periodic() {
     RobotContainer.poseEstimation.updateOdometry(getHeadingRotation2d(), getModulePositions());
 
+    SmarterDashboard.putString("Drive Mode", getDriveMode().toString(), "Drivetrain");
     SmarterDashboard.putString("Left Front Module State", leftFront.getState().toString(), "Drivetrain");
     SmarterDashboard.putString("Right Front Module State", rightFront.getState().toString(), "Drivetrain");
     SmarterDashboard.putString("Left Back Module State", leftBack.getState().toString(), "Drivetrain");
     SmarterDashboard.putString("Right Back Module State", rightBack.getState().toString(), "Drivetrain");
     SmarterDashboard.putNumber("Robot Angle", getHeading(), "Drivetrain");
     SmarterDashboard.putString("Angular Speed", new DecimalFormat("#.00").format((-gyro.getRate() / 180)) + "\u03C0" + " rad/s", "Drivetrain");
-    SmarterDashboard.putString("Odometry", getPose().toString(), "Drivetrain");
+    SmarterDashboard.putBoolean("Ready To Shoot", readyToShoot(), "Drivetrain");
+    SmartDashboard.putString("Odometry", getPose().toString());
+    Logger.recordOutput("Drivetrain/Odometry", getPose());
 
     leftFrontStateEntry.setString(leftFront.getState().toString());
     rightFrontStateEntry.setString(rightFront.getState().toString());
@@ -339,9 +350,9 @@ public class Drivetrain extends SubsystemBase {
         double z = Math.abs(camerapose_targetspace[2]);
         double offset = Math.atan(x / z);
 
-        double error = llTable.getEntry("tx").getDouble(0) + offset + 2.5;
+        double error = llTable.getEntry("tx").getDouble(0) + offset + 3.5;
         
-        alignSpeed = Math.abs(error) > 0.9 ? Math.signum(error) * SwerveConstants.kS_PERCENT + SwerveConstants.kP_PERCENT * error : 0;
+        alignSpeed = Math.abs(error) > 0.9 ? -alignPIDController.calculate(llTable.getEntry("tx").getDouble(0) + offset, -3.5) : 0;
       }
       else{
         double alignAngle = getAlignAngle(4);
@@ -370,9 +381,9 @@ public class Drivetrain extends SubsystemBase {
         double z = Math.abs(camerapose_targetspace[2]);
         double offset = Math.atan(x / z);
 
-        double error = llTable.getEntry("tx").getDouble(0) + offset + 2.5;
+        double error = llTable.getEntry("tx").getDouble(0) + offset + 3.5;
         
-        alignSpeed = Math.abs(error) > 0.9 ? Math.signum(error) * SwerveConstants.kS_PERCENT + SwerveConstants.kP_PERCENT * error : 0;
+        alignSpeed = Math.abs(error) > 0.9 ? -alignPIDController.calculate(llTable.getEntry("tx").getDouble(0) + offset, -3.5) : 0;
       }
       else{
         double alignAngle = getAlignAngle(7);
@@ -398,7 +409,7 @@ public class Drivetrain extends SubsystemBase {
     return alignSpeed;
   }
 
-  public double getAlignSpeedSourceAuto(){
+  public double getAlignSpeedSourceAuto(){ 
     double alignSpeed;
 
     if(isRedAlliance()){
@@ -473,7 +484,7 @@ public class Drivetrain extends SubsystemBase {
     double z = Math.abs(camerapose_targetspace[2]);
     double offset = Math.atan(x / z);
 
-    double error = llTable.getEntry("tx").getDouble(0) + offset + 2.5;
+    double error = llTable.getEntry("tx").getDouble(0) + offset + 3.5;
     if(isRedAlliance()){
       return Math.abs(error) <= 0.9 && llTable.getEntry("tid").getDouble(0) == 4; 
     }

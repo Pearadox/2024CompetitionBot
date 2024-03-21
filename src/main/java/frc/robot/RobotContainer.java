@@ -28,7 +28,6 @@ import frc.robot.commands.AutoAlign;
 import frc.robot.commands.IntakeHold;
 import frc.robot.commands.Outtake;
 import frc.robot.commands.Shoot;
-import frc.robot.commands.ShootOnTheMove;
 import frc.robot.commands.ShooterHold;
 import frc.robot.commands.SourceAutoAlign;
 import frc.robot.commands.SwerveDrive;
@@ -53,18 +52,19 @@ public class RobotContainer {
   public static final AmpBar ampBar = AmpBar.getInstance();
 
   //Driver Controls
-  public static final XboxController driverController = new XboxController(IOConstants.DRIVER_CONTROLLER_PORT);
+  public static final CommandXboxController commandDriverController = new CommandXboxController(IOConstants.DRIVER_CONTROLLER_PORT);
+  public static final XboxController driverController = commandDriverController.getHID();
 
   private final JoystickButton resetHeading_Start = new JoystickButton(driverController, XboxController.Button.kStart.value);
-  private final JoystickButton popNote_A = new JoystickButton(driverController, XboxController.Button.kA.value);
   private final JoystickButton shoot_RB = new JoystickButton(driverController, XboxController.Button.kRightBumper.value);
   private final JoystickButton zeroingShooter_X = new JoystickButton(driverController, XboxController.Button.kX.value);
   private final JoystickButton outtake_B = new JoystickButton(driverController, XboxController.Button.kB.value);
   private final JoystickButton turnToApril_LB = new JoystickButton(driverController, XboxController.Button.kLeftBumper.value);
 
   //Operator Controls
-  public static final XboxController opController = new XboxController(IOConstants.OP_CONTROLLER_PORT);
-  
+  public static final CommandXboxController commandOpController = new CommandXboxController(IOConstants.OP_CONTROLLER_PORT);
+  public static final XboxController opController = commandOpController.getHID();  
+
   private final JoystickButton shooterAutoMode_A = new JoystickButton(opController, XboxController.Button.kA.value);
   private final JoystickButton shooterPassingMode_Y = new JoystickButton(opController, XboxController.Button.kY.value);
   private final JoystickButton shooterManualMode_B = new JoystickButton(opController, XboxController.Button.kB.value);
@@ -105,11 +105,10 @@ public class RobotContainer {
   private void configureBindings() {
     //Driver Buttons
     resetHeading_Start.onTrue(new InstantCommand(drivetrain::zeroHeading, drivetrain));
-    popNote_A.whileTrue(new Shoot());
     zeroingShooter_X.whileTrue(new RunCommand(() -> shooter.setZeroing(true)))
       .onFalse(new InstantCommand(() -> shooter.setZeroing(false))
       .andThen(new InstantCommand(() -> shooter.resetPivotEncoder())));
-    shoot_RB.whileTrue(new ShootOnTheMove());
+    shoot_RB.whileTrue(new Shoot());
     outtake_B.whileTrue(new Outtake());
     turnToApril_LB.onTrue(new InstantCommand(() -> drivetrain.setAlignMode()))
       .onFalse(new InstantCommand(() -> drivetrain.setNormalMode()));
@@ -139,8 +138,8 @@ public class RobotContainer {
 
   public void registerNamedCommands(){
     NamedCommands.registerCommand("Stop Modules", new InstantCommand(() -> drivetrain.stopModules()));
-    NamedCommands.registerCommand("Auto Align", new AutoAlign().withTimeout(0.4));
-    NamedCommands.registerCommand("Source Auto Align", new SourceAutoAlign().withTimeout(0.4));
+    NamedCommands.registerCommand("Auto Align", new AutoAlign().withTimeout(0.7));
+    NamedCommands.registerCommand("Source Auto Align", new SourceAutoAlign().withTimeout(0.8));
     NamedCommands.registerCommand("Shoot", new Shoot().withTimeout(0.2));
     NamedCommands.registerCommand("Source Set Pivot Position", new InstantCommand(() -> shooter.setPivotPosition(14.0)));
     NamedCommands.registerCommand("Set Shooter Auto", new InstantCommand(() -> shooter.setShooterAuto(0.85)));

@@ -107,7 +107,7 @@ public final class Constants {
     public static final Vector<N3> ODOMETRY_STD_DEV = VecBuilder.fill(0.1, 0.1, 0.1);
 
     public static final double kS_PERCENT = 0.035;
-    public static final double kP_PERCENT = 0.009;
+    public static final double kP_PERCENT = 0.008;
   }
 
   public static final class IntakeConstants{
@@ -138,9 +138,9 @@ public final class Constants {
     public static final double PIVOT_MIN_OUTPUT = -0.85;
     public static final double PIVOT_MAX_OUTPUT = 0.85;
 
-    public static final double AMP_PIVOT_POSITION = 13.8;
-    public static final double PASSING_PIVOT_POSITION = 15.5;
-    public static final double SPEAKER_PIVOT_POSITION = 19.7;
+    public static final double AMP_PIVOT_POSITION = 23;
+    public static final double PASSING_PIVOT_POSITION = 24.5;
+    public static final double SPEAKER_PIVOT_POSITION = 29.7;
 
     public static final double FLOOR_TO_SHOOTER = Units.inchesToMeters(7);
   }
@@ -164,7 +164,7 @@ public final class Constants {
 
     // Zero at Top of Shooter at Lowest Pivot
     public static final double STOWED_ROT = 3.0;
-    public static final double DEPLOYED_ROT = 22.0;
+    public static final double DEPLOYED_ROT = 23.0;
   }
 
   public static final class FieldConstants{
@@ -177,7 +177,9 @@ public final class Constants {
   public static final class VisionConstants{
     //Limelight Offest with Mount
     // LL Forward = 0.2667 LL Up = 0.46355
-    public static final String LL_NAME = "limelight";
+
+    public static final String SHOOTER_LL_NAME = "limelight-shooter";
+    public static final String INTAKE_LL_NAME = "limelight-intake";
 
     public static final Transform3d ROBOT_TO_SHOOTER_LL = new Transform3d(
       new Translation3d( 

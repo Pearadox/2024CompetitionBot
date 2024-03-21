@@ -10,22 +10,23 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.*;
 import frc.robot.Constants;
-import frc.robot.Constants.VisionConstants;
 
 import java.util.Arrays;
 import java.util.Optional;
 
 public class LimelightBackend extends VisionBackend {
-    private static final NetworkTable table = NetworkTableInstance.getDefault().getTable(VisionConstants.LL_NAME);
+    private String llName;
 
     private final DoubleArraySubscriber botPose;
     private final DoubleSubscriber cl;
     private final DoubleSubscriber tl;
 
-    public LimelightBackend() {
-        botPose = table.getDoubleArrayTopic("botpose_wpiblue").subscribe(null);
-        cl = table.getDoubleTopic("cl").subscribe(0);
-        tl = table.getDoubleTopic("tl").subscribe(0);
+    public LimelightBackend(String llName) {
+        this.llName = llName;
+
+        botPose =  NetworkTableInstance.getDefault().getTable(llName).getDoubleArrayTopic("botpose_wpiblue").subscribe(null);
+        cl = NetworkTableInstance.getDefault().getTable(llName).getDoubleTopic("cl").subscribe(0);
+        tl = NetworkTableInstance.getDefault().getTable(llName).getDoubleTopic("tl").subscribe(0);
     }
 
     @Override
@@ -62,7 +63,7 @@ public class LimelightBackend extends VisionBackend {
     }
 
     public boolean isValid(){
-        double[] botpose_wpiblue = table.getEntry("botpose_wpiblue").getDoubleArray(new double[11]);
+        double[] botpose_wpiblue = NetworkTableInstance.getDefault().getTable(llName).getEntry("botpose_wpiblue").getDoubleArray(new double[11]);
 
         double tagCount = botpose_wpiblue[7];
         double avgDist = botpose_wpiblue[9];

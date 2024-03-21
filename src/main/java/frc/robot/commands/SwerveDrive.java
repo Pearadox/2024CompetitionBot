@@ -10,9 +10,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Shooter.ShooterMode;
 
 public class SwerveDrive extends Command {
   private Drivetrain drivetrain = Drivetrain.getInstance();
+  private Shooter shooter = Shooter.getInstance();
   private XboxController driverController = RobotContainer.driverController;
 
   /** Creates a new SwerveDrive. */
@@ -29,6 +32,15 @@ public class SwerveDrive extends Command {
   @Override
   public void execute() {
     if(drivetrain.getDriveMode() == Drivetrain.DriveMode.Align){
+      if(shooter.getShooterMode() == ShooterMode.Passing){
+        if(drivetrain.isRedAlliance()){
+          drivetrain.turnToHeading(45, new Translation2d());
+        }
+        else{
+          drivetrain.turnToHeading(-30, new Translation2d());
+        }
+      }
+    else{
       drivetrain.swerveDrive(
         -driverController.getLeftY(), 
         -driverController.getLeftX(), 
@@ -36,8 +48,9 @@ public class SwerveDrive extends Command {
         true,
         new Translation2d(),
         true);
+    }
       
-      if(drivetrain.readyToShoot()){
+      if(drivetrain.readyToShoot() && shooter.readyToShoot()){
         CommandScheduler.getInstance().schedule(drivetrain.rumbleController());
       }
     }

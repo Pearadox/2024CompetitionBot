@@ -5,6 +5,8 @@
 
 package frc.lib.drivers.vision;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -14,9 +16,10 @@ import edu.wpi.first.math.interpolation.TimeInterpolatableBuffer;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.Timer;
-import frc.lib.util.SmarterDashboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.Constants.SwerveConstants;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.Drivetrain;
 
 public class PoseEstimation {
@@ -43,11 +46,13 @@ public class PoseEstimation {
             VecBuilder.fill(0, 0, 0) // will be overwritten for each measurement
         );
 
-        backends = new LimelightBackend[1];
-        backendToggles = new boolean[1];
+        backends = new LimelightBackend[2];
+        backendToggles = new boolean[2];
 
-        backends[0] = new LimelightBackend();
+        backends[0] = new LimelightBackend(VisionConstants.SHOOTER_LL_NAME);
+        backends[1] = new LimelightBackend(VisionConstants.INTAKE_LL_NAME);
         backendToggles[0] = true;
+        backendToggles[1] = true;
     }
 
     public void periodic() {
@@ -101,6 +106,7 @@ public class PoseEstimation {
     }
 
     private void loggingPose(VisionBackend.Measurement measurement) {
-        SmarterDashboard.putString("Vision Pose", measurement.pose.toPose2d().toString(), "Drivetrain");
+        SmartDashboard.putString("Vision Pose", measurement.pose.toPose2d().toString());
+        Logger.recordOutput("Drivetrain/Vision Pose", measurement.pose.toPose2d());
     }
 }

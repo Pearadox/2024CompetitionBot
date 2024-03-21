@@ -34,7 +34,7 @@ public class Robot extends LoggedRobot {
   private Drivetrain drivetrain = Drivetrain.getInstance();
   private Shooter shooter = Shooter.getInstance();
   private Transport transport = Transport.getInstance();
-  private static final NetworkTable llTable = NetworkTableInstance.getDefault().getTable(VisionConstants.LL_NAME);
+  private static final NetworkTable llTable = NetworkTableInstance.getDefault().getTable(VisionConstants.SHOOTER_LL_NAME);
 
 
   private RobotContainer m_robotContainer;
@@ -52,7 +52,7 @@ public class Robot extends LoggedRobot {
     Logger.recordMetadata("ProjectName", "MyProject"); // Set a metadata value
 
     if (isReal()) {
-        //Logger.addDataReceiver(new WPILOGWriter("/media/sda1/")); // Log to a USB stick ("/U/logs")
+        Logger.addDataReceiver(new WPILOGWriter("/media/sda1/")); // Log to a USB stick ("/U/logs")
         Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables 
         // new PowerDistribution(1, ModuleType.kRev); // Enables power distribution logging
     } 

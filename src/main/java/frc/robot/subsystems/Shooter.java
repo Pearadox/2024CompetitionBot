@@ -47,7 +47,7 @@ public class Shooter extends SubsystemBase {
 
   private boolean zeroing = false;
 
-  private static final NetworkTable llTable = NetworkTableInstance.getDefault().getTable(VisionConstants.LL_NAME);
+  private static final NetworkTable llTable = NetworkTableInstance.getDefault().getTable(VisionConstants.SHOOTER_LL_NAME);
 
   private double pivotPosition;
   private double pivotAdjust = 0;
@@ -97,28 +97,28 @@ public class Shooter extends SubsystemBase {
     rightController = rightShooter.getPIDController();
     pivotController = pivot.getPIDController();
 
-    pivotLerp.addPoint(53, 20.3);
-    pivotLerp.addPoint(50, 19.4);
-    pivotLerp.addPoint(47, 17.8);
-    pivotLerp.addPoint(44, 15.8);
-    pivotLerp.addPoint(41, 14.8);
-    pivotLerp.addPoint(38, 13.7);
-    pivotLerp.addPoint(35, 13.0);
-    pivotLerp.addPoint(32, 12.6);
-    pivotLerp.addPoint(29, 11.4);
-    pivotLerp.addPoint(26, 10.1);
-    pivotLerp.addPoint(23, 8.9);
-    pivotLerp.addPoint(20, 8.6);
-    pivotLerp.addPoint(17, 8.0);
-    pivotLerp.addPoint(14, 7.5);
+    pivotLerp.addPoint(54, 29.7);
+    pivotLerp.addPoint(51, 29.7);
+    pivotLerp.addPoint(48, 27.5);
+    pivotLerp.addPoint(45, 24.5);
+    pivotLerp.addPoint(42, 22.1);
+    pivotLerp.addPoint(39, 19.0);
+    pivotLerp.addPoint(36, 17.8);
+    pivotLerp.addPoint(33, 15.2);
+    pivotLerp.addPoint(30, 13.8);
+    pivotLerp.addPoint(27, 11.9);
+    pivotLerp.addPoint(24, 10.4);
+    pivotLerp.addPoint(21, 9.3);
+    pivotLerp.addPoint(18, 7.0);
+    pivotLerp.addPoint(15, 4.5);
 
-    shooterLerp.addPoint(53, 6);
-    shooterLerp.addPoint(47, 6.5);
-    shooterLerp.addPoint(41, 7);
-    shooterLerp.addPoint(35, 7.5);
-    shooterLerp.addPoint(29, 8);
+    shooterLerp.addPoint(53, 7.5);
+    shooterLerp.addPoint(47, 7.5);
+    shooterLerp.addPoint(41, 7.75);
+    shooterLerp.addPoint(35, 8);
+    shooterLerp.addPoint(29, 8.25);
     shooterLerp.addPoint(23, 8.5);
-    shooterLerp.addPoint(17, 9);
+    shooterLerp.addPoint(15, 9);
 
     driverTab = Shuffleboard.getTab("Driver");
     leftShooterSpeedEntry = driverTab.add("Left Shooter Speed", 9)
@@ -132,7 +132,9 @@ public class Shooter extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmarterDashboard.putString("Shooter Mode", getShooterMode().toString(), "Shooter");
     SmarterDashboard.putNumber("Shooter Left Speed", leftEncoder.getVelocity(), "Shooter");
+    SmarterDashboard.putNumber("Shooter Right Speed", rightEncoder.getVelocity(), "Shooter");
     SmarterDashboard.putNumber("Shooter Pivot Position", pivotEncoder.getPosition(), "Shooter");
     SmarterDashboard.putNumber("Shooter Pivot Intended Position", pivotPosition, "Shooter");
     SmarterDashboard.putNumber("Shooter Pivot Current", pivot.getOutputCurrent(), "Shooter");
@@ -166,12 +168,12 @@ public class Shooter extends SubsystemBase {
     }
     else if(shooterMode == ShooterMode.Passing){
       leftController.setReference(
-        5.6,
+        6.1,
         ControlType.kVoltage,
         0);
 
       rightController.setReference(
-        3.6,
+        4.1,
         ControlType.kVoltage,
         0);
     }
@@ -319,7 +321,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public double getNoteVelocity(){
-    return ((leftEncoder.getVelocity() + rightEncoder.getVelocity()) / 2) * 2 * Math.PI * Units.inchesToMeters(1.5) / 60;
+    return 2 * (((leftEncoder.getVelocity() + rightEncoder.getVelocity()) / 2) * 2 * Math.PI * Units.inchesToMeters(1.5) / 60);
   }
 
   public boolean hasPriorityTarget(){
@@ -365,5 +367,9 @@ public class Shooter extends SubsystemBase {
         return alliance.get() == DriverStation.Alliance.Red;
     }
     return false;
+  }
+
+  public boolean readyToShoot() {
+    return (Math.abs(pivotPosition + pivotAdjust - pivotEncoder.getPosition()) <= 0.5);
   }
 }
