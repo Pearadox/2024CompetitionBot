@@ -143,7 +143,9 @@ public class Shooter extends SubsystemBase {
     SmarterDashboard.putString("Shooter Mode", shooterMode.toString(), "Shooter"); 
     SmarterDashboard.putNumber("Shooter Pivot Adjust", pivotAdjust, "Shooter");
     SmarterDashboard.putNumber("Note Velocity", getNoteVelocity(), "Shooter");
-
+    SmarterDashboard.putNumber("Shooter Left Temperature", leftShooter.getMotorTemperature(), "Shooter");
+    SmarterDashboard.putNumber("Shooter Right Temperature", rightShooter.getMotorTemperature(), "Shooter");
+    
     shooterModeEntry.setString(shooterMode.toString());
     pivotAdjustEntry.setDouble(pivotAdjust);
   }
