@@ -201,7 +201,7 @@ public final class Constants {
       //     );
       // };
 
-      public static final Vector<N3> LIMELIGHT_STD_DEV = VecBuilder.fill(.7, .7, .9999999);
+      public static final Vector<N3> LIMELIGHT_STD_DEV = VecBuilder.fill(.9, .9, .9999999);
       
       public static final double AMBIGUITY_FILTER = 0.3;
       public static final double DISTANCE_FILTER = FieldConstants.FIELD_LENGTH / 2;

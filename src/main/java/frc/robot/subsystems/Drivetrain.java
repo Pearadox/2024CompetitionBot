@@ -350,9 +350,9 @@ public class Drivetrain extends SubsystemBase {
         double z = Math.abs(camerapose_targetspace[2]);
         double offset = Math.atan(x / z);
 
-        double error = llTable.getEntry("tx").getDouble(0) + offset + 3.5;
+        double error = llTable.getEntry("tx").getDouble(0) + offset + 2.5;
         
-        alignSpeed = Math.abs(error) > 0.9 ? -alignPIDController.calculate(llTable.getEntry("tx").getDouble(0) + offset, -3.5) : 0;
+        alignSpeed = Math.abs(error) > 0.9 ? -alignPIDController.calculate(llTable.getEntry("tx").getDouble(0) + offset, -2.5) : 0;
       }
       else{
         double alignAngle = getAlignAngle(4);
@@ -381,9 +381,9 @@ public class Drivetrain extends SubsystemBase {
         double z = Math.abs(camerapose_targetspace[2]);
         double offset = Math.atan(x / z);
 
-        double error = llTable.getEntry("tx").getDouble(0) + offset + 3.5;
+        double error = llTable.getEntry("tx").getDouble(0) + offset + 2.5;
         
-        alignSpeed = Math.abs(error) > 0.9 ? -alignPIDController.calculate(llTable.getEntry("tx").getDouble(0) + offset, -3.5) : 0;
+        alignSpeed = Math.abs(error) > 0.9 ? -alignPIDController.calculate(llTable.getEntry("tx").getDouble(0) + offset, -2.5) : 0;
       }
       else{
         double alignAngle = getAlignAngle(7);

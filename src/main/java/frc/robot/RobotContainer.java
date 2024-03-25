@@ -66,9 +66,10 @@ public class RobotContainer {
   public static final XboxController opController = commandOpController.getHID();  
 
   private final JoystickButton shooterAutoMode_A = new JoystickButton(opController, XboxController.Button.kA.value);
-  private final JoystickButton shooterPassingMode_Y = new JoystickButton(opController, XboxController.Button.kY.value);
+  private final JoystickButton shooterSourcePassingMode_Y = new JoystickButton(opController, XboxController.Button.kY.value);
   private final JoystickButton shooterManualMode_B = new JoystickButton(opController, XboxController.Button.kB.value);
   private final JoystickButton shooterSpeakerMode_X = new JoystickButton(opController, XboxController.Button.kX.value);
+  private final JoystickButton shooterStagePassingMode_Start = new JoystickButton(opController, XboxController.Button.kStart.value);
 
   //Pose Estimation
   public static final PoseEstimation poseEstimation = new PoseEstimation();
@@ -116,7 +117,8 @@ public class RobotContainer {
     //Operator Buttons
     shooterAutoMode_A.onTrue(new InstantCommand(() -> shooter.setAutoMode()));
     shooterManualMode_B.onTrue(new InstantCommand(() -> shooter.setManualMode()));
-    shooterPassingMode_Y.onTrue(new InstantCommand(() -> shooter.setPassingMode()));
+    shooterSourcePassingMode_Y.onTrue(new InstantCommand(() -> shooter.setSourcePassingMode()));
+    shooterStagePassingMode_Start.onTrue(new InstantCommand(() -> shooter.setStagePassingMode()));
     shooterSpeakerMode_X.onTrue(new InstantCommand(() -> shooter.setSpeakerMode()));
   }
 
@@ -127,12 +129,18 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     drivetrain.resetAllEncoders();
-    if(drivetrain.isRedAlliance()){
-      drivetrain.setHeading(60);
+    if(autoChooser.getSelected().getName() == "S_8-6"){
+      if(drivetrain.isRedAlliance()){
+        drivetrain.setHeading(60);
+      }
+      else{
+        drivetrain.setHeading(-60);
+      }
     }
     else{
-      drivetrain.setHeading(-60);
+      drivetrain.setHeading(0);
     }
+
     return autoChooser.getSelected();
   }
 
@@ -142,6 +150,9 @@ public class RobotContainer {
     NamedCommands.registerCommand("Source Auto Align", new SourceAutoAlign().withTimeout(0.8));
     NamedCommands.registerCommand("Shoot", new Shoot().withTimeout(0.2));
     NamedCommands.registerCommand("Source Set Pivot Position", new InstantCommand(() -> shooter.setPivotPosition(14.0)));
+    NamedCommands.registerCommand("Middle Set Pivot Position", new InstantCommand(() -> shooter.setPivotPosition(4.0)));
+    NamedCommands.registerCommand("Set Manual Mode", new InstantCommand(() -> shooter.setManualMode()));
+    NamedCommands.registerCommand("Set Auto Mode", new InstantCommand(() -> shooter.setAutoMode()));
     NamedCommands.registerCommand("Set Shooter Auto", new InstantCommand(() -> shooter.setShooterAuto(0.85)));
     NamedCommands.registerCommand("Reset Heading", new InstantCommand(drivetrain::zeroHeading, drivetrain));
     NamedCommands.registerCommand("7 Note Set Pivot Position", new InstantCommand(() -> shooter.setPivotPosition(11.5)));

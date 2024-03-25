@@ -64,7 +64,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public enum ShooterMode{
-    Auto, Manual, Passing, Speaker
+    Auto, Manual, SourcePassing, StagePassing, Speaker
   }
 
   private ShooterMode shooterMode = ShooterMode.Auto;
@@ -103,14 +103,14 @@ public class Shooter extends SubsystemBase {
     pivotLerp.addPoint(45, 24.5);
     pivotLerp.addPoint(42, 22.1);
     pivotLerp.addPoint(39, 19.0);
-    pivotLerp.addPoint(36, 17.8);
-    pivotLerp.addPoint(33, 15.2);
-    pivotLerp.addPoint(30, 13.8);
-    pivotLerp.addPoint(27, 11.9);
-    pivotLerp.addPoint(24, 10.4);
-    pivotLerp.addPoint(21, 9.3);
-    pivotLerp.addPoint(18, 7.0);
-    pivotLerp.addPoint(15, 4.5);
+    pivotLerp.addPoint(36, 17.8); // blue red
+    pivotLerp.addPoint(33, 15.65); // 15.2 15.6
+    pivotLerp.addPoint(30, 14.5); // 13.8 14.4 
+    pivotLerp.addPoint(27, 12.8); //12.1 12.7
+    pivotLerp.addPoint(24, 11.5); //11.1 11.5
+    pivotLerp.addPoint(21, 10.2); //10 10.2
+    pivotLerp.addPoint(18, 7.3); //7.3 7.3
+    pivotLerp.addPoint(15, 4.6); //4.6 4.6
 
     shooterLerp.addPoint(53, 7.5);
     shooterLerp.addPoint(47, 7.5);
@@ -140,7 +140,6 @@ public class Shooter extends SubsystemBase {
     SmarterDashboard.putNumber("Shooter Pivot Current", pivot.getOutputCurrent(), "Shooter");
     SmarterDashboard.putNumber("Shooter Pivot Intended Angle", calculatePivotAngle(), "Shooter");  
     SmarterDashboard.putBoolean("Shooter Has Priority Target", hasPriorityTarget(), "Shooter"); 
-    SmarterDashboard.putString("Shooter Mode", shooterMode.toString(), "Shooter"); 
     SmarterDashboard.putNumber("Shooter Pivot Adjust", pivotAdjust, "Shooter");
     SmarterDashboard.putNumber("Note Velocity", getNoteVelocity(), "Shooter");
 
@@ -166,25 +165,36 @@ public class Shooter extends SubsystemBase {
         ControlType.kVoltage,
         0);
     }
-    else if(shooterMode == ShooterMode.Passing){
+    else if(shooterMode == ShooterMode.SourcePassing){
       leftController.setReference(
-        6.1,
+        5.7,
         ControlType.kVoltage,
         0);
 
       rightController.setReference(
-        4.1,
+        3.7,
+        ControlType.kVoltage,
+        0);
+    }
+    else if(shooterMode == ShooterMode.StagePassing){
+      leftController.setReference(
+        5.3, 
+        ControlType.kVoltage,
+        0);
+
+      rightController.setReference(
+        3.3,
         ControlType.kVoltage,
         0);
     }
     else if(shooterMode == ShooterMode.Speaker){
       leftController.setReference(
-        6.5,
+        7.5,
         ControlType.kVoltage,
         0);
 
       rightController.setReference(
-        4.5,
+        5.5,
         ControlType.kVoltage,
         0);
     }
@@ -230,7 +240,7 @@ public class Shooter extends SubsystemBase {
 
       pivotPosition = ShooterConstants.AMP_PIVOT_POSITION;
     }
-    else if(shooterMode == ShooterMode.Passing){
+    else if(shooterMode == ShooterMode.SourcePassing || shooterMode == ShooterMode.StagePassing){
       pivotController.setReference(
         ShooterConstants.PASSING_PIVOT_POSITION,
         ControlType.kPosition,
@@ -301,6 +311,10 @@ public class Shooter extends SubsystemBase {
 
     double x = Math.abs(botpose_targetspace[0]);
     double z = Math.abs(botpose_targetspace[2]);
+    if(!isRedAlliance()){ //edit for houston comp
+      z += 0.02;  
+    }
+
     double hypot = Math.hypot(x, z);
 
     double angle = Math.atan((FieldConstants.SPEAKER_HEIGHT - ShooterConstants.FLOOR_TO_SHOOTER) / hypot);
@@ -353,8 +367,12 @@ public class Shooter extends SubsystemBase {
     shooterMode = ShooterMode.Manual;
   }
 
-  public void setPassingMode(){
-    shooterMode = ShooterMode.Passing;
+  public void setSourcePassingMode(){
+    shooterMode = ShooterMode.SourcePassing;
+  }
+  
+  public void setStagePassingMode(){
+    shooterMode = ShooterMode.StagePassing;
   }
 
   public void setSpeakerMode(){
@@ -370,6 +388,6 @@ public class Shooter extends SubsystemBase {
   }
 
   public boolean readyToShoot() {
-    return (Math.abs(pivotPosition + pivotAdjust - pivotEncoder.getPosition()) <= 0.5);
+    return (Math.abs(pivotPosition + pivotAdjust - pivotEncoder.getPosition()) <= 0.9);
   }
 }

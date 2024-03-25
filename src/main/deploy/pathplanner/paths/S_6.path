@@ -49,11 +49,11 @@
     {
       "anchor": {
         "x": 8.358004364464787,
-        "y": 4.15
+        "y": 4.02
       },
       "prevControl": {
         "x": 7.548614239823749,
-        "y": 4.15
+        "y": 4.02
       },
       "nextControl": null,
       "isLocked": false,

@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.*;
+import frc.lib.util.SmarterDashboard;
 import frc.robot.Constants;
 
 import java.util.Arrays;
@@ -63,11 +64,19 @@ public class LimelightBackend extends VisionBackend {
     }
 
     public boolean isValid(){
-        double[] botpose_wpiblue = NetworkTableInstance.getDefault().getTable(llName).getEntry("botpose_wpiblue").getDoubleArray(new double[11]);
+        LimelightHelpers.PoseEstimate poseEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue(llName);
+        if(poseEstimate.rawFiducials.length == 1){
+            double ambiguity = poseEstimate.rawFiducials[0].ambiguity;
+            SmarterDashboard.putNumber("Single Tag Ambiguity", poseEstimate.rawFiducials[0].ambiguity, "Limelight");
 
-        double tagCount = botpose_wpiblue[7];
-        double avgDist = botpose_wpiblue[9];
+            if(ambiguity >= 0.8){
+                return false;
+            }
+        }
 
-        return tagCount > 0 && avgDist < 4.5;
+        double tagCount = poseEstimate.tagCount;
+        double avgDist = poseEstimate.avgTagDist;
+
+        return tagCount > 0 && avgDist < 3.5;
     }
 }
