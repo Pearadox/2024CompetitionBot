@@ -72,10 +72,6 @@ public class RobotContainer {
   private final JoystickButton shooterPassingMode_Y = new JoystickButton(opController, XboxController.Button.kY.value);
   private final JoystickButton shooterManualMode_B = new JoystickButton(opController, XboxController.Button.kB.value);
   private final JoystickButton shooterSpeakerMode_X = new JoystickButton(opController, XboxController.Button.kX.value);
-  private final JoystickButton climb_RB = new JoystickButton(opController, XboxController.Button.kRightBumper.value);
-  private final JoystickButton climbing_LB = new JoystickButton(opController, XboxController.Button.kLeftBumper.value);
-
-
 
   //Pose Estimation
   public static final PoseEstimation poseEstimation = new PoseEstimation();
@@ -126,8 +122,6 @@ public class RobotContainer {
     shooterManualMode_B.onTrue(new InstantCommand(() -> shooter.setManualMode()));
     shooterPassingMode_Y.onTrue(new InstantCommand(() -> shooter.setPassingMode()));
     shooterSpeakerMode_X.onTrue(new InstantCommand(() -> shooter.setSpeakerMode()));
-    climb_RB.onTrue(new Climb(climber));
-    climbing_LB.whileTrue(new InstantCommand(()-> climber.setClimbingMode()));
   
   }
 
