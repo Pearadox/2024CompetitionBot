@@ -33,6 +33,7 @@ import frc.robot.commands.ShooterHold;
 import frc.robot.commands.SourceAutoAlign;
 import frc.robot.commands.SwerveDrive;
 import frc.robot.subsystems.AmpBar;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
@@ -51,6 +52,7 @@ public class RobotContainer {
   public static final Transport transport = Transport.getInstance();
   public static final Shooter shooter = Shooter.getInstance();
   public static final AmpBar ampBar = AmpBar.getInstance();
+  public static final Climber climber = Climber.getInstance();
 
   //Driver Controls
   public static final XboxController driverController = new XboxController(IOConstants.DRIVER_CONTROLLER_PORT);
@@ -69,6 +71,8 @@ public class RobotContainer {
   private final JoystickButton shooterPassingMode_Y = new JoystickButton(opController, XboxController.Button.kY.value);
   private final JoystickButton shooterManualMode_B = new JoystickButton(opController, XboxController.Button.kB.value);
   private final JoystickButton shooterSpeakerMode_X = new JoystickButton(opController, XboxController.Button.kX.value);
+  private final JoystickButton climb_RB = new JoystickButton(opController, XboxController.Button.kRightBumper.value);
+
 
   //Pose Estimation
   public static final PoseEstimation poseEstimation = new PoseEstimation();
@@ -119,6 +123,9 @@ public class RobotContainer {
     shooterManualMode_B.onTrue(new InstantCommand(() -> shooter.setManualMode()));
     shooterPassingMode_Y.onTrue(new InstantCommand(() -> shooter.setPassingMode()));
     shooterSpeakerMode_X.onTrue(new InstantCommand(() -> shooter.setSpeakerMode()));
+    climb_RB.onTrue(new InstantCommand(() -> climber.setZeroing(true))).onFalse(
+    new InstantCommand(() -> climber.setZeroing(false)).andThen(new InstantCommand(() -> climber.setClimbingMode())));
+  
   }
 
   /**
