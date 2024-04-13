@@ -114,6 +114,13 @@ public final class Constants {
     public static final int UTB_ROLLER_ID = 21;
   }
 
+  public static final class ClimberConstants {
+
+    public static final int CLIMBER_ID = 25; 
+    public static final double CLIMBED_ROT = 0.0;
+    public static final double CLIMBING_ROT = 0.0;
+  }
+
   public static final class ShooterConstants{
     public static final int LEFT_SHOOTER_ID = 31;
     public static final int RIGHT_SHOOTER_ID = 32;
