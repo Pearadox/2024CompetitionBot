@@ -117,8 +117,8 @@ public final class Constants {
   public static final class ClimberConstants {
 
     public static final int CLIMBER_ID = 25; 
-    public static final double CLIMBED_ROT = 0.0;
-    public static final double CLIMBING_ROT = 0.0;
+    public static final double CLIMBED_ROT = 0.5;
+    public static final double CLIMBING_ROT = 0.5;
   }
 
   public static final class ShooterConstants{

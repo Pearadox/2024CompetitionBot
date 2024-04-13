@@ -12,7 +12,8 @@ public class Climb extends Command {
   
   private Climber climber = Climber.getInstance();
 
-  public Climb() {
+  public Climb(Climber climber) {
+    this.climber=climber;
     // Use addRequirements() here to declare subsystem dependencies.
 
     addRequirements(climber);

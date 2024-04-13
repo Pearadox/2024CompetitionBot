@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.lib.drivers.vision.PoseEstimation;
 import frc.robot.Constants.IOConstants;
 import frc.robot.commands.AutoAlign;
+import frc.robot.commands.Climb;
 import frc.robot.commands.IntakeHold;
 import frc.robot.commands.Outtake;
 import frc.robot.commands.Shoot;
@@ -72,6 +73,8 @@ public class RobotContainer {
   private final JoystickButton shooterManualMode_B = new JoystickButton(opController, XboxController.Button.kB.value);
   private final JoystickButton shooterSpeakerMode_X = new JoystickButton(opController, XboxController.Button.kX.value);
   private final JoystickButton climb_RB = new JoystickButton(opController, XboxController.Button.kRightBumper.value);
+  private final JoystickButton climbing_LB = new JoystickButton(opController, XboxController.Button.kLeftBumper.value);
+
 
 
   //Pose Estimation
@@ -123,8 +126,8 @@ public class RobotContainer {
     shooterManualMode_B.onTrue(new InstantCommand(() -> shooter.setManualMode()));
     shooterPassingMode_Y.onTrue(new InstantCommand(() -> shooter.setPassingMode()));
     shooterSpeakerMode_X.onTrue(new InstantCommand(() -> shooter.setSpeakerMode()));
-    climb_RB.onTrue(new InstantCommand(() -> climber.setZeroing(true))).onFalse(
-    new InstantCommand(() -> climber.setZeroing(false)).andThen(new InstantCommand(() -> climber.setClimbingMode())));
+    climb_RB.onTrue(new Climb(climber));
+    climbing_LB.whileTrue(new InstantCommand(()-> climber.setClimbingMode()));
   
   }
 
