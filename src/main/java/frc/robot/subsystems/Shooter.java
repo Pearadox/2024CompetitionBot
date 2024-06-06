@@ -42,7 +42,8 @@ public class Shooter extends SubsystemBase {
 
   private static final NetworkTable llTable = NetworkTableInstance.getDefault().getTable(VisionConstants.LL_NAME);
 
-  private Drivetrain drivetrain = new Drivetrain();
+  public static final Drivetrain drivetrain = Drivetrain.getInstance();
+  //private Drivetrain drivetrain = new Drivetrain();
 
   private enum ShooterMode{
     Auto, Speaker
