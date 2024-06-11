@@ -64,10 +64,10 @@ public class Shooter extends SubsystemBase {
   }
 
   public enum ShooterMode{
-    Auto, Manual, Passing, Speaker
+    Auto, Manual, Passing, Speaker, Stage
   }
 
-  private ShooterMode shooterMode = ShooterMode.Auto;
+  private ShooterMode shooterMode = ShooterMode.Speaker;
 
   public static ShuffleboardTab driverTab;
   private GenericEntry leftShooterSpeedEntry;
@@ -175,7 +175,7 @@ public class Shooter extends SubsystemBase {
         ControlType.kVoltage,
         0);
     }
-    else if(shooterMode == ShooterMode.Speaker){
+    else if(shooterMode == ShooterMode.Speaker || shooterMode == ShooterMode.Stage){
       leftController.setReference(
         6.5,
         ControlType.kVoltage,
@@ -211,7 +211,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setShooterAuto(double speed){
-    setAutoMode();
+    setSpeakerMode();
     leftShooter.set(speed);
     rightShooter.set(speed);
   }
@@ -243,6 +243,14 @@ public class Shooter extends SubsystemBase {
         0);
 
       pivotPosition = ShooterConstants.SPEAKER_PIVOT_POSITION;
+    }
+    else if(shooterMode == ShooterMode.Stage){
+      pivotController.setReference(
+        ShooterConstants.STAGE_PIVOT_POSITION,
+        ControlType.kPosition,
+        0);
+
+      pivotPosition = ShooterConstants.STAGE_PIVOT_POSITION;
     }
     else{
       if(shooterMode == ShooterMode.Auto && hasPriorityTarget()){
@@ -357,6 +365,10 @@ public class Shooter extends SubsystemBase {
 
   public void setSpeakerMode(){
     shooterMode = ShooterMode.Speaker;
+  }
+
+  public void setStageMode(){
+    shooterMode = ShooterMode.Stage;
   }
 
   public boolean isRedAlliance(){

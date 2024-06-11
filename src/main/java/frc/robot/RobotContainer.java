@@ -60,15 +60,16 @@ public class RobotContainer {
   private final JoystickButton shoot_RB = new JoystickButton(driverController, XboxController.Button.kRightBumper.value);
   private final JoystickButton zeroingShooter_X = new JoystickButton(driverController, XboxController.Button.kX.value);
   private final JoystickButton outtake_B = new JoystickButton(driverController, XboxController.Button.kB.value);
-  private final JoystickButton turnToApril_LB = new JoystickButton(driverController, XboxController.Button.kLeftBumper.value);
+  // private final JoystickButton turnToApril_LB = new JoystickButton(driverController, XboxController.Button.kLeftBumper.value);
 
   //Operator Controls
   public static final XboxController opController = new XboxController(IOConstants.OP_CONTROLLER_PORT);
   
-  private final JoystickButton shooterAutoMode_A = new JoystickButton(opController, XboxController.Button.kA.value);
+  // private final JoystickButton shooterAutoMode_A = new JoystickButton(opController, XboxController.Button.kA.value);
+  private final JoystickButton shooterStageMode_A = new JoystickButton(opController, XboxController.Button.kA.value);
   private final JoystickButton shooterPassingMode_Y = new JoystickButton(opController, XboxController.Button.kY.value);
   private final JoystickButton shooterManualMode_B = new JoystickButton(opController, XboxController.Button.kB.value);
-  private final JoystickButton shooterSpeakerMode_X = new JoystickButton(opController, XboxController.Button.kX.value);
+  private final JoystickButton shooterSpeakerMode_X = new JoystickButton(opController, XboxController.Button.kLeftBumper.value);
 
   //Pose Estimation
   public static final PoseEstimation poseEstimation = new PoseEstimation();
@@ -111,11 +112,11 @@ public class RobotContainer {
       .andThen(new InstantCommand(() -> shooter.resetPivotEncoder())));
     shoot_RB.whileTrue(new ShootOnTheMove());
     outtake_B.whileTrue(new Outtake());
-    turnToApril_LB.onTrue(new InstantCommand(() -> drivetrain.setAlignMode()))
-      .onFalse(new InstantCommand(() -> drivetrain.setNormalMode()));
+    // turnToApril_LB.onTrue(new InstantCommand(() -> drivetrain.setAlignMode()))
+    //   .onFalse(new InstantCommand(() -> drivetrain.setNormalMode()));
 
     //Operator Buttons
-    shooterAutoMode_A.onTrue(new InstantCommand(() -> shooter.setAutoMode()));
+    shooterStageMode_A.onTrue(new InstantCommand(() -> shooter.setStageMode())); // formerly shooter.setAutoMode()
     shooterManualMode_B.onTrue(new InstantCommand(() -> shooter.setManualMode()));
     shooterPassingMode_Y.onTrue(new InstantCommand(() -> shooter.setPassingMode()));
     shooterSpeakerMode_X.onTrue(new InstantCommand(() -> shooter.setSpeakerMode()));
