@@ -26,7 +26,7 @@ public class ShootOnTheMove extends Command {
 
   private SlewRateLimiter turnLimiter = new SlewRateLimiter(SwerveConstants.TELE_DRIVE_MAX_ANGULAR_ACCELERATION);
 
-  private final NetworkTable llTable = NetworkTableInstance.getDefault().getTable(VisionConstants.LL_NAME);
+  //private final NetworkTable llTable = NetworkTableInstance.getDefault().getTable(VisionConstants.LL_NAME);
 
   private double timestamp;
 
@@ -57,35 +57,35 @@ public class ShootOnTheMove extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double turnSpeed = turnLimiter.calculate(-drivetrain.getAlignSpeed()) * SwerveConstants.TELE_DRIVE_MAX_ANGULAR_SPEED;
-    chassisSpeeds.omegaRadiansPerSecond = turnSpeed;
-    drivetrain.swerveDrive(chassisSpeeds, new Translation2d());
+    // double turnSpeed = turnLimiter.calculate(-drivetrain.getAlignSpeed()) * SwerveConstants.TELE_DRIVE_MAX_ANGULAR_SPEED;
+    // chassisSpeeds.omegaRadiansPerSecond = turnSpeed;
+    // drivetrain.swerveDrive(chassisSpeeds, new Translation2d());
 
-    if(shooter.hasPriorityTarget()){
-      double[] botpose_targetspace = llTable.getEntry("botpose_targetspace").getDoubleArray(new double[6]);
-      double x = botpose_targetspace[0];
-      double z = botpose_targetspace[2];
-      double robotAngle_i = Math.atan(x / z);
-      SmartDashboard.putNumber("Robot Angle initial", robotAngle_i);
+    // if(shooter.hasPriorityTarget()){
+    //   double[] botpose_targetspace = llTable.getEntry("botpose_targetspace").getDoubleArray(new double[6]);
+    //   double x = botpose_targetspace[0];
+    //   double z = botpose_targetspace[2];
+    //   double robotAngle_i = Math.atan(x / z);
+    //   SmartDashboard.putNumber("Robot Angle initial", robotAngle_i);
 
-      double v_n = shooter.getNoteVelocity() * 1.8;
-      double v_n_pivot = v_n * Math.cos(robotAngle_i);
-      SmartDashboard.putNumber("Note Velocity for pivot", v_n_pivot);
-      double v_x = chassisSpeeds.vxMetersPerSecond;
-      SmartDashboard.putNumber("ChassisSpeeds x", v_x);
-      double deltaPivotAngle = Math.toDegrees(Math.asin(Math.abs(v_x) * Math.sin(Math.toRadians(shooter.calculatePivotAngle())) / Math.abs(v_n_pivot)));
-      if(v_x > 0){
-        deltaPivotAngle *= shooter.calculatePivotAngle() * 0.7 / 53.0;
-      }
-      else if(v_x < 0){
-        deltaPivotAngle *= 53.0 * 0.7 / shooter.calculatePivotAngle();
-      }
-      SmartDashboard.putNumber("Delta Pivot Angle", deltaPivotAngle);
-      double pivotAngle = v_x > 0 ? shooter.calculatePivotAngle() - deltaPivotAngle : shooter.calculatePivotAngle() + deltaPivotAngle;
-      SmartDashboard.putNumber("Corrected Pivot Angle", pivotAngle);
-      shooter.setPivotAngle(pivotAngle);
-      shooter.setPivotPosition();
-    }
+    //   double v_n = shooter.getNoteVelocity() * 1.8;
+    //   double v_n_pivot = v_n * Math.cos(robotAngle_i);
+    //   SmartDashboard.putNumber("Note Velocity for pivot", v_n_pivot);
+    //   double v_x = chassisSpeeds.vxMetersPerSecond;
+    //   SmartDashboard.putNumber("ChassisSpeeds x", v_x);
+    //   double deltaPivotAngle = Math.toDegrees(Math.asin(Math.abs(v_x) * Math.sin(Math.toRadians(shooter.calculatePivotAngle())) / Math.abs(v_n_pivot)));
+    //   if(v_x > 0){
+    //     deltaPivotAngle *= shooter.calculatePivotAngle() * 0.7 / 53.0;
+    //   }
+    //   else if(v_x < 0){
+    //     deltaPivotAngle *= 53.0 * 0.7 / shooter.calculatePivotAngle();
+    //   }
+    //   SmartDashboard.putNumber("Delta Pivot Angle", deltaPivotAngle);
+    //   double pivotAngle = v_x > 0 ? shooter.calculatePivotAngle() - deltaPivotAngle : shooter.calculatePivotAngle() + deltaPivotAngle;
+    //   SmartDashboard.putNumber("Corrected Pivot Angle", pivotAngle);
+    //   shooter.setPivotAngle(pivotAngle);
+    //   shooter.setPivotPosition();
+    // }
 
     if(Timer.getFPGATimestamp() - timestamp > 0.7){
       transport.transportShoot();

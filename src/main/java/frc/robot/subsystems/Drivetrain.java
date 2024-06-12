@@ -46,10 +46,10 @@ public class Drivetrain extends SubsystemBase {
 
   private Pigeon2 gyro;
 
-  private static final NetworkTable llTable = NetworkTableInstance.getDefault().getTable(VisionConstants.LL_NAME);
+  //private static final NetworkTable llTable = NetworkTableInstance.getDefault().getTable(VisionConstants.LL_NAME);
 
   public enum DriveMode{
-    Normal, Align
+    Normal //, Align
   }
 
   private DriveMode driveMode = DriveMode.Normal;
@@ -155,15 +155,15 @@ public class Drivetrain extends SubsystemBase {
 
   public void swerveDrive(double frontSpeed, double sideSpeed, double turnSpeed, 
     boolean fieldOriented, Translation2d centerOfRotation, boolean deadband){ //Drive with rotational speed control w/ joystick
-    if(driveMode == DriveMode.Align && deadband){
-      frontSpeed = Math.abs(frontSpeed) > 0.1 ? frontSpeed : 0;
-      sideSpeed = Math.abs(sideSpeed) > 0.1 ? sideSpeed : 0;
-    }
-    else{
+    // if(driveMode == DriveMode.Align && deadband){
+    //   frontSpeed = Math.abs(frontSpeed) > 0.1 ? frontSpeed : 0;
+    //   sideSpeed = Math.abs(sideSpeed) > 0.1 ? sideSpeed : 0;
+    // }
+    //else{
       frontSpeed = Math.abs(frontSpeed) > 0.1 ? frontSpeed : 0;
       sideSpeed = Math.abs(sideSpeed) > 0.1 ? sideSpeed : 0;
       turnSpeed = Math.abs(turnSpeed) > 0.1 ? turnSpeed : 0;
-    }
+    //}
 
     frontSpeed = frontLimiter.calculate(frontSpeed) * SwerveConstants.TELE_DRIVE_MAX_SPEED;
     sideSpeed = sideLimiter.calculate(sideSpeed) * SwerveConstants.TELE_DRIVE_MAX_SPEED;
@@ -329,177 +329,177 @@ public class Drivetrain extends SubsystemBase {
     return false;
   }
 
-  public double getAlignSpeed(){
-    double alignSpeed;
+  // public double getAlignSpeed(){
+  //   double alignSpeed;
 
-    if(isRedAlliance()){
-      if(llTable.getEntry("tid").getDouble(0) == 4){
-        double[] camerapose_targetspace = llTable.getEntry("camerapose_targetspace").getDoubleArray(new double[6]);
-        double x = Math.abs(camerapose_targetspace[0]);
-        double z = Math.abs(camerapose_targetspace[2]);
-        double offset = Math.atan(x / z);
+  //   if(isRedAlliance()){
+  //     if(llTable.getEntry("tid").getDouble(0) == 4){
+  //       double[] camerapose_targetspace = llTable.getEntry("camerapose_targetspace").getDoubleArray(new double[6]);
+  //       double x = Math.abs(camerapose_targetspace[0]);
+  //       double z = Math.abs(camerapose_targetspace[2]);
+  //       double offset = Math.atan(x / z);
 
-        double error = llTable.getEntry("tx").getDouble(0) + offset + 2.5;
+  //       double error = llTable.getEntry("tx").getDouble(0) + offset + 2.5;
         
-        alignSpeed = Math.abs(error) > 0.9 ? Math.signum(error) * SwerveConstants.kS_PERCENT + SwerveConstants.kP_PERCENT * error : 0;
-      }
-      else{
-        double alignAngle = getAlignAngle(4);
+  //       alignSpeed = Math.abs(error) > 0.9 ? Math.signum(error) * SwerveConstants.kS_PERCENT + SwerveConstants.kP_PERCENT * error : 0;
+  //     }
+  //     else{
+  //       double alignAngle = getAlignAngle(4);
 
-        double error = alignAngle - getHeading();
+  //       double error = alignAngle - getHeading();
 
-        if(error > 180) {
-          error -= 360;
-        }
-        else if(error < -180){
-          error += 360;
-        }
+  //       if(error > 180) {
+  //         error -= 360;
+  //       }
+  //       else if(error < -180){
+  //         error += 360;
+  //       }
         
-        if(Math.abs(error) > 1){
-          alignSpeed = Math.signum(-error) * SwerveConstants.kS_PERCENT + SwerveConstants.kP_PERCENT * -error;
-        }
-        else{
-          alignSpeed = 0;
-        }
-      }
-    }
-    else{
-      if(llTable.getEntry("tid").getDouble(0) == 7){
-        double[] camerapose_targetspace = llTable.getEntry("camerapose_targetspace").getDoubleArray(new double[6]);
-        double x = Math.abs(camerapose_targetspace[0]);
-        double z = Math.abs(camerapose_targetspace[2]);
-        double offset = Math.atan(x / z);
+  //       if(Math.abs(error) > 1){
+  //         alignSpeed = Math.signum(-error) * SwerveConstants.kS_PERCENT + SwerveConstants.kP_PERCENT * -error;
+  //       }
+  //       else{
+  //         alignSpeed = 0;
+  //       }
+  //     }
+  //   }
+  //   else{
+  //     if(llTable.getEntry("tid").getDouble(0) == 7){
+  //       double[] camerapose_targetspace = llTable.getEntry("camerapose_targetspace").getDoubleArray(new double[6]);
+  //       double x = Math.abs(camerapose_targetspace[0]);
+  //       double z = Math.abs(camerapose_targetspace[2]);
+  //       double offset = Math.atan(x / z);
 
-        double error = llTable.getEntry("tx").getDouble(0) + offset + 2.5;
+  //       double error = llTable.getEntry("tx").getDouble(0) + offset + 2.5;
         
-        alignSpeed = Math.abs(error) > 0.9 ? Math.signum(error) * SwerveConstants.kS_PERCENT + SwerveConstants.kP_PERCENT * error : 0;
-      }
-      else{
-        double alignAngle = getAlignAngle(7);
+  //       alignSpeed = Math.abs(error) > 0.9 ? Math.signum(error) * SwerveConstants.kS_PERCENT + SwerveConstants.kP_PERCENT * error : 0;
+  //     }
+  //     else{
+  //       double alignAngle = getAlignAngle(7);
 
-        double error = alignAngle - getHeading();
+  //       double error = alignAngle - getHeading();
 
-        if(error > 180) {
-          error -= 360;
-        }
-        else if(error < -180){
-          error += 360;
-        }
+  //       if(error > 180) {
+  //         error -= 360;
+  //       }
+  //       else if(error < -180){
+  //         error += 360;
+  //       }
         
-        if(Math.abs(error) > 1){
-          alignSpeed = Math.signum(-error) * SwerveConstants.kS_PERCENT + SwerveConstants.kP_PERCENT * -error;
-        }
-        else{
-          alignSpeed = 0;
-        }
-      }
-    }
+  //       if(Math.abs(error) > 1){
+  //         alignSpeed = Math.signum(-error) * SwerveConstants.kS_PERCENT + SwerveConstants.kP_PERCENT * -error;
+  //       }
+  //       else{
+  //         alignSpeed = 0;
+  //       }
+  //     }
+  //   }
 
-    return alignSpeed;
-  }
+  //   return alignSpeed;
+  // }
 
-  public double getAlignSpeedSourceAuto(){
-    double alignSpeed;
+  // public double getAlignSpeedSourceAuto(){
+  //   double alignSpeed;
 
-    if(isRedAlliance()){
-      if(llTable.getEntry("tid").getDouble(0) == 4){
-        double[] camerapose_targetspace = llTable.getEntry("camerapose_targetspace").getDoubleArray(new double[6]);
-        double x = Math.abs(camerapose_targetspace[0]);
-        double z = Math.abs(camerapose_targetspace[2]);
-        double offset = Math.atan(x / z);
+  //   if(isRedAlliance()){
+  //     if(llTable.getEntry("tid").getDouble(0) == 4){
+  //       double[] camerapose_targetspace = llTable.getEntry("camerapose_targetspace").getDoubleArray(new double[6]);
+  //       double x = Math.abs(camerapose_targetspace[0]);
+  //       double z = Math.abs(camerapose_targetspace[2]);
+  //       double offset = Math.atan(x / z);
 
-        double error = llTable.getEntry("tx").getDouble(0) + offset;
+  //       double error = llTable.getEntry("tx").getDouble(0) + offset;
         
-        alignSpeed = Math.abs(error) > 0.9 ? Math.signum(error) * SwerveConstants.kS_PERCENT + SwerveConstants.kP_PERCENT * error : 0;
-      }
-      else{
-        double alignAngle = getAlignAngle(4);
+  //       alignSpeed = Math.abs(error) > 0.9 ? Math.signum(error) * SwerveConstants.kS_PERCENT + SwerveConstants.kP_PERCENT * error : 0;
+  //     }
+  //     else{
+  //       double alignAngle = getAlignAngle(4);
 
-        double error = alignAngle - getHeading();
+  //       double error = alignAngle - getHeading();
 
-        if(error > 180) {
-          error -= 360;
-        }
-        else if(error < -180){
-          error += 360;
-        }
+  //       if(error > 180) {
+  //         error -= 360;
+  //       }
+  //       else if(error < -180){
+  //         error += 360;
+  //       }
         
-        if(Math.abs(error) > 1){
-          alignSpeed = Math.signum(-error) * SwerveConstants.kS_PERCENT + SwerveConstants.kP_PERCENT * -error;
-        }
-        else{
-          alignSpeed = 0;
-        }
-      }
-    }
-    else{
-      if(llTable.getEntry("tid").getDouble(0) == 7){
-        double[] camerapose_targetspace = llTable.getEntry("camerapose_targetspace").getDoubleArray(new double[6]);
-        double x = Math.abs(camerapose_targetspace[0]);
-        double z = Math.abs(camerapose_targetspace[2]);
-        double offset = Math.atan(x / z);
+  //       if(Math.abs(error) > 1){
+  //         alignSpeed = Math.signum(-error) * SwerveConstants.kS_PERCENT + SwerveConstants.kP_PERCENT * -error;
+  //       }
+  //       else{
+  //         alignSpeed = 0;
+  //       }
+  //     }
+  //   }
+  //   else{
+  //     if(llTable.getEntry("tid").getDouble(0) == 7){
+  //       double[] camerapose_targetspace = llTable.getEntry("camerapose_targetspace").getDoubleArray(new double[6]);
+  //       double x = Math.abs(camerapose_targetspace[0]);
+  //       double z = Math.abs(camerapose_targetspace[2]);
+  //       double offset = Math.atan(x / z);
 
-        double error = llTable.getEntry("tx").getDouble(0) + offset;
+  //       double error = llTable.getEntry("tx").getDouble(0) + offset;
         
-        alignSpeed = Math.abs(error) > 0.9 ? Math.signum(error) * SwerveConstants.kS_PERCENT + SwerveConstants.kP_PERCENT * error : 0;
-      }
-      else{
-        double alignAngle = getAlignAngle(7);
+  //       alignSpeed = Math.abs(error) > 0.9 ? Math.signum(error) * SwerveConstants.kS_PERCENT + SwerveConstants.kP_PERCENT * error : 0;
+  //     }
+  //     else{
+  //       double alignAngle = getAlignAngle(7);
 
-        double error = alignAngle - getHeading();
+  //       double error = alignAngle - getHeading();
 
-        if(error > 180) {
-          error -= 360;
-        }
-        else if(error < -180){
-          error += 360;
-        }
+  //       if(error > 180) {
+  //         error -= 360;
+  //       }
+  //       else if(error < -180){
+  //         error += 360;
+  //       }
         
-        if(Math.abs(error) > 1){
-          alignSpeed = Math.signum(-error) * SwerveConstants.kS_PERCENT + SwerveConstants.kP_PERCENT * -error;
-        }
-        else{
-          alignSpeed = 0;
-        }
-      }
-    }
+  //       if(Math.abs(error) > 1){
+  //         alignSpeed = Math.signum(-error) * SwerveConstants.kS_PERCENT + SwerveConstants.kP_PERCENT * -error;
+  //       }
+  //       else{
+  //         alignSpeed = 0;
+  //       }
+  //     }
+  //   }
 
-    return alignSpeed;
-  }
+  //   return alignSpeed;
+  // }
 
-  public boolean readyToShoot(){
-    double[] camerapose_targetspace = llTable.getEntry("camerapose_targetspace").getDoubleArray(new double[6]);
-    double x = Math.abs(camerapose_targetspace[0]);
-    double z = Math.abs(camerapose_targetspace[2]);
-    double offset = Math.atan(x / z);
+  // public boolean readyToShoot(){
+  //   double[] camerapose_targetspace = llTable.getEntry("camerapose_targetspace").getDoubleArray(new double[6]);
+  //   double x = Math.abs(camerapose_targetspace[0]);
+  //   double z = Math.abs(camerapose_targetspace[2]);
+  //   double offset = Math.atan(x / z);
 
-    double error = llTable.getEntry("tx").getDouble(0) + offset + 2.5;
-    if(isRedAlliance()){
-      return Math.abs(error) <= 0.9 && llTable.getEntry("tid").getDouble(0) == 4; 
-    }
-    else{
-      return Math.abs(error) <= 0.9 && llTable.getEntry("tid").getDouble(0) == 7;
-    }
-  }
+  //   double error = llTable.getEntry("tx").getDouble(0) + offset + 2.5;
+  //   if(isRedAlliance()){
+  //     return Math.abs(error) <= 0.9 && llTable.getEntry("tid").getDouble(0) == 4; 
+  //   }
+  //   else{
+  //     return Math.abs(error) <= 0.9 && llTable.getEntry("tid").getDouble(0) == 7;
+  //   }
+  // }
 
-  public double getAlignAngle(int tagID){
-    Pose2d tagPose = RobotContainer.aprilTagFieldLayout.getTagPose(tagID).get().toPose2d();
-    Pose2d robotPose = getPose();
+  // public double getAlignAngle(int tagID){
+  //   Pose2d tagPose = RobotContainer.aprilTagFieldLayout.getTagPose(tagID).get().toPose2d();
+  //   Pose2d robotPose = getPose();
 
-    double deltaX = tagPose.getX() - robotPose.getX();
-    double deltaY = tagPose.getY() - robotPose.getY() + Units.inchesToMeters(22.5);
+  //   double deltaX = tagPose.getX() - robotPose.getX();
+  //   double deltaY = tagPose.getY() - robotPose.getY() + Units.inchesToMeters(22.5);
 
-    double alignAngle = Math.toDegrees(Math.atan2(deltaY, deltaX));
+  //   double alignAngle = Math.toDegrees(Math.atan2(deltaY, deltaX));
 
-    if(!isRedAlliance()){
-      alignAngle += 180;
-      if(alignAngle > 180){
-        alignAngle -= 360;
-      }
-    }
+  //   if(!isRedAlliance()){
+  //     alignAngle += 180;
+  //     if(alignAngle > 180){
+  //       alignAngle -= 360;
+  //     }
+  //   }
 
-    return alignAngle;
-  }
+  //   return alignAngle;
+  // }
 
   public DriveMode getDriveMode(){
     return driveMode;
@@ -509,9 +509,9 @@ public class Drivetrain extends SubsystemBase {
     driveMode = DriveMode.Normal;
   }
 
-  public void setAlignMode(){
-    driveMode = DriveMode.Align;
-  }
+  // public void setAlignMode(){
+  //   driveMode = DriveMode.Align;
+  // }
 
   public Command rumbleController(){
     return new InstantCommand(() -> RobotContainer.driverController.setRumble(RumbleType.kBothRumble, 0.25))

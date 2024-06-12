@@ -29,7 +29,6 @@ public class AutoAlign extends Command {
     timer = new Timer();
     timer.restart();
     timer.start();
-    time = Timer.getFPGATimestamp();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -54,6 +53,6 @@ public class AutoAlign extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Timer.getFPGATimestamp() > time + delay;
+    return timer.get() > delay;
   }
 }

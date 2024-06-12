@@ -168,6 +168,15 @@ public final class Constants {
     public static final double DEPLOYED_ROT = 22.0;
   }
 
+  public static final class ClimberConstants {
+    public static final int CLIMBER_ID = 51;
+
+    // public static final double CLIMBER_kP;
+    // public static final double CLIMBER_kI;
+    // public static final double CLIMBER_kD;
+
+  }
+
   public static final class FieldConstants{
     public static final double FIELD_LENGTH = 16.54175;
     public static final double FIELD_WIDTH = 8.21055;
