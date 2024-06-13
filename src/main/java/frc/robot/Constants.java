@@ -140,8 +140,8 @@ public final class Constants {
 
     public static final double AMP_PIVOT_POSITION = 13.8;
     public static final double PASSING_PIVOT_POSITION = 15.5;
-    public static final double SPEAKER_PIVOT_POSITION = 19.7;
-    public static final double STAGE_PIVOT_POSITION = 15.8; // TODO: find value
+    public static final double SPEAKER_PIVOT_POSITION = 19.2; // 19.7
+    public static final double STAGE_PIVOT_POSITION = 1.3; // 15.8 
 
     public static final double FLOOR_TO_SHOOTER = Units.inchesToMeters(7);
   }

@@ -26,6 +26,7 @@ import frc.lib.drivers.PearadoxSparkFlex;
 import frc.lib.drivers.PearadoxSparkMax;
 import frc.lib.util.LerpTable;
 import frc.lib.util.SmarterDashboard;
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.ShooterConstants;
@@ -49,7 +50,7 @@ public class Shooter extends SubsystemBase {
 
   //private static final NetworkTable llTable = NetworkTableInstance.getDefault().getTable(VisionConstants.LL_NAME);
 
-  private double pivotPosition;
+  private double pivotPosition = Constants.ShooterConstants.SPEAKER_PIVOT_POSITION;
   private double pivotAdjust = 0;
   //private double[] botpose_targetspace = new double[6];
   public static final Drivetrain drivetrain = Drivetrain.getInstance();
@@ -67,7 +68,7 @@ public class Shooter extends SubsystemBase {
     Auto, Manual, Passing, Speaker, Stage
   }
 
-  private ShooterMode shooterMode = ShooterMode.Speaker;
+  private ShooterMode shooterMode = ShooterMode.Manual;
 
   public static ShuffleboardTab driverTab;
   private GenericEntry leftShooterSpeedEntry;
@@ -134,7 +135,7 @@ public class Shooter extends SubsystemBase {
     // This method will be called once per scheduler run
     SmarterDashboard.putNumber("Shooter Left Speed", leftEncoder.getVelocity(), "Shooter");
     SmarterDashboard.putNumber("Shooter Pivot Position", pivotEncoder.getPosition(), "Shooter");
-    SmarterDashboard.putNumber("Shooter Pivot Intended Position", pivotPosition, "Shooter");
+    SmarterDashboard.putNumber("Shooter Pivot Intended Position", pivotPosition + pivotAdjust, "Shooter");
     SmarterDashboard.putNumber("Shooter Pivot Current", pivot.getOutputCurrent(), "Shooter");
     // SmarterDashboard.putNumber("Shooter Pivot Intended Angle", calculatePivotAngle(), "Shooter");  
     // SmarterDashboard.putBoolean("Shooter Has Priority Target", hasPriorityTarget(), "Shooter"); 
@@ -175,28 +176,28 @@ public class Shooter extends SubsystemBase {
         ControlType.kVoltage,
         0);
     }
-    else if(shooterMode == ShooterMode.Speaker || shooterMode == ShooterMode.Stage){
+    else{
       leftController.setReference(
-        6.5,
+        7.5,
         ControlType.kVoltage,
         0);
 
       rightController.setReference(
-        4.5,
+        5.5,
         ControlType.kVoltage,
         0);
     }
-    else if(shooterMode == ShooterMode.Manual){
-      leftController.setReference(
-        leftShooterSpeedEntry.getDouble(9),
-        ControlType.kVoltage,
-        0);
+    // else if(shooterMode == ShooterMode.Manual){
+    //   leftController.setReference(
+    //     leftShooterSpeedEntry.getDouble(7.5),
+    //     ControlType.kVoltage,
+    //     0);
 
-      rightController.setReference(
-        rightShooterSpeedEntry.getDouble(7),
-        ControlType.kVoltage,
-        0);
-    }
+    //   rightController.setReference(
+    //     rightShooterSpeedEntry.getDouble(5.5),
+    //     ControlType.kVoltage,
+    //     0);
+    // }
     // else{
     //   leftController.setReference(
     //     shooterVoltage,
@@ -263,11 +264,11 @@ public class Shooter extends SubsystemBase {
         0);
     }
 
-    if(RobotContainer.opController.getPOV() == 0){
-      pivotAdjust += 0.1;
-    }
-    else if(RobotContainer.opController.getPOV() == 180){
-      pivotAdjust -= 0.1;
+    // should we change this back to dpad? i feel like the joystick axises were harder to control
+    if(RobotContainer.opController.getLeftY() >= 0.5 && pivotPosition + pivotAdjust > 0){
+      pivotAdjust -= 0.2;
+    } else if(RobotContainer.opController.getLeftY() <= -0.5 && pivotPosition + pivotAdjust < 20){
+      pivotAdjust += 0.2;
     }
   }
 

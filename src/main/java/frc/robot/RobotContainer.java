@@ -67,9 +67,9 @@ public class RobotContainer {
   
   // private final JoystickButton shooterAutoMode_A = new JoystickButton(opController, XboxController.Button.kA.value);
   private final JoystickButton shooterStageMode_A = new JoystickButton(opController, XboxController.Button.kA.value);
-  private final JoystickButton shooterPassingMode_Y = new JoystickButton(opController, XboxController.Button.kY.value);
   private final JoystickButton shooterManualMode_B = new JoystickButton(opController, XboxController.Button.kB.value);
-  private final JoystickButton shooterSpeakerMode_X = new JoystickButton(opController, XboxController.Button.kLeftBumper.value);
+  private final JoystickButton shooterSpeakerMode_X = new JoystickButton(opController, XboxController.Button.kX.value);
+  private final JoystickButton shooterPassingMode_Y = new JoystickButton(opController, XboxController.Button.kY.value);
 
   //Pose Estimation
   public static final PoseEstimation poseEstimation = new PoseEstimation();

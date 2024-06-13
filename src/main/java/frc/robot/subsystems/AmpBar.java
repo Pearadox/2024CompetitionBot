@@ -76,6 +76,7 @@ public class AmpBar extends SubsystemBase {
     }
 
     SmarterDashboard.putNumber("Amp Bar Position", ampBarEncoder.getPosition(), "Amp Bar");
+    SmarterDashboard.putString("Amp Bar Mode", ampBarMode.toString(), "Amp Bar");
   }
 
   public void setStowedMode(){
