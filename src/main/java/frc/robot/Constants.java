@@ -174,7 +174,8 @@ public final class Constants {
     // public static final double CLIMBER_kP;
     // public static final double CLIMBER_kI;
     // public static final double CLIMBER_kD;
-
+    public static final double ZEROING_SPEED = -0.5;
+    public static final double CLIMB_SPEED = 0.75; 
   }
 
   public static final class FieldConstants{
