@@ -164,12 +164,13 @@ public final class Constants {
     public static final double AMP_BAR_MAX_OUTPUT = 0.5;
 
     // Zero at Top of Shooter at Lowest Pivot
-    public static final double STOWED_ROT = 3.0;
-    public static final double DEPLOYED_ROT = 22.0;
+    public static final double STOWED_ROT = 2.54; // 3 (climber interference moved zero)
+    public static final double DEFENSE_ROT = 12.5;
+    public static final double DEPLOYED_ROT = 18.25; // 22 (climber interference moved zero)
   }
 
   public static final class ClimberConstants {
-    public static final int CLIMBER_ID = 51;
+    public static final int CLIMBER_ID = 25;
 
     // public static final double CLIMBER_kP;
     // public static final double CLIMBER_kI;

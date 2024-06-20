@@ -156,12 +156,12 @@ public class Shooter extends SubsystemBase {
     }
     else if(RobotContainer.driverController.getLeftTriggerAxis() >= 0.95){ //Amp
       leftController.setReference(
-        3.9,
+        4.4, // 3.9
         ControlType.kVoltage,
         0);
 
       rightController.setReference(
-        3.8,
+        4.3, // 3.8
         ControlType.kVoltage,
         0);
     }

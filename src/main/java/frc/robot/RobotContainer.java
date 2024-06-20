@@ -150,7 +150,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Stop Modules", new InstantCommand(() -> drivetrain.stopModules()));
     NamedCommands.registerCommand("Auto Align", new AutoAlign().withTimeout(0.4));
     NamedCommands.registerCommand("Source Auto Align", new SourceAutoAlign().withTimeout(0.4));
-    NamedCommands.registerCommand("Shoot", new Shoot().withTimeout(0.2));
+    NamedCommands.registerCommand("Shoot", new Shoot().withTimeout(0.3)); // 0.2
     NamedCommands.registerCommand("Source Set Pivot Position", new InstantCommand(() -> shooter.setPivotPosition(14.0)));
     NamedCommands.registerCommand("Set Shooter Auto", new InstantCommand(() -> shooter.setShooterAuto(0.85)));
     NamedCommands.registerCommand("Reset Heading", new InstantCommand(drivetrain::zeroHeading, drivetrain));
