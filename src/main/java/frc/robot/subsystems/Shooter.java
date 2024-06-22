@@ -48,7 +48,6 @@ public class Shooter extends SubsystemBase {
 
   private boolean zeroing = false;
 
-
   //private static final NetworkTable llTable = NetworkTableInstance.getDefault().getTable(VisionConstants.LL_NAME);
 
   private double pivotPosition = Constants.ShooterConstants.SPEAKER_PIVOT_POSITION;
@@ -66,8 +65,6 @@ public class Shooter extends SubsystemBase {
   }
 
   public enum ShooterMode{
-// <<<<<<< Hantao2
-    // Auto, Manual, SourcePassing, StagePassing, Speaker
     Auto, Manual, Passing, Speaker, Stage
   }
 
@@ -101,28 +98,28 @@ public class Shooter extends SubsystemBase {
     rightController = rightShooter.getPIDController();
     pivotController = pivot.getPIDController();
 
-    pivotLerp.addPoint(54, 29.7);
-    pivotLerp.addPoint(51, 29.7);
-    pivotLerp.addPoint(48, 27.5);
-    pivotLerp.addPoint(45, 24.5);
-    pivotLerp.addPoint(42, 22.1);
-    pivotLerp.addPoint(39, 19.0);
-    pivotLerp.addPoint(36, 17.8); // blue red
-    pivotLerp.addPoint(33, 15.65); // 15.2 15.6
-    pivotLerp.addPoint(30, 14.5); // 13.8 14.4 
-    pivotLerp.addPoint(27, 12.8); //12.1 12.7
-    pivotLerp.addPoint(24, 11.5); //11.1 11.5
-    pivotLerp.addPoint(21, 10.2); //10 10.2
-    pivotLerp.addPoint(18, 7.3); //7.3 7.3
-    pivotLerp.addPoint(15, 4.6); //4.6 4.6
+    pivotLerp.addPoint(53, 20.3);
+    pivotLerp.addPoint(50, 19.4);
+    pivotLerp.addPoint(47, 17.8);
+    pivotLerp.addPoint(44, 15.8);
+    pivotLerp.addPoint(41, 14.8);
+    pivotLerp.addPoint(38, 13.7);
+    pivotLerp.addPoint(35, 13.0);
+    pivotLerp.addPoint(32, 12.6);
+    pivotLerp.addPoint(29, 11.4);
+    pivotLerp.addPoint(26, 10.1);
+    pivotLerp.addPoint(23, 8.9);
+    pivotLerp.addPoint(20, 8.6);
+    pivotLerp.addPoint(17, 8.0);
+    pivotLerp.addPoint(14, 7.5);
 
-    shooterLerp.addPoint(53, 7.5);
-    shooterLerp.addPoint(47, 7.5);
-    shooterLerp.addPoint(41, 7.75);
-    shooterLerp.addPoint(35, 8);
-    shooterLerp.addPoint(29, 8.25);
+    shooterLerp.addPoint(53, 6);
+    shooterLerp.addPoint(47, 6.5);
+    shooterLerp.addPoint(41, 7);
+    shooterLerp.addPoint(35, 7.5);
+    shooterLerp.addPoint(29, 8);
     shooterLerp.addPoint(23, 8.5);
-    shooterLerp.addPoint(15, 9);
+    shooterLerp.addPoint(17, 9);
 
     driverTab = Shuffleboard.getTab("Driver");
     leftShooterSpeedEntry = driverTab.add("Left Shooter Speed", 9)
@@ -136,21 +133,16 @@ public class Shooter extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmarterDashboard.putString("Shooter Mode", getShooterMode().toString(), "Shooter");
     SmarterDashboard.putNumber("Shooter Left Speed", leftEncoder.getVelocity(), "Shooter");
-    SmarterDashboard.putNumber("Shooter Right Speed", rightEncoder.getVelocity(), "Shooter");
     SmarterDashboard.putNumber("Shooter Pivot Position", pivotEncoder.getPosition(), "Shooter");
     SmarterDashboard.putNumber("Shooter Pivot Intended Position", pivotPosition + pivotAdjust, "Shooter");
     SmarterDashboard.putNumber("Shooter Pivot Current", pivot.getOutputCurrent(), "Shooter");
-
     // SmarterDashboard.putNumber("Shooter Pivot Intended Angle", calculatePivotAngle(), "Shooter");  
     // SmarterDashboard.putBoolean("Shooter Has Priority Target", hasPriorityTarget(), "Shooter"); 
     SmarterDashboard.putString("Shooter Mode", shooterMode.toString(), "Shooter"); 
     SmarterDashboard.putNumber("Shooter Pivot Adjust", pivotAdjust, "Shooter");
     SmarterDashboard.putNumber("Note Velocity", getNoteVelocity(), "Shooter");
-    SmarterDashboard.putNumber("Shooter Left Temperature", leftShooter.getMotorTemperature(), "Shooter");
-    SmarterDashboard.putNumber("Shooter Right Temperature", rightShooter.getMotorTemperature(), "Shooter");
-    
+
     shooterModeEntry.setString(shooterMode.toString());
     pivotAdjustEntry.setDouble(pivotAdjust);
   }
@@ -173,52 +165,17 @@ public class Shooter extends SubsystemBase {
         ControlType.kVoltage,
         0);
     }
-    else if(shooterMode == ShooterMode.SourcePassing){
+    else if(shooterMode == ShooterMode.Passing){
       leftController.setReference(
-        5.7,
+        5.6,
         ControlType.kVoltage,
         0);
 
       rightController.setReference(
-        3.7,
+        3.6,
         ControlType.kVoltage,
         0);
     }
-    else if(shooterMode == ShooterMode.StagePassing){
-      leftController.setReference(
-        5.3, 
-        ControlType.kVoltage,
-        0);
-
-      rightController.setReference(
-        3.3,
-        ControlType.kVoltage,
-        0);
-    }
-// <<<<<<< Hantao2
-//     else if(shooterMode == ShooterMode.Speaker){
-//       leftController.setReference(
-//         7.5,
-//         ControlType.kVoltage,
-//         0);
-
-//       rightController.setReference(
-//         5.5,
-//         ControlType.kVoltage,
-//         0);
-//     }
-//     else if(shooterMode == ShooterMode.Manual){
-//       leftController.setReference(
-//         leftShooterSpeedEntry.getDouble(9),
-//         ControlType.kVoltage,
-//         0);
-
-//       rightController.setReference(
-//         rightShooterSpeedEntry.getDouble(7),
-//         ControlType.kVoltage,
-//         0);
-//     }
-
     else{
       leftController.setReference(
         7.5,
@@ -272,7 +229,7 @@ public class Shooter extends SubsystemBase {
 
       pivotPosition = ShooterConstants.AMP_PIVOT_POSITION;
     }
-    else if(shooterMode == ShooterMode.SourcePassing || shooterMode == ShooterMode.StagePassing){
+    else if(shooterMode == ShooterMode.Passing){
       pivotController.setReference(
         ShooterConstants.PASSING_PIVOT_POSITION,
         ControlType.kPosition,
@@ -349,7 +306,6 @@ public class Shooter extends SubsystemBase {
   //     botpose_targetspace = llTable.getEntry("botpose_targetspace").getDoubleArray(new double[6]);
   //   }
 
-
   //   double x = Math.abs(botpose_targetspace[0]);
   //   double z = Math.abs(botpose_targetspace[2]);
   //   double hypot = Math.hypot(x, z);
@@ -372,7 +328,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public double getNoteVelocity(){
-    return 2 * (((leftEncoder.getVelocity() + rightEncoder.getVelocity()) / 2) * 2 * Math.PI * Units.inchesToMeters(1.5) / 60);
+    return ((leftEncoder.getVelocity() + rightEncoder.getVelocity()) / 2) * 2 * Math.PI * Units.inchesToMeters(1.5) / 60;
   }
 
   // public boolean hasPriorityTarget(){
@@ -404,12 +360,8 @@ public class Shooter extends SubsystemBase {
     shooterMode = ShooterMode.Manual;
   }
 
-  public void setSourcePassingMode(){
-    shooterMode = ShooterMode.SourcePassing;
-  }
-  
-  public void setStagePassingMode(){
-    shooterMode = ShooterMode.StagePassing;
+  public void setPassingMode(){
+    shooterMode = ShooterMode.Passing;
   }
 
   public void setSpeakerMode(){
@@ -426,9 +378,5 @@ public class Shooter extends SubsystemBase {
         return alliance.get() == DriverStation.Alliance.Red;
     }
     return false;
-  }
-
-  public boolean readyToShoot() {
-    return (Math.abs(pivotPosition + pivotAdjust - pivotEncoder.getPosition()) <= 0.9);
   }
 }

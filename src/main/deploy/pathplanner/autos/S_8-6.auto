@@ -24,6 +24,12 @@
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.7
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "Auto Align"
@@ -54,9 +60,15 @@
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.45
+          }
+        },
+        {
           "type": "named",
           "data": {
-            "name": "Auto Align"
+            "name": "Source Auto Align"
           }
         },
         {
@@ -90,9 +102,15 @@
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.45
+          }
+        },
+        {
           "type": "named",
           "data": {
-            "name": "Auto Align"
+            "name": "Source Auto Align"
           }
         },
         {
