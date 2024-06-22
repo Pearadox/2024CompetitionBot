@@ -107,7 +107,7 @@ public final class Constants {
     public static final Vector<N3> ODOMETRY_STD_DEV = VecBuilder.fill(0.1, 0.1, 0.1);
 
     public static final double kS_PERCENT = 0.035;
-    public static final double kP_PERCENT = 0.008;
+    public static final double kP_PERCENT = 0.009;
   }
 
   public static final class IntakeConstants{
@@ -164,7 +164,6 @@ public final class Constants {
     public static final double AMP_BAR_MAX_OUTPUT = 0.5;
 
     // Zero at Top of Shooter at Lowest Pivot
-
     public static final double STOWED_ROT = 2.54; // 3 (climber interference moved zero)
     public static final double DEFENSE_ROT = 12.5;
     public static final double DEPLOYED_ROT = 18.25; // 22 (climber interference moved zero)
@@ -190,9 +189,7 @@ public final class Constants {
   public static final class VisionConstants{
     //Limelight Offest with Mount
     // LL Forward = 0.2667 LL Up = 0.46355
-
-    public static final String SHOOTER_LL_NAME = "limelight-shooter";
-    public static final String INTAKE_LL_NAME = "limelight-intake";
+    public static final String LL_NAME = "limelight";
 
     public static final Transform3d ROBOT_TO_SHOOTER_LL = new Transform3d(
       new Translation3d( 
@@ -214,7 +211,7 @@ public final class Constants {
       //     );
       // };
 
-      public static final Vector<N3> LIMELIGHT_STD_DEV = VecBuilder.fill(.9, .9, .9999999);
+      public static final Vector<N3> LIMELIGHT_STD_DEV = VecBuilder.fill(.7, .7, .9999999);
       
       public static final double AMBIGUITY_FILTER = 0.3;
       public static final double DISTANCE_FILTER = FieldConstants.FIELD_LENGTH / 2;

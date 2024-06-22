@@ -10,12 +10,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Shooter.ShooterMode;
 
 public class SwerveDrive extends Command {
   private Drivetrain drivetrain = Drivetrain.getInstance();
-  private Shooter shooter = Shooter.getInstance();
   private XboxController driverController = RobotContainer.driverController;
 
   /** Creates a new SwerveDrive. */

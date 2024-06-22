@@ -12,7 +12,8 @@
         {
             "groupId": "com.pathplanner.lib",
             "artifactId": "PathplannerLib-java",
-            "version": "2024.2.8"        }
+            "version": "2024.2.8"
+        }
     ],
     "jniDependencies": [],
     "cppDependencies": [
