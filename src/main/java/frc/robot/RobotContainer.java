@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -32,6 +33,7 @@ import frc.robot.commands.ShooterHold;
 import frc.robot.commands.SourceAutoAlign;
 import frc.robot.commands.SwerveDrive;
 import frc.robot.subsystems.AmpBar;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
@@ -50,6 +52,7 @@ public class RobotContainer {
   public static final Transport transport = Transport.getInstance();
   public static final Shooter shooter = Shooter.getInstance();
   public static final AmpBar ampBar = AmpBar.getInstance();
+  public static final Climber climber = Climber.getInstance();
 
   //Driver Controls
   public static final CommandXboxController commandDriverController = new CommandXboxController(IOConstants.DRIVER_CONTROLLER_PORT);
@@ -59,18 +62,20 @@ public class RobotContainer {
   private final JoystickButton shoot_RB = new JoystickButton(driverController, XboxController.Button.kRightBumper.value);
   private final JoystickButton zeroingShooter_X = new JoystickButton(driverController, XboxController.Button.kX.value);
   private final JoystickButton outtake_B = new JoystickButton(driverController, XboxController.Button.kB.value);
-  private final JoystickButton turnToApril_LB = new JoystickButton(driverController, XboxController.Button.kLeftBumper.value);
+  // private final JoystickButton turnToApril_LB = new JoystickButton(driverController, XboxController.Button.kLeftBumper.value);
 
   //Operator Controls
-  public static final CommandXboxController commandOpController = new CommandXboxController(IOConstants.OP_CONTROLLER_PORT);
-  public static final XboxController opController = commandOpController.getHID();  
 
-  private final JoystickButton shooterAutoMode_A = new JoystickButton(opController, XboxController.Button.kA.value);
-  private final JoystickButton shooterSourcePassingMode_Y = new JoystickButton(opController, XboxController.Button.kY.value);
+  public static final XboxController opController = new XboxController(IOConstants.OP_CONTROLLER_PORT);
+  
+  // private final JoystickButton shooterAutoMode_A = new JoystickButton(opController, XboxController.Button.kA.value);
+  private final JoystickButton shooterStageMode_A = new JoystickButton(opController, XboxController.Button.kA.value);
   private final JoystickButton shooterManualMode_B = new JoystickButton(opController, XboxController.Button.kB.value);
   private final JoystickButton shooterSpeakerMode_X = new JoystickButton(opController, XboxController.Button.kX.value);
-  private final JoystickButton shooterStagePassingMode_Start = new JoystickButton(opController, XboxController.Button.kStart.value);
-
+  private final JoystickButton shooterPassingMode_Y = new JoystickButton(opController, XboxController.Button.kY.value);
+  
+  private final JoystickButton climberPrepear_LB = new JoystickButton(opController, XboxController.Button.kLeftBumper.value);
+  private final JoystickButton climberLift_RB = new JoystickButton(opController, XboxController.Button.kRightBumper.value);
   //Pose Estimation
   public static final PoseEstimation poseEstimation = new PoseEstimation();
   public static AprilTagFieldLayout aprilTagFieldLayout;
@@ -111,15 +116,18 @@ public class RobotContainer {
       .andThen(new InstantCommand(() -> shooter.resetPivotEncoder())));
     shoot_RB.whileTrue(new Shoot());
     outtake_B.whileTrue(new Outtake());
-    turnToApril_LB.onTrue(new InstantCommand(() -> drivetrain.setAlignMode()))
-      .onFalse(new InstantCommand(() -> drivetrain.setNormalMode()));
+    // turnToApril_LB.onTrue(new InstantCommand(() -> drivetrain.setAlignMode()))
+    //   .onFalse(new InstantCommand(() -> drivetrain.setNormalMode()));
 
     //Operator Buttons
-    shooterAutoMode_A.onTrue(new InstantCommand(() -> shooter.setAutoMode()));
+    shooterStageMode_A.onTrue(new InstantCommand(() -> shooter.setStageMode())); // formerly shooter.setAutoMode()
     shooterManualMode_B.onTrue(new InstantCommand(() -> shooter.setManualMode()));
     shooterSourcePassingMode_Y.onTrue(new InstantCommand(() -> shooter.setSourcePassingMode()));
     shooterStagePassingMode_Start.onTrue(new InstantCommand(() -> shooter.setStagePassingMode()));
     shooterSpeakerMode_X.onTrue(new InstantCommand(() -> shooter.setSpeakerMode()));
+
+    climberPrepear_LB.whileTrue(new StartEndCommand(() -> climber.prepearClimber(), () -> climber.idleClimber()));
+    climberLift_RB.whileTrue(new StartEndCommand(() -> climber.liftClimber(), () -> climber.idleClimber()));
   }
 
   /**
@@ -148,7 +156,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Stop Modules", new InstantCommand(() -> drivetrain.stopModules()));
     NamedCommands.registerCommand("Auto Align", new AutoAlign().withTimeout(0.7));
     NamedCommands.registerCommand("Source Auto Align", new SourceAutoAlign().withTimeout(0.8));
-    NamedCommands.registerCommand("Shoot", new Shoot().withTimeout(0.2));
+    NamedCommands.registerCommand("Shoot", new Shoot().withTimeout(0.3)); //0.2
     NamedCommands.registerCommand("Source Set Pivot Position", new InstantCommand(() -> shooter.setPivotPosition(14.0)));
     NamedCommands.registerCommand("Middle Set Pivot Position", new InstantCommand(() -> shooter.setPivotPosition(4.0)));
     NamedCommands.registerCommand("Set Manual Mode", new InstantCommand(() -> shooter.setManualMode()));

@@ -26,6 +26,7 @@ import frc.lib.drivers.PearadoxSparkFlex;
 import frc.lib.drivers.PearadoxSparkMax;
 import frc.lib.util.LerpTable;
 import frc.lib.util.SmarterDashboard;
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.ShooterConstants;
@@ -47,11 +48,12 @@ public class Shooter extends SubsystemBase {
 
   private boolean zeroing = false;
 
-  private static final NetworkTable llTable = NetworkTableInstance.getDefault().getTable(VisionConstants.SHOOTER_LL_NAME);
 
-  private double pivotPosition;
+  //private static final NetworkTable llTable = NetworkTableInstance.getDefault().getTable(VisionConstants.LL_NAME);
+
+  private double pivotPosition = Constants.ShooterConstants.SPEAKER_PIVOT_POSITION;
   private double pivotAdjust = 0;
-  private double[] botpose_targetspace = new double[6];
+  //private double[] botpose_targetspace = new double[6];
   public static final Drivetrain drivetrain = Drivetrain.getInstance();
 
   private LerpTable pivotLerp = new LerpTable();
@@ -64,10 +66,12 @@ public class Shooter extends SubsystemBase {
   }
 
   public enum ShooterMode{
-    Auto, Manual, SourcePassing, StagePassing, Speaker
+// <<<<<<< Hantao2
+    // Auto, Manual, SourcePassing, StagePassing, Speaker
+    Auto, Manual, Passing, Speaker, Stage
   }
 
-  private ShooterMode shooterMode = ShooterMode.Auto;
+  private ShooterMode shooterMode = ShooterMode.Manual;
 
   public static ShuffleboardTab driverTab;
   private GenericEntry leftShooterSpeedEntry;
@@ -136,10 +140,12 @@ public class Shooter extends SubsystemBase {
     SmarterDashboard.putNumber("Shooter Left Speed", leftEncoder.getVelocity(), "Shooter");
     SmarterDashboard.putNumber("Shooter Right Speed", rightEncoder.getVelocity(), "Shooter");
     SmarterDashboard.putNumber("Shooter Pivot Position", pivotEncoder.getPosition(), "Shooter");
-    SmarterDashboard.putNumber("Shooter Pivot Intended Position", pivotPosition, "Shooter");
+    SmarterDashboard.putNumber("Shooter Pivot Intended Position", pivotPosition + pivotAdjust, "Shooter");
     SmarterDashboard.putNumber("Shooter Pivot Current", pivot.getOutputCurrent(), "Shooter");
-    SmarterDashboard.putNumber("Shooter Pivot Intended Angle", calculatePivotAngle(), "Shooter");  
-    SmarterDashboard.putBoolean("Shooter Has Priority Target", hasPriorityTarget(), "Shooter"); 
+
+    // SmarterDashboard.putNumber("Shooter Pivot Intended Angle", calculatePivotAngle(), "Shooter");  
+    // SmarterDashboard.putBoolean("Shooter Has Priority Target", hasPriorityTarget(), "Shooter"); 
+    SmarterDashboard.putString("Shooter Mode", shooterMode.toString(), "Shooter"); 
     SmarterDashboard.putNumber("Shooter Pivot Adjust", pivotAdjust, "Shooter");
     SmarterDashboard.putNumber("Note Velocity", getNoteVelocity(), "Shooter");
     SmarterDashboard.putNumber("Shooter Left Temperature", leftShooter.getMotorTemperature(), "Shooter");
@@ -150,7 +156,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public void shooterHold(){
-    double shooterVoltage = shooterLerp.interpolate(calculatePivotAngle());
+    //double shooterVoltage = shooterLerp.interpolate(calculatePivotAngle());
 
     if(DriverStation.isAutonomousEnabled()){
       leftShooter.set(0.7);
@@ -158,12 +164,12 @@ public class Shooter extends SubsystemBase {
     }
     else if(RobotContainer.driverController.getLeftTriggerAxis() >= 0.95){ //Amp
       leftController.setReference(
-        3.9,
+        4.4, // 3.9
         ControlType.kVoltage,
         0);
 
       rightController.setReference(
-        3.8,
+        4.3, // 3.8
         ControlType.kVoltage,
         0);
     }
@@ -189,7 +195,31 @@ public class Shooter extends SubsystemBase {
         ControlType.kVoltage,
         0);
     }
-    else if(shooterMode == ShooterMode.Speaker){
+// <<<<<<< Hantao2
+//     else if(shooterMode == ShooterMode.Speaker){
+//       leftController.setReference(
+//         7.5,
+//         ControlType.kVoltage,
+//         0);
+
+//       rightController.setReference(
+//         5.5,
+//         ControlType.kVoltage,
+//         0);
+//     }
+//     else if(shooterMode == ShooterMode.Manual){
+//       leftController.setReference(
+//         leftShooterSpeedEntry.getDouble(9),
+//         ControlType.kVoltage,
+//         0);
+
+//       rightController.setReference(
+//         rightShooterSpeedEntry.getDouble(7),
+//         ControlType.kVoltage,
+//         0);
+//     }
+
+    else{
       leftController.setReference(
         7.5,
         ControlType.kVoltage,
@@ -200,32 +230,32 @@ public class Shooter extends SubsystemBase {
         ControlType.kVoltage,
         0);
     }
-    else if(shooterMode == ShooterMode.Manual){
-      leftController.setReference(
-        leftShooterSpeedEntry.getDouble(9),
-        ControlType.kVoltage,
-        0);
+    // else if(shooterMode == ShooterMode.Manual){
+    //   leftController.setReference(
+    //     leftShooterSpeedEntry.getDouble(7.5),
+    //     ControlType.kVoltage,
+    //     0);
 
-      rightController.setReference(
-        rightShooterSpeedEntry.getDouble(7),
-        ControlType.kVoltage,
-        0);
-    }
-    else{
-      leftController.setReference(
-        shooterVoltage,
-        ControlType.kVoltage,
-        0);
+    //   rightController.setReference(
+    //     rightShooterSpeedEntry.getDouble(5.5),
+    //     ControlType.kVoltage,
+    //     0);
+    // }
+    // else{
+    //   leftController.setReference(
+    //     shooterVoltage,
+    //     ControlType.kVoltage,
+    //     0);
 
-      rightController.setReference(
-        shooterVoltage - 2,
-        ControlType.kVoltage,
-        0);
-    }
+    //   rightController.setReference(
+    //     shooterVoltage - 2,
+    //     ControlType.kVoltage,
+    //     0);
+    // }
   }
 
   public void setShooterAuto(double speed){
-    setAutoMode();
+    setSpeakerMode();
     leftShooter.set(speed);
     rightShooter.set(speed);
   }
@@ -258,10 +288,18 @@ public class Shooter extends SubsystemBase {
 
       pivotPosition = ShooterConstants.SPEAKER_PIVOT_POSITION;
     }
+    else if(shooterMode == ShooterMode.Stage){
+      pivotController.setReference(
+        ShooterConstants.STAGE_PIVOT_POSITION,
+        ControlType.kPosition,
+        0);
+
+      pivotPosition = ShooterConstants.STAGE_PIVOT_POSITION;
+    }
     else{
-      if(shooterMode == ShooterMode.Auto && hasPriorityTarget()){
-        setPivotAngle(calculatePivotAngle());
-      }
+      // if(shooterMode == ShooterMode.Auto && hasPriorityTarget()){
+      //   setPivotAngle(calculatePivotAngle());
+      // }
 
       pivotController.setReference(
         pivotPosition + pivotAdjust,
@@ -269,11 +307,11 @@ public class Shooter extends SubsystemBase {
         0);
     }
 
-    if(RobotContainer.opController.getPOV() == 0){
-      pivotAdjust += 0.1;
-    }
-    else if(RobotContainer.opController.getPOV() == 180){
-      pivotAdjust -= 0.1;
+    // should we change this back to dpad? i feel like the joystick axises were harder to control
+    if(RobotContainer.opController.getLeftY() >= 0.5 && pivotPosition + pivotAdjust > 0){
+      pivotAdjust -= 0.2;
+    } else if(RobotContainer.opController.getLeftY() <= -0.5 && pivotPosition + pivotAdjust < 20){
+      pivotAdjust += 0.2;
     }
   }
 
@@ -306,28 +344,25 @@ public class Shooter extends SubsystemBase {
     return pivot.getOutputCurrent();
   }
 
-  public double calculatePivotAngle(){
-    if(hasPriorityTarget()){
-      botpose_targetspace = llTable.getEntry("botpose_targetspace").getDoubleArray(new double[6]);
-    }
+  // public double calculatePivotAngle(){
+  //   if(hasPriorityTarget()){
+  //     botpose_targetspace = llTable.getEntry("botpose_targetspace").getDoubleArray(new double[6]);
+  //   }
 
-    double x = Math.abs(botpose_targetspace[0]);
-    double z = Math.abs(botpose_targetspace[2]);
-    if(!isRedAlliance()){ //edit for houston comp
-      z += 0.02;  
-    }
 
-    double hypot = Math.hypot(x, z);
+  //   double x = Math.abs(botpose_targetspace[0]);
+  //   double z = Math.abs(botpose_targetspace[2]);
+  //   double hypot = Math.hypot(x, z);
 
-    double angle = Math.atan((FieldConstants.SPEAKER_HEIGHT - ShooterConstants.FLOOR_TO_SHOOTER) / hypot);
-    return Units.radiansToDegrees(angle);
-  }
+  //   double angle = Math.atan((FieldConstants.SPEAKER_HEIGHT - ShooterConstants.FLOOR_TO_SHOOTER) / hypot);
+  //   return Units.radiansToDegrees(angle);
+  // }
 
-  public void setPivotAngle(double angle){
-    if(hasPriorityTarget()){
-      pivotPosition = pivotLerp.interpolate(angle);
-    }
-  }
+  // public void setPivotAngle(double angle){
+  //   if(hasPriorityTarget()){
+  //     pivotPosition = pivotLerp.interpolate(angle);
+  //   }
+  // }
 
   public void setPivotPosition(){
     pivotController.setReference(
@@ -340,18 +375,18 @@ public class Shooter extends SubsystemBase {
     return 2 * (((leftEncoder.getVelocity() + rightEncoder.getVelocity()) / 2) * 2 * Math.PI * Units.inchesToMeters(1.5) / 60);
   }
 
-  public boolean hasPriorityTarget(){
-    if(isRedAlliance()){
-      return llTable.getEntry("tid").getDouble(0) == 4;
-    }
-    else{
-      return llTable.getEntry("tid").getDouble(0) == 7;
-    }
-  }
+  // public boolean hasPriorityTarget(){
+  //   if(isRedAlliance()){
+  //     return llTable.getEntry("tid").getDouble(0) == 4;
+  //   }
+  //   else{
+  //     return llTable.getEntry("tid").getDouble(0) == 7;
+  //   }
+  // }
 
-  public void setPipeline(int index){
-    llTable.getEntry("pipeline").setNumber(index);
-  }
+  // public void setPipeline(int index){
+  //   llTable.getEntry("pipeline").setNumber(index);
+  // }
 
   public void setPivotPosition(double position){
     pivotPosition = position;
@@ -379,6 +414,10 @@ public class Shooter extends SubsystemBase {
 
   public void setSpeakerMode(){
     shooterMode = ShooterMode.Speaker;
+  }
+
+  public void setStageMode(){
+    shooterMode = ShooterMode.Stage;
   }
 
   public boolean isRedAlliance(){

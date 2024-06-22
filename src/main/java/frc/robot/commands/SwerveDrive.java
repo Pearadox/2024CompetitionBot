@@ -31,38 +31,20 @@ public class SwerveDrive extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(drivetrain.getDriveMode() == Drivetrain.DriveMode.Align){
-      if(shooter.getShooterMode() == ShooterMode.SourcePassing){
-        if(drivetrain.isRedAlliance()){
-          drivetrain.turnToHeading(45, new Translation2d());
-        }
-        else{
-          drivetrain.turnToHeading(-30, new Translation2d());
-        }
-      }
-      else if(shooter.getShooterMode() == ShooterMode.StagePassing){
-        if(drivetrain.isRedAlliance()){
-          drivetrain.turnToHeading(22.5, new Translation2d());
-        }
-        else{
-          drivetrain.turnToHeading(-15, new Translation2d());
-        }
-      }
-      else{
-        drivetrain.swerveDrive(
-          -driverController.getLeftY(), 
-          -driverController.getLeftX(), 
-          -drivetrain.getAlignSpeed(),
-          true,
-          new Translation2d(),
-          true);
-      }
+    // if(drivetrain.getDriveMode() == Drivetrain.DriveMode.Align){
+    //   drivetrain.swerveDrive(
+    //     -driverController.getLeftY(), 
+    //     -driverController.getLeftX(), 
+    //     -drivetrain.getAlignSpeed(),
+    //     true,
+    //     new Translation2d(),
+    //     true);
       
-      if(drivetrain.readyToShoot() && shooter.readyToShoot()){
-        CommandScheduler.getInstance().schedule(drivetrain.rumbleController());
-      }
-    }
-    else{
+    //   if(drivetrain.readyToShoot()){
+    //     CommandScheduler.getInstance().schedule(drivetrain.rumbleController());
+    //   }
+    // }
+    //else{
       drivetrain.swerveDrive(
         -driverController.getLeftY(), 
         -driverController.getLeftX(), 
@@ -70,7 +52,7 @@ public class SwerveDrive extends Command {
         RobotContainer.driverController.getRightTriggerAxis() < 0.9,
         new Translation2d(),
         true);
-    }
+    //}
   }
 
   // Called once the command ends or is interrupted.

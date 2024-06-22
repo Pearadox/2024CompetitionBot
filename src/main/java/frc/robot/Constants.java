@@ -138,9 +138,10 @@ public final class Constants {
     public static final double PIVOT_MIN_OUTPUT = -0.85;
     public static final double PIVOT_MAX_OUTPUT = 0.85;
 
-    public static final double AMP_PIVOT_POSITION = 23;
-    public static final double PASSING_PIVOT_POSITION = 24.5;
-    public static final double SPEAKER_PIVOT_POSITION = 29.7;
+    public static final double AMP_PIVOT_POSITION = 13.8;
+    public static final double PASSING_PIVOT_POSITION = 15.5;
+    public static final double SPEAKER_PIVOT_POSITION = 19.2; // 19.7
+    public static final double STAGE_PIVOT_POSITION = 1.3; // 15.8 
 
     public static final double FLOOR_TO_SHOOTER = Units.inchesToMeters(7);
   }
@@ -163,8 +164,20 @@ public final class Constants {
     public static final double AMP_BAR_MAX_OUTPUT = 0.5;
 
     // Zero at Top of Shooter at Lowest Pivot
-    public static final double STOWED_ROT = 3.0;
-    public static final double DEPLOYED_ROT = 23.0;
+
+    public static final double STOWED_ROT = 2.54; // 3 (climber interference moved zero)
+    public static final double DEFENSE_ROT = 12.5;
+    public static final double DEPLOYED_ROT = 18.25; // 22 (climber interference moved zero)
+  }
+
+  public static final class ClimberConstants {
+    public static final int CLIMBER_ID = 25;
+
+    // public static final double CLIMBER_kP;
+    // public static final double CLIMBER_kI;
+    // public static final double CLIMBER_kD;
+    public static final double ZEROING_SPEED = -0.5;
+    public static final double CLIMB_SPEED = 0.75; 
   }
 
   public static final class FieldConstants{

@@ -24,13 +24,13 @@ public class SourceAutoAlign extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    drivetrain.swerveDrive(
-      0,
-      0, 
-      -drivetrain.getAlignSpeedSourceAuto(),
-      true,
-      new Translation2d(),
-      false);
+    // drivetrain.swerveDrive(
+    //   0,
+    //   0, 
+    //   -drivetrain.getAlignSpeedSourceAuto(),
+    //   true,
+    //   new Translation2d(),
+    //   false);
   }
 
   // Called once the command ends or is interrupted.
