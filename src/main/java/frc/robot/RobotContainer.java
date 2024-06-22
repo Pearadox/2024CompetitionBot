@@ -29,7 +29,6 @@ import frc.robot.commands.AutoAlign;
 import frc.robot.commands.IntakeHold;
 import frc.robot.commands.Outtake;
 import frc.robot.commands.Shoot;
-import frc.robot.commands.ShootOnTheMove;
 import frc.robot.commands.ShooterHold;
 import frc.robot.commands.SourceAutoAlign;
 import frc.robot.commands.SwerveDrive;
@@ -56,16 +55,17 @@ public class RobotContainer {
   public static final Climber climber = Climber.getInstance();
 
   //Driver Controls
-  public static final XboxController driverController = new XboxController(IOConstants.DRIVER_CONTROLLER_PORT);
+  public static final CommandXboxController commandDriverController = new CommandXboxController(IOConstants.DRIVER_CONTROLLER_PORT);
+  public static final XboxController driverController = commandDriverController.getHID();
 
   private final JoystickButton resetHeading_Start = new JoystickButton(driverController, XboxController.Button.kStart.value);
-  private final JoystickButton popNote_A = new JoystickButton(driverController, XboxController.Button.kA.value);
   private final JoystickButton shoot_RB = new JoystickButton(driverController, XboxController.Button.kRightBumper.value);
   private final JoystickButton zeroingShooter_X = new JoystickButton(driverController, XboxController.Button.kX.value);
   private final JoystickButton outtake_B = new JoystickButton(driverController, XboxController.Button.kB.value);
   // private final JoystickButton turnToApril_LB = new JoystickButton(driverController, XboxController.Button.kLeftBumper.value);
 
   //Operator Controls
+
   public static final XboxController opController = new XboxController(IOConstants.OP_CONTROLLER_PORT);
   
   // private final JoystickButton shooterAutoMode_A = new JoystickButton(opController, XboxController.Button.kA.value);
@@ -111,11 +111,10 @@ public class RobotContainer {
   private void configureBindings() {
     //Driver Buttons
     resetHeading_Start.onTrue(new InstantCommand(drivetrain::zeroHeading, drivetrain));
-    popNote_A.whileTrue(new Shoot());
     zeroingShooter_X.whileTrue(new RunCommand(() -> shooter.setZeroing(true)))
       .onFalse(new InstantCommand(() -> shooter.setZeroing(false))
       .andThen(new InstantCommand(() -> shooter.resetPivotEncoder())));
-    shoot_RB.whileTrue(new ShootOnTheMove());
+    shoot_RB.whileTrue(new Shoot());
     outtake_B.whileTrue(new Outtake());
     // turnToApril_LB.onTrue(new InstantCommand(() -> drivetrain.setAlignMode()))
     //   .onFalse(new InstantCommand(() -> drivetrain.setNormalMode()));
@@ -123,7 +122,8 @@ public class RobotContainer {
     //Operator Buttons
     shooterStageMode_A.onTrue(new InstantCommand(() -> shooter.setStageMode())); // formerly shooter.setAutoMode()
     shooterManualMode_B.onTrue(new InstantCommand(() -> shooter.setManualMode()));
-    shooterPassingMode_Y.onTrue(new InstantCommand(() -> shooter.setPassingMode()));
+    shooterSourcePassingMode_Y.onTrue(new InstantCommand(() -> shooter.setSourcePassingMode()));
+    shooterStagePassingMode_Start.onTrue(new InstantCommand(() -> shooter.setStagePassingMode()));
     shooterSpeakerMode_X.onTrue(new InstantCommand(() -> shooter.setSpeakerMode()));
 
     climberPrepear_LB.whileTrue(new StartEndCommand(() -> climber.prepearClimber(), () -> climber.idleClimber()));
@@ -137,21 +137,30 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     drivetrain.resetAllEncoders();
-    if(drivetrain.isRedAlliance()){
-      drivetrain.setHeading(60);
+    if(autoChooser.getSelected().getName() == "S_8-6"){
+      if(drivetrain.isRedAlliance()){
+        drivetrain.setHeading(60);
+      }
+      else{
+        drivetrain.setHeading(-60);
+      }
     }
     else{
-      drivetrain.setHeading(-60);
+      drivetrain.setHeading(0);
     }
+
     return autoChooser.getSelected();
   }
 
   public void registerNamedCommands(){
     NamedCommands.registerCommand("Stop Modules", new InstantCommand(() -> drivetrain.stopModules()));
-    NamedCommands.registerCommand("Auto Align", new AutoAlign().withTimeout(0.4));
-    NamedCommands.registerCommand("Source Auto Align", new SourceAutoAlign().withTimeout(0.4));
-    NamedCommands.registerCommand("Shoot", new Shoot().withTimeout(0.3)); // 0.2
+    NamedCommands.registerCommand("Auto Align", new AutoAlign().withTimeout(0.7));
+    NamedCommands.registerCommand("Source Auto Align", new SourceAutoAlign().withTimeout(0.8));
+    NamedCommands.registerCommand("Shoot", new Shoot().withTimeout(0.3)); //0.2
     NamedCommands.registerCommand("Source Set Pivot Position", new InstantCommand(() -> shooter.setPivotPosition(14.0)));
+    NamedCommands.registerCommand("Middle Set Pivot Position", new InstantCommand(() -> shooter.setPivotPosition(4.0)));
+    NamedCommands.registerCommand("Set Manual Mode", new InstantCommand(() -> shooter.setManualMode()));
+    NamedCommands.registerCommand("Set Auto Mode", new InstantCommand(() -> shooter.setAutoMode()));
     NamedCommands.registerCommand("Set Shooter Auto", new InstantCommand(() -> shooter.setShooterAuto(0.85)));
     NamedCommands.registerCommand("Reset Heading", new InstantCommand(drivetrain::zeroHeading, drivetrain));
     NamedCommands.registerCommand("7 Note Set Pivot Position", new InstantCommand(() -> shooter.setPivotPosition(11.5)));

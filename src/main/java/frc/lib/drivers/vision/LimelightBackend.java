@@ -9,23 +9,25 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.*;
+import frc.lib.util.SmarterDashboard;
 import frc.robot.Constants;
-import frc.robot.Constants.VisionConstants;
 
 import java.util.Arrays;
 import java.util.Optional;
 
 public class LimelightBackend extends VisionBackend {
-    private static final NetworkTable table = NetworkTableInstance.getDefault().getTable(VisionConstants.LL_NAME);
+    private String llName;
 
     private final DoubleArraySubscriber botPose;
     private final DoubleSubscriber cl;
     private final DoubleSubscriber tl;
 
-    public LimelightBackend() {
-        botPose = table.getDoubleArrayTopic("botpose_wpiblue").subscribe(null);
-        cl = table.getDoubleTopic("cl").subscribe(0);
-        tl = table.getDoubleTopic("tl").subscribe(0);
+    public LimelightBackend(String llName) {
+        this.llName = llName;
+
+        botPose =  NetworkTableInstance.getDefault().getTable(llName).getDoubleArrayTopic("botpose_wpiblue").subscribe(null);
+        cl = NetworkTableInstance.getDefault().getTable(llName).getDoubleTopic("cl").subscribe(0);
+        tl = NetworkTableInstance.getDefault().getTable(llName).getDoubleTopic("tl").subscribe(0);
     }
 
     @Override
@@ -62,11 +64,19 @@ public class LimelightBackend extends VisionBackend {
     }
 
     public boolean isValid(){
-        double[] botpose_wpiblue = table.getEntry("botpose_wpiblue").getDoubleArray(new double[11]);
+        LimelightHelpers.PoseEstimate poseEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue(llName);
+        if(poseEstimate.rawFiducials.length == 1){
+            double ambiguity = poseEstimate.rawFiducials[0].ambiguity;
+            SmarterDashboard.putNumber("Single Tag Ambiguity", poseEstimate.rawFiducials[0].ambiguity, "Limelight");
 
-        double tagCount = botpose_wpiblue[7];
-        double avgDist = botpose_wpiblue[9];
+            if(ambiguity >= 0.8){
+                return false;
+            }
+        }
 
-        return tagCount > 0 && avgDist < 4.5;
+        double tagCount = poseEstimate.tagCount;
+        double avgDist = poseEstimate.avgTagDist;
+
+        return tagCount > 0 && avgDist < 3.5;
     }
 }
