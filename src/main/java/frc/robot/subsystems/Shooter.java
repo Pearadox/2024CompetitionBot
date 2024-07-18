@@ -265,10 +265,16 @@ public class Shooter extends SubsystemBase {
     }
 
     // should we change this back to dpad? i feel like the joystick axises were harder to control
-    if(RobotContainer.opController.getLeftY() >= 0.5 && pivotPosition + pivotAdjust > 0){
-      pivotAdjust -= 0.2;
-    } else if(RobotContainer.opController.getLeftY() <= -0.5 && pivotPosition + pivotAdjust < 20){
-      pivotAdjust += 0.2;
+    // if(RobotContainer.opController.getLeftY() >= 0.5 && pivotPosition + pivotAdjust > 0){
+    //   pivotAdjust -= 0.2;
+    // } else if(RobotContainer.opController.getLeftY() <= -0.5 && pivotPosition + pivotAdjust < 20){
+    //   pivotAdjust += 0.2;
+    // }
+
+    if(RobotContainer.opController.getPOV() == 0){
+      pivotAdjust += 0.1;
+    } else if(RobotContainer.opController.getPOV() == 180){
+      pivotAdjust -= 0.1;
     }
   }
 
