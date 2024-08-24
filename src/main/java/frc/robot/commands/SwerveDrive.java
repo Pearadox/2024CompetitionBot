@@ -43,9 +43,9 @@ public class SwerveDrive extends Command {
     // }
     //else{
       drivetrain.swerveDrive(
-        -driverController.getLeftY(), 
-        -driverController.getLeftX(), 
-        -driverController.getRightX(),
+        -driverController.getLeftY() * 0.3, 
+        -driverController.getLeftX() * 0.3, 
+        -driverController.getRightX() * 0.3,
         RobotContainer.driverController.getRightTriggerAxis() < 0.9,
         new Translation2d(),
         true);

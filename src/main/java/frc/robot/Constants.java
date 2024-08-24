@@ -138,7 +138,7 @@ public final class Constants {
     public static final double PIVOT_MIN_OUTPUT = -0.85;
     public static final double PIVOT_MAX_OUTPUT = 0.85;
 
-    public static final double AMP_PIVOT_POSITION = 13.8;
+    public static final double AMP_PIVOT_POSITION = 22;
     public static final double PASSING_PIVOT_POSITION = 15.5;
     public static final double SPEAKER_PIVOT_POSITION = 19.2; // 19.7
     public static final double STAGE_PIVOT_POSITION = 1.3; // 15.8 
