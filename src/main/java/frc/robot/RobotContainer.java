@@ -25,20 +25,20 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.lib.drivers.vision.PoseEstimation;
 import frc.robot.Constants.IOConstants;
-import frc.robot.commands.AutoAlign;
-import frc.robot.commands.IntakeHold;
-import frc.robot.commands.Outtake;
-import frc.robot.commands.Shoot;
-import frc.robot.commands.ShootOnTheMove;
-import frc.robot.commands.ShooterHold;
+// import frc.robot.commands.AutoAlign;
+// import frc.robot.commands.IntakeHold;
+// import frc.robot.commands.Outtake;
+// import frc.robot.commands.Shoot;
+// import frc.robot.commands.ShootOnTheMove;
+// import frc.robot.commands.ShooterHold;
 import frc.robot.commands.SourceAutoAlign;
 import frc.robot.commands.SwerveDrive;
-import frc.robot.subsystems.AmpBar;
-import frc.robot.subsystems.Climber;
+// import frc.robot.subsystems.AmpBar;
+// import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Transport;
+// import frc.robot.subsystems.Intake;
+// import frc.robot.subsystems.Shooter;
+// import frc.robot.subsystems.Transport;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -49,11 +49,11 @@ import frc.robot.subsystems.Transport;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   public static final Drivetrain drivetrain = Drivetrain.getInstance();
-  public static final Intake intake = Intake.getInstance();
-  public static final Transport transport = Transport.getInstance();
-  public static final Shooter shooter = Shooter.getInstance();
-  public static final AmpBar ampBar = AmpBar.getInstance();
-  public static final Climber climber = Climber.getInstance();
+  // public static final Intake intake = Intake.getInstance();
+  // public static final Transport transport = Transport.getInstance();
+  // public static final Shooter shooter = Shooter.getInstance();
+  // public static final AmpBar ampBar = AmpBar.getInstance();
+  // public static final Climber climber = Climber.getInstance();
 
   //Driver Controls
   public static final XboxController driverController = new XboxController(IOConstants.DRIVER_CONTROLLER_PORT);
@@ -111,23 +111,23 @@ public class RobotContainer {
   private void configureBindings() {
     //Driver Buttons
     resetHeading_Start.onTrue(new InstantCommand(drivetrain::zeroHeading, drivetrain));
-    popNote_A.whileTrue(new Shoot());
-    zeroingShooter_X.whileTrue(new RunCommand(() -> shooter.setZeroing(true)))
-      .onFalse(new InstantCommand(() -> shooter.setZeroing(false))
-      .andThen(new InstantCommand(() -> shooter.resetPivotEncoder())));
-    shoot_RB.whileTrue(new ShootOnTheMove());
-    outtake_B.whileTrue(new Outtake());
+    // popNote_A.whileTrue(new Shoot());
+    // zeroingShooter_X.whileTrue(new RunCommand(() -> shooter.setZeroing(true)))
+    //   .onFalse(new InstantCommand(() -> shooter.setZeroing(false))
+    //   .andThen(new InstantCommand(() -> shooter.resetPivotEncoder())));
+    // shoot_RB.whileTrue(new ShootOnTheMove());
+    // outtake_B.whileTrue(new Outtake());
     // turnToApril_LB.onTrue(new InstantCommand(() -> drivetrain.setAlignMode()))
     //   .onFalse(new InstantCommand(() -> drivetrain.setNormalMode()));
 
     //Operator Buttons
-    shooterStageMode_A.onTrue(new InstantCommand(() -> shooter.setStageMode())); // formerly shooter.setAutoMode()
-    shooterManualMode_B.onTrue(new InstantCommand(() -> shooter.setManualMode()));
-    shooterPassingMode_Y.onTrue(new InstantCommand(() -> shooter.setPassingMode()));
-    shooterSpeakerMode_X.onTrue(new InstantCommand(() -> shooter.setSpeakerMode()));
+    // shooterStageMode_A.onTrue(new InstantCommand(() -> shooter.setStageMode())); // formerly shooter.setAutoMode()
+    // shooterManualMode_B.onTrue(new InstantCommand(() -> shooter.setManualMode()));
+    // shooterPassingMode_Y.onTrue(new InstantCommand(() -> shooter.setPassingMode()));
+    // shooterSpeakerMode_X.onTrue(new InstantCommand(() -> shooter.setSpeakerMode()));
 
-    climberPrepear_LB.whileTrue(new StartEndCommand(() -> climber.prepearClimber(), () -> climber.idleClimber()));
-    climberLift_RB.whileTrue(new StartEndCommand(() -> climber.liftClimber(), () -> climber.idleClimber()));
+    // climberPrepear_LB.whileTrue(new StartEndCommand(() -> climber.prepearClimber(), () -> climber.idleClimber()));
+    // climberLift_RB.whileTrue(new StartEndCommand(() -> climber.liftClimber(), () -> climber.idleClimber()));
   }
 
   /**
@@ -148,19 +148,19 @@ public class RobotContainer {
 
   public void registerNamedCommands(){
     NamedCommands.registerCommand("Stop Modules", new InstantCommand(() -> drivetrain.stopModules()));
-    NamedCommands.registerCommand("Auto Align", new AutoAlign().withTimeout(0.4));
+    // NamedCommands.registerCommand("Auto Align", new AutoAlign().withTimeout(0.4));
     NamedCommands.registerCommand("Source Auto Align", new SourceAutoAlign().withTimeout(0.4));
-    NamedCommands.registerCommand("Shoot", new Shoot().withTimeout(0.3)); // 0.2
-    NamedCommands.registerCommand("Source Set Pivot Position", new InstantCommand(() -> shooter.setPivotPosition(14.0)));
-    NamedCommands.registerCommand("Set Shooter Auto", new InstantCommand(() -> shooter.setShooterAuto(0.85)));
-    NamedCommands.registerCommand("Reset Heading", new InstantCommand(drivetrain::zeroHeading, drivetrain));
-    NamedCommands.registerCommand("7 Note Set Pivot Position", new InstantCommand(() -> shooter.setPivotPosition(11.5)));
+    // NamedCommands.registerCommand("Shoot", new Shoot().withTimeout(0.3)); // 0.2
+    // NamedCommands.registerCommand("Source Set Pivot Position", new InstantCommand(() -> shooter.setPivotPosition(14.0)));
+    // NamedCommands.registerCommand("Set Shooter Auto", new InstantCommand(() -> shooter.setShooterAuto(0.85)));
+    // NamedCommands.registerCommand("Reset Heading", new InstantCommand(drivetrain::zeroHeading, drivetrain));
+    // NamedCommands.registerCommand("7 Note Set Pivot Position", new InstantCommand(() -> shooter.setPivotPosition(11.5)));
   }
 
   public void setDefaultCommands(){
     drivetrain.setDefaultCommand(new SwerveDrive());
-    intake.setDefaultCommand(new IntakeHold());
-    shooter.setDefaultCommand(new ShooterHold());
+    // intake.setDefaultCommand(new IntakeHold());
+    // shooter.setDefaultCommand(new ShooterHold());
   }
 
   private void configureAutoTab() {
